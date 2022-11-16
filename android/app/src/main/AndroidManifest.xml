@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myrewards_flutter">
+    package="com.example.my_rewards_flutter">
+
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
    <application
-        android:label="myrewards_flutter"
+        android:label="my_rewards_flutter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
