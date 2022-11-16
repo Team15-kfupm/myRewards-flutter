@@ -1,6 +1,6 @@
 {
-    "name": "myrewards_flutter",
-    "short_name": "myrewards_flutter",
+    "name": "my_rewards_flutter",
+    "short_name": "my_rewards_flutter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
