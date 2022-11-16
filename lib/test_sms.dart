@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:telephony/telephony.dart';
 
 class TestSMS extends StatefulWidget {
   const TestSMS({Key? key}) : super(key: key);
@@ -10,11 +12,24 @@ class TestSMS extends StatefulWidget {
 }
 
 class _TestSMSState extends State<TestSMS> {
-  final SmsQuery _query = SmsQuery();
-  List<SmsMessage> _messages = [];
+  List<SmsMessage> messages = [];
+  String sms = "";
+  Telephony telephony = Telephony.instance;
 
   @override
   void initState() {
+    telephony.listenIncomingSms(
+      onNewMessage: (SmsMessage message) {
+        print(message.address); //+977981******67, sender nubmer
+        print(message.body); //sms text
+        print(message.date); //1659690242000, timestamp
+        setState(() {
+          sms = message.body.toString();
+        });
+      },
+      listenInBackground: false,
+    );
+
     super.initState();
   }
 
@@ -22,41 +37,39 @@ class _TestSMSState extends State<TestSMS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plugin example app'),
-      ),
+          title: Text("Listen Incoming SMS in Flutter"),
+          backgroundColor: Colors.redAccent),
       body: Container(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: _messages.length,
-          itemBuilder: (BuildContext context, int i) {
-            var message = _messages[i];
-
-            return ListTile(
-              title:
-                  Text('${message.sender} [${message.body!.contains('شراء')}]'),
-              subtitle: Text('${message.body}'),
-            );
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
+          padding: EdgeInsets.only(top: 50, left: 20, right: 20),
+          alignment: Alignment.topLeft,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Recieved SMS Text:",
+                style: TextStyle(fontSize: 30),
+              ),
+              Divider(),
+              Text(
+                "SMS Text:" + sms,
+                style: TextStyle(fontSize: 20),
+              ),
+              Container(
+                color: Colors.blue,
+                child: Text(messages.length == 0
+                    ? "No SMS"
+                    : messages[7].body.toString()),
+              )
+            ],
+          )),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.refresh),
         onPressed: () async {
-          var permission = await Permission.sms.status;
-          if (permission.isGranted) {
-            final messages = await _query.querySms(
-              kinds: [SmsQueryKind.inbox, SmsQueryKind.sent],
-              // address: '+254712345789',
-              count: 10,
-            );
-            debugPrint('sms inbox messages: ${messages.length}');
-
-            setState(() => _messages = messages);
-          } else {
-            await Permission.sms.request();
-          }
+          messages = await telephony.getInboxSms(
+            columns: [SmsColumn.ADDRESS, SmsColumn.BODY, SmsColumn.DATE],
+          );
+          setState(() {});
         },
-        child: const Icon(Icons.refresh),
       ),
     );
   }
