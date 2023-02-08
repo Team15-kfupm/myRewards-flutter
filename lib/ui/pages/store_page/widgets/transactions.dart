@@ -29,7 +29,7 @@ class Transactions extends StatelessWidget {
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Logo',
                           style: TextStyle(color: Colors.black),

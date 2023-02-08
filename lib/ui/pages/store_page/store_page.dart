@@ -29,12 +29,12 @@ class StorePage extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Offers(), StoreLogo()],
+                children: const [Offers(), StoreLogo()],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Transactions(),
+              const Transactions(),
             ],
           ),
         ));

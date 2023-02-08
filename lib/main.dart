@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/home_page.dart';
 import 'package:myrewards_flutter/ui/pages/store_page/store_page.dart';
 
 void main() {

@@ -12,7 +12,7 @@ class StoreLogo extends StatelessWidget {
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(25),
       ),
-      child: Center(child: Text('Store Logo')),
+      child: const Center(child: Text('Store Logo')),
     );
   }
 }
