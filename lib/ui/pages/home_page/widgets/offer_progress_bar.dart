@@ -38,7 +38,7 @@ class _OfferProgressBarState extends State<OfferProgressBar> {
         const SizedBox(
           width: 10,
         ),
-        Text('80%'),
+        const Text('80%'),
       ],
     );
   }

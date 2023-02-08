@@ -15,7 +15,7 @@ class _OfferDotsProgressState extends State<OfferDotsProgress> {
         Container(
           width: 10,
           height: 10,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.orange,
             shape: BoxShape.circle,
           ),

@@ -12,9 +12,11 @@ class CategoriesChart extends StatefulWidget {
 class _CategoriesChartState extends State<CategoriesChart> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 200,
-      width: 200,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(40)),
+      ),
       child: BarChart(BarChartData(
         backgroundColor: const Color.fromARGB(233, 17, 19, 44),
         gridData:
@@ -36,7 +38,7 @@ class _CategoriesChartState extends State<CategoriesChart> {
         minY: 0,
         groupsSpace: 12,
         barTouchData: BarTouchData(
-          enabled: false,
+          enabled: true,
         ),
         barGroups: BarChartsData.barChartsData
             .map((e) => BarChartGroupData(
