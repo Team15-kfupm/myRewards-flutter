@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/bottom_nav_bar.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/categories_chart.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/offers.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/total_spending.dart';
