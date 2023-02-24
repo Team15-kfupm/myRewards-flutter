@@ -1,7 +1,10 @@
-
+import 'package:flutter/material.dart';
 
 // Colors Section Start//
 
+const primaryColor = Color(0xFFFEC54B);
+const secondaryColor = Color(0x88F90808);
+const whiteColor = Colors.white;
 
 // Colors Section End//
 
