@@ -1,25 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // Colors Section Start//
 
 const primaryColor = Color(0xFFFEC54B);
-const secondaryColor = Color(0x88F90808);
+const secondaryColor = Color(0xFFFDB244);
+const authPageClipColor = Color(0xFFF2BB69);
+const greyColor = Color(0xFF6A6A6A);
 const whiteColor = Colors.white;
+const blackColor = Colors.black;
 
 // Colors Section End//
 
 // Text Style Section Start//
 
+final smallPrimaryTextStyle = GoogleFonts.poppins(
+  fontSize: 14.sp,
+  fontWeight: FontWeight.w500,
+  color: primaryColor,
+);
+
+final smallTextStyle = GoogleFonts.poppins(
+  fontSize: 14.sp,
+  fontWeight: FontWeight.w500,
+  color: blackColor,
+);
+
+final normaGreylTextStyle = GoogleFonts.poppins(
+  fontSize: 16.sp,
+  fontWeight: FontWeight.w400,
+  color: greyColor,
+);
+
+final normaPrimarylTextStyle = GoogleFonts.poppins(
+  fontSize: 16.sp,
+  fontWeight: FontWeight.w400,
+  color: primaryColor,
+);
+
+final titleTextStyle = GoogleFonts.poppins(
+  fontSize: 21.sp,
+  fontWeight: FontWeight.w600,
+  color: blackColor,
+);
 
 // Text Style Section End//
 
 // Button Style Section Start//
 
+final signInButtonStyle = BoxDecoration(
+  color: primaryColor,
+  borderRadius: BorderRadius.circular(30.r),
+);
 
 // Button Style Section End//
 
 // Text in Button Style Section Start//
-
+final signInButtonTextStyle = GoogleFonts.poppins(
+  fontSize: 16.sp,
+  fontWeight: FontWeight.w600,
+  color: blackColor,
+);
 
 // Text in Button Style Section End//
 
