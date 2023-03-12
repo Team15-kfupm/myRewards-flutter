@@ -50,31 +50,40 @@ class SignUpPage extends StatelessWidget {
           ),
         ),
         52.verticalSpace,
-        Text(
-          'By creating account, you agree to our',
-          style: smallTextStyle,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            InkWell(
-                onTap: () {},
-                child: Text(
-                  'Terms',
-                  style: smallPrimaryTextStyle,
-                )),
-            Text(
-              ' and ',
-              style: smallTextStyle,
-            ),
-            InkWell(
-                onTap: () {},
-                child: Text(
-                  'Conditions',
-                  style: smallPrimaryTextStyle,
-                )),
-          ],
-        ),
+        RichText(
+            text: TextSpan(
+                text: 'By creating account, you agree to our',
+                style: smallTextStyle,
+                children: [
+              TextSpan(text: 'Terms', style: smallPrimaryTextStyle),
+              TextSpan(text: ' and ', style: smallTextStyle),
+              TextSpan(text: 'Conditions', style: smallPrimaryTextStyle),
+            ])),
+        // Text(
+        //   'By creating account, you agree to our',
+        //   style: smallTextStyle,
+        // ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     InkWell(
+        //         onTap: () {},
+        //         child: Text(
+        //           'Terms',
+        //           style: smallPrimaryTextStyle,
+        //         )),
+        //     Text(
+        //       ' and ',
+        //       style: smallTextStyle,
+        //     ),
+        //     InkWell(
+        //         onTap: () {},
+        //         child: Text(
+        //           'Conditions',
+        //           style: smallPrimaryTextStyle,
+        //         )),
+        //   ],
+        // ),
         29.verticalSpace,
         InkWell(
           onTap: () {},

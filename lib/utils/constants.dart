@@ -8,6 +8,7 @@ const primaryColor = Color(0xFFFEC54B);
 const secondaryColor = Color(0xFFFDB244);
 const authPageClipColor = Color(0xFFF2BB69);
 const greyColor = Color(0xFF6A6A6A);
+const lightGreyColor = Color(0xFFD9D9D9);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
 
@@ -39,6 +40,14 @@ final normaPrimarylTextStyle = GoogleFonts.poppins(
   color: primaryColor,
 );
 
+final expireOTPCountdownTextStyle =
+    GoogleFonts.abel(fontSize: 17.sp, color: greyColor);
+
+final forgotPasswordTextStyle =
+    GoogleFonts.abel(fontSize: 17.sp, color: primaryColor);
+
+final oTPLabelTextStyle = GoogleFonts.abel(fontSize: 28.sp, color: blackColor);
+
 final titleTextStyle = GoogleFonts.poppins(
   fontSize: 21.sp,
   fontWeight: FontWeight.w600,
@@ -54,6 +63,10 @@ final signInButtonStyle = BoxDecoration(
   borderRadius: BorderRadius.circular(30.r),
 );
 
+ButtonStyle noBackgroundButtonStyle = TextButton.styleFrom(
+  primary: whiteColor,
+);
+
 // Button Style Section End//
 
 // Text in Button Style Section Start//
@@ -62,6 +75,9 @@ final signInButtonTextStyle = GoogleFonts.poppins(
   fontWeight: FontWeight.w600,
   color: blackColor,
 );
+
+final largeButtonTextStyle =
+    GoogleFonts.abel(fontSize: 25.sp, color: whiteColor);
 
 // Text in Button Style Section End//
 

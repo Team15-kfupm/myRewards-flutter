@@ -1,14 +1,30 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:myrewards_flutter/ui/pages/auth_page/auth_structure_page.dart';
+import 'package:myrewards_flutter/utils/router.dart' as router;
 
-void main() {
-  runApp(const MyApp());
+import 'core/providers/auth_phone_provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  MyAppState createState() => MyAppState();
+}
+
+final verificationIdProvider =
+    StateNotifierProvider<VerificationIdNotifier, String>(
+        (ref) => VerificationIdNotifier());
+
+class MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -17,7 +33,8 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return const MaterialApp(
           title: 'Flutter Demo',
-          home: AuthStructurePage(),
+          initialRoute: '/',
+          onGenerateRoute: router.generateRoute,
         );
       },
     );

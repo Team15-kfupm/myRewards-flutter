@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/categories_chart.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/offers.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/total_spending.dart';
@@ -36,8 +37,9 @@ class _HomePageState extends State<HomePage> {
             ],
           )),
       const StoresPage(),
-      const Center(
-        child: Text('Settings Page'),
+      Center(
+        child: InkWell(
+            onTap: () => AuthService().signOut(), child: Text('Settings Page')),
       ),
     ];
     return Scaffold(

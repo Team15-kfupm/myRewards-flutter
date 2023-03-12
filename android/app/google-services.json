@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "654852290280",
+    "firebase_url": "https://myrewards-e3b0c-default-rtdb.firebaseio.com",
+    "project_id": "myrewards-e3b0c",
+    "storage_bucket": "myrewards-e3b0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654852290280:android:a7fe0fbe3154dd9b82bb5d",
+        "android_client_info": {
+          "package_name": "com.example.myrewards_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654852290280-6spvadb6us0j7nkk165mrnn9ibq1l4gn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGlVY6MQ6n6Iv2UZjq-E4PAZm5_wQCN3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654852290280-6spvadb6us0j7nkk165mrnn9ibq1l4gn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
