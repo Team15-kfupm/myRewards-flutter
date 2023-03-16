@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:myrewards_flutter/utils/constants.dart';
-import '../../../main.dart';
+
 import 'widgets/go_button.dart';
-import 'widgets/phone_number_text_field.dart';
+
 import 'widgets/upper_part.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
@@ -16,10 +16,9 @@ class SignInPage extends ConsumerStatefulWidget {
 }
 
 class AuthStructurePageState extends ConsumerState<SignInPage> {
+  String _phoneNumber = '';
   @override
   Widget build(BuildContext context) {
-    final verificationId = ref.watch(verificationIdProvider);
-    
     return Scaffold(
       backgroundColor: secondaryColor,
       resizeToAvoidBottomInset: false,
@@ -42,9 +41,36 @@ class AuthStructurePageState extends ConsumerState<SignInPage> {
                 const Align(
                     alignment: Alignment.topRight, child: CloseButton()),
                 58.verticalSpace,
-                const PhoneNumberTextField(),
+                TextField(
+                  onChanged: (value) {
+                    _phoneNumber = value;
+                    setState(() {});
+                  },
+                  enabled: true,
+                  decoration: InputDecoration(
+                    fillColor: whiteColor,
+                    focusColor: primaryColor,
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30.r),
+                        ),
+                        borderSide: const BorderSide(color: primaryColor)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30.r),
+                        ),
+                        borderSide: const BorderSide(color: primaryColor)),
+                    prefixIcon: const Icon(
+                      Icons.phone_iphone_outlined,
+                      color: Colors.black,
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 25.h, horizontal: 10.w),
+                    hintText: '05XXXXXXXX',
+                  ),
+                ),
                 60.verticalSpace,
-                const GoButton(),
+                GoButton(phoneNumber: _phoneNumber),
               ],
             ),
           )

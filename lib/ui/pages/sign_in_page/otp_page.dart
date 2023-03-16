@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +21,7 @@ void setOtp(String otp, int index) {
 }
 
 final _formKey = GlobalKey<FormState>();
+final countDownProvider = StateProvider.autoDispose<int>((ref) => 30);
 
 class OTPPage extends ConsumerStatefulWidget {
   const OTPPage({
@@ -36,7 +38,11 @@ class OTPPageState extends ConsumerState<OTPPage> {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back_ios_rounded, color: blackColor),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: blackColor)),
         backgroundColor: whiteColor,
         elevation: 0,
       ),
@@ -47,8 +53,10 @@ class OTPPageState extends ConsumerState<OTPPage> {
           children: [
             Container(),
             Column(children: [
-              Text('Enter OTP sent to your mobile \n +966 123456789',
-                  textAlign: TextAlign.center, style: oTPLabelTextStyle),
+              Text(
+                  'Enter OTP sent to your mobile \n ${ref.read(userInfoProvider).phone}',
+                  textAlign: TextAlign.center,
+                  style: oTPLabelTextStyle),
               20.verticalSpace,
               const OTPField(),
               25.verticalSpace,
@@ -56,34 +64,49 @@ class OTPPageState extends ConsumerState<OTPPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //create countdown timer
-                  Text('Code expire in 00:30',
-                      style: expireOTPCountdownTextStyle),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      Future.delayed(const Duration(seconds: 1), () {
+                        if (ref.read(countDownProvider.notifier).state > 0) {
+                          ref.read(countDownProvider.notifier).state--;
+                        }
+                      });
+
+                      return Text("00:${ref.watch(countDownProvider)}s",
+                          style: expireOTPCountdownTextStyle);
+                    },
+                  ),
 
                   TextButton(
-                      onPressed: () {},
+                      onPressed: ref.watch(countDownProvider) == 0
+                          ? () {
+                              AuthService()
+                                  .signInWithPhoneNumber(ref, '+966545351030');
+                            }
+                          : () {},
                       style: noBackgroundButtonStyle,
-                      child:
-                          Text('Resend Code', style: forgotPasswordTextStyle))
+                      child: Text('Resend Code',
+                          style: ref.watch(countDownProvider) == 0
+                              ? forgotPasswordTextStyle
+                              : expireOTPCountdownTextStyle))
                 ],
               )
             ]),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
               child: InkWell(
-                onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    String errorMessage = await AuthService()
+                onTap: () {
+                  try {
+                    AuthService()
                         .verifyOTP(ref.read(verificationIdProvider), getOtp());
-                    if (errorMessage.isNotEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Enter a valid OTP'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      return;
-                    }
-                    Navigator.pop(context);
+                  } catch (e) {
+                    Flushbar(
+                      message: 'Please enter a valid OTP',
+                      duration: const Duration(milliseconds: 1300),
+                      flushbarStyle: FlushbarStyle.FLOATING,
+                      backgroundColor: Colors.red,
+                      flushbarPosition: FlushbarPosition.TOP,
+                    ).show(context);
                   }
                 },
                 highlightColor: whiteColor,
@@ -147,12 +170,6 @@ class _OTPFieldState extends State<OTPField> {
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
                 border: InputBorder.none,
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter OTP';
-                }
-                return null;
-              },
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();

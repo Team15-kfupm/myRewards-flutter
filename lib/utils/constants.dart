@@ -83,9 +83,13 @@ final largeButtonTextStyle =
 
 // Text in Radio Button Style Section Start//
 
-
 // Text in Radio Button Style Section End//
 
 // Container Style Section Start//
 
 // Container Style Section End//
+
+// Regex Section Start//
+var phoneNumberRegex = RegExp(r'^(05)+(\d{8})$');
+
+// Regex Section End//
