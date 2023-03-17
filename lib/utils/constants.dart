@@ -149,3 +149,4 @@ final largeButtonTextStyle =
 var phoneNumberRegex = RegExp(r'^(05)+(\d{8})$');
 
 // Regex Section End//
+

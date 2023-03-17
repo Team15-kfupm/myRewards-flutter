@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/user_info_model.dart';
+import 'package:myrewards_flutter/core/providers/stored_user_provider.dart';
 import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/utils/router.dart' as router;
 
@@ -28,6 +29,16 @@ final verificationIdProvider =
 
 final userInfoProvider = StateNotifierProvider<UserInfoProvider, UserInfoModel>(
     (ref) => UserInfoProvider());
+
+//async provider
+final storedUserProvider =
+    AsyncNotifierProvider<StoredUserProvider, UserInfoModel>(() {
+  return StoredUserProvider();
+});
+
+// final isActiveSessionProvider = StateProvider<bool>((ref) => false);
+// final prevPhoneNumberProvider = StateProvider<String>((ref) => '');
+
 
 class MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
