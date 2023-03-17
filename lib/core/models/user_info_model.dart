@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserInfoModel {
@@ -7,6 +8,7 @@ class UserInfoModel {
   final String phone;
   final DateTime birthDate;
   final String gender;
+
 
   UserInfoModel({
     required this.uid,
@@ -26,13 +28,16 @@ class UserInfoModel {
       DateTime? birthDate,
       String? gender}) {
     return UserInfoModel(
+
         uid: uid ?? this.uid,
+
         name: name ?? this.name,
         email: email ?? this.email,
         phone: phone ?? this.phone,
         birthDate: birthDate ?? this.birthDate,
         gender: gender ?? this.gender);
   }
+
 
   // from snapshot
   UserInfoModel.fromSnapshot(DocumentSnapshot snapshot)
@@ -42,4 +47,5 @@ class UserInfoModel {
         phone = snapshot.get('phoneNumber'),
         birthDate = snapshot.get('birthDate'),
         gender = snapshot.get('gender');
+>
 }

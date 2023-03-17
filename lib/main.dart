@@ -11,7 +11,7 @@ import 'core/providers/auth_phone_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+//  await Firebase.initializeApp();
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -29,6 +29,7 @@ final verificationIdProvider =
 
 final userInfoProvider = StateNotifierProvider<UserInfoProvider, UserInfoModel>(
     (ref) => UserInfoProvider());
+
 //async provider
 final storedUserProvider =
     AsyncNotifierProvider<StoredUserProvider, UserInfoModel>(() {
@@ -38,6 +39,7 @@ final storedUserProvider =
 // final isActiveSessionProvider = StateProvider<bool>((ref) => false);
 // final prevPhoneNumberProvider = StateProvider<String>((ref) => '');
 
+
 class MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
@@ -46,6 +48,7 @@ class MyAppState extends ConsumerState<MyApp> {
       designSize: const Size(375, 812),
       builder: (BuildContext context, Widget? child) {
         return const MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           initialRoute: '/',
           onGenerateRoute: router.generateRoute,
