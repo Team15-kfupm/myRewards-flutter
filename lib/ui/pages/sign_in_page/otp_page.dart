@@ -1,5 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +20,7 @@ void setOtp(String otp, int index) {
   _otp[index] = otp;
 }
 
-final _formKey = GlobalKey<FormState>();
-final countDownProvider = StateProvider.autoDispose<int>((ref) => 30);
+final countDownProvider = StateProvider.autoDispose<int>((ref) => 50);
 
 class OTPPage extends ConsumerStatefulWidget {
   const OTPPage({
@@ -33,6 +32,12 @@ class OTPPage extends ConsumerStatefulWidget {
 }
 
 class OTPPageState extends ConsumerState<OTPPage> {
+  @override
+  void didChangeDependencies() {
+    context.dependOnInheritedWidgetOfExactType();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +85,13 @@ class OTPPageState extends ConsumerState<OTPPage> {
                   TextButton(
                       onPressed: ref.watch(countDownProvider) == 0
                           ? () {
-                              AuthService()
-                                  .signInWithPhoneNumber(ref, '+966545351030');
+                              ref.read(countDownProvider.notifier).state = 50;
+                              AuthService().signInWithPhoneNumber(
+                                  ref,
+                                  ref
+                                      .read(userInfoProvider)
+                                      .phone
+                                      .substring(1));
                             }
                           : () {},
                       style: noBackgroundButtonStyle,
@@ -95,9 +105,9 @@ class OTPPageState extends ConsumerState<OTPPage> {
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   try {
-                    AuthService()
+                    await AuthService()
                         .verifyOTP(ref.read(verificationIdProvider), getOtp());
                   } catch (e) {
                     Flushbar(
@@ -107,7 +117,9 @@ class OTPPageState extends ConsumerState<OTPPage> {
                       backgroundColor: Colors.red,
                       flushbarPosition: FlushbarPosition.TOP,
                     ).show(context);
+                    return;
                   }
+                  Navigator.pop(context);
                 },
                 highlightColor: whiteColor,
                 child: Container(
@@ -149,7 +161,6 @@ class _OTPFieldState extends State<OTPField> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

@@ -23,7 +23,7 @@ class GoButtonState extends ConsumerState<GoButton> {
     var isLoading = ref.watch(isLoadingProvider);
 
     return InkWell(
-      onTap: () async {
+      onTap: () {
         if (widget.phoneNumber.isEmpty ||
             !phoneNumberRegex.hasMatch(widget.phoneNumber)) {
           Flushbar(
@@ -35,26 +35,29 @@ class GoButtonState extends ConsumerState<GoButton> {
           ).show(context);
           return;
         }
-        if (isLoading) return;
-        ref.read(isLoadingProvider.notifier).state = true;
+        if (isLoading) {
+          Navigator.pushNamed(context, '/otp');
+          return;
+        }
 
+        AuthService()
+            .signInWithPhoneNumber(ref, widget.phoneNumber.substring(1));
+        ref.read(isLoadingProvider.notifier).state = true;
         var userInfo = ref.read(userInfoProvider);
         userInfo = userInfo.copyWith(phone: widget.phoneNumber);
         ref.read(userInfoProvider.notifier).setUserInfo(userInfo);
-        AuthService()
-            .signInWithPhoneNumber(ref, widget.phoneNumber.substring(1));
+
+        Navigator.pushNamed(context, '/otp');
       },
       child: Container(
         height: 60.h,
         width: 318.w,
         decoration: signInButtonStyle,
         child: Center(
-          child: isLoading
-              ? const CircularProgressIndicator()
-              : Text(
-                  'GO!',
-                  style: signInButtonTextStyle,
-                ),
+          child: Text(
+            'GO!',
+            style: signInButtonTextStyle,
+          ),
         ),
       ),
     );

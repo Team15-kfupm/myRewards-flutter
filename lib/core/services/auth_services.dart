@@ -33,14 +33,13 @@ class AuthService {
   int _forceResendingToken = 0;
 
   Future<void> signInWithPhoneNumber(WidgetRef ref, String phoneNumber) async {
-    _auth.verifyPhoneNumber(
+    await _auth.verifyPhoneNumber(
       phoneNumber: "+966$phoneNumber",
-      verificationCompleted: ((phoneAuthCredential) async {
+      verificationCompleted: ((phoneAuthCredential) {
         log('verify success');
 
-        final user = await _auth.signInWithCredential(phoneAuthCredential);
+        _auth.signInWithCredential(phoneAuthCredential);
         ref.read(isLoadingProvider.notifier).state = false;
-        log(user.toString());
       }),
       verificationFailed: (FirebaseAuthException e) {
         ref.read(isLoadingProvider.notifier).state = false;
@@ -49,21 +48,17 @@ class AuthService {
       },
       codeSent: (String verificationId, int? resendToken) {
         log('code sent');
-        Navigator.popUntil(ref.context, (route) {
-          return route.settings.name == null;
-        });
+
         ref
             .read(verificationIdProvider.notifier)
             .setVerificationId(verificationId);
         ref.read(isLoadingProvider.notifier).state = false;
-        ref.read(countDownProvider.notifier).state = 30;
-        _forceResendingToken = resendToken!;
 
-        Navigator.pushNamed(ref.context, '/otp');
+        _forceResendingToken = resendToken!;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         log('code auto retrieval timeout');
-        // ref.read(isActiveSessionProvider.notifier).state = false;
+
         ref.read(isLoadingProvider.notifier).state = false;
       },
       timeout: const Duration(seconds: 30),
