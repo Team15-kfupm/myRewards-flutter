@@ -7,8 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 const primaryColor = Color(0xFFFEC54B);
 const secondaryColor = Color(0xFFFDB244);
 const authPageClipColor = Color(0xFFF2BB69);
+const shapesInCardBackgroundColor = Color(0xFFFFB519);
 const greyColor = Color(0xFF6A6A6A);
 const lightGreyColor = Color(0xFFD9D9D9);
+const offerCardprimaryColor = Color(0xFFDDA85C);
+const offerCardClaimBackgroundColor = Color(0xFF389AD4);
 const whiteColor = Color(0xFFFFFFFF);
 const blackColor = Colors.black;
 const transparentColor = Colors.transparent;
@@ -18,7 +21,7 @@ const settingsTileIconColor = Color(0xFFA2A2A7);
 const settingsTileTitleColor = Color(0xFF1E1E2D);
 const settingsTileArrowIconColor = Color(0xFF7E848D);
 const profileTileValueColor = Color(0xFFA2A2A7);
-const profileTileArrowColor = Color(0xFF7E848D);
+const welcomeTextColor = Color(0xFF7E848D);
 
 // Colors Section End//
 
@@ -27,6 +30,12 @@ const profileTileArrowColor = Color(0xFF7E848D);
 final smallPrimaryTextStyle = GoogleFonts.poppins(
   fontSize: 14.spMin,
   fontWeight: FontWeight.w500,
+  color: primaryColor,
+);
+
+final normaPrimarylTextStyle = GoogleFonts.poppins(
+  fontSize: 16.sp,
+  fontWeight: FontWeight.w400,
   color: primaryColor,
 );
 
@@ -42,10 +51,16 @@ final normaGreylTextStyle = GoogleFonts.poppins(
   color: greyColor,
 );
 
-final normaPrimarylTextStyle = GoogleFonts.poppins(
-  fontSize: 16.sp,
-  fontWeight: FontWeight.w400,
-  color: primaryColor,
+final totalSpendingsAmountTextStyle = GoogleFonts.poppins(
+  fontSize: 32.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
+);
+
+final totalSpendingsTextStyle = GoogleFonts.poppins(
+  fontSize: 16.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
 );
 
 final expireOTPCountdownTextStyle =
@@ -60,6 +75,18 @@ final titleTextStyle = GoogleFonts.poppins(
   fontSize: 20.spMin,
   fontWeight: FontWeight.w600,
   color: blackColor,
+);
+
+final welcomeTextStyle = GoogleFonts.poppins(
+  fontSize: 12.spMin,
+  fontWeight: FontWeight.w400,
+  color: welcomeTextColor,
+);
+
+final welcomeNameTextStyle = GoogleFonts.poppins(
+  fontSize: 18.spMin,
+  fontWeight: FontWeight.w600,
+  color: settingsTileTitleColor,
 );
 
 final settingsUsernameTextStyle = GoogleFonts.poppins(

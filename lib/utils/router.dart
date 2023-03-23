@@ -9,7 +9,7 @@ import '../ui/pages/sign_in_page/otp_page.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (context) => const AuthChecker());
+      return MaterialPageRoute(builder: (context) => const HomePage());
 
     case '/home':
       return MaterialPageRoute(builder: (context) => const HomePage());

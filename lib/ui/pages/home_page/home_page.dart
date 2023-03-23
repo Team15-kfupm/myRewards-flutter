@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/categories_chart.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/offers.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/total_spending.dart';
+import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
+import 'package:myrewards_flutter/ui/pages/home_page/widgets/offers_list.dart';
+import 'package:myrewards_flutter/ui/pages/home_page/widgets/total_spendings_card.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
+
+import '../../../utils/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,22 +27,40 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              TotalSpending(),
-              SizedBox(
-                height: 30,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const AvatarWithWelcome(),
+                  InkWell(
+                    onLongPress: () {},
+                    child: Container(
+                        width: 42.w,
+                        height: 42.h,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          color: settingsAppBarIconBackgroundColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.search_rounded,
+                          color: blackColor,
+                          size: 20.r,
+                        )),
+                  ),
+                ],
               ),
-              CategoriesChart(),
-              SizedBox(
-                height: 30,
-              ),
-              Offers(),
+              32.verticalSpace,
+              const TotalSpendings(),
+              32.verticalSpace,
+              const OffersList(),
             ],
           )),
       const StoresPage(),
       Center(
         child: InkWell(
-            onTap: () => AuthService().signOut(), child: Text('Settings Page')),
+            onTap: () => AuthService().signOut(),
+            child: const Text('Settings Page')),
       ),
     ];
     return Scaffold(
