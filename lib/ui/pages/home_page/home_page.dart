@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/offers_list.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/total_spendings_card.dart';
+import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
 
 import '../../../utils/constants.dart';
@@ -16,13 +16,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      const Center(
-        child: Text('Comunity Page'),
-      ),
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           child: Column(
@@ -51,12 +48,15 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               32.verticalSpace,
-              const TotalSpendings(),
+              const CreditsCard(),
               32.verticalSpace,
               const OffersList(),
             ],
           )),
       const StoresPage(),
+      const Center(
+        child: Text('Statistics Page'),
+      ),
       Center(
         child: InkWell(
             onTap: () => AuthService().signOut(),
@@ -76,16 +76,16 @@ class _HomePageState extends State<HomePage> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'Comunity',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.store),
+            icon: Icon(Icons.group),
             label: 'Stores',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store),
+            label: 'Statistics',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

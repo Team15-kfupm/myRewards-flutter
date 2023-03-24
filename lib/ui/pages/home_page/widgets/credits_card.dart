@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 
-class TotalSpendings extends StatefulWidget {
-  const TotalSpendings({Key? key}) : super(key: key);
+class CreditsCard extends StatefulWidget {
+  const CreditsCard({Key? key}) : super(key: key);
 
   @override
-  State<TotalSpendings> createState() => _TotalSpendingsState();
+  State<CreditsCard> createState() => _CreditsCardState();
 }
 
-class _TotalSpendingsState extends State<TotalSpendings> {
+class _CreditsCardState extends State<CreditsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,10 +105,10 @@ class _TotalSpendingsState extends State<TotalSpendings> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '\$ 11,000.00',
+                  '432.00',
                   style: totalSpendingsAmountTextStyle,
                 ),
-                Text('Total Spendings', style: totalSpendingsTextStyle),
+                Text('Credits', style: totalSpendingsTextStyle),
               ],
             ),
           ),

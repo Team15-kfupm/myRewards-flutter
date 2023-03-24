@@ -11,7 +11,7 @@ class OfferCard extends StatefulWidget {
 }
 
 class _OfferCardState extends State<OfferCard> {
-  final double _progressPercentage = 84;
+  final double _price = 84;
 
   @override
   Widget build(BuildContext context) {
@@ -104,48 +104,29 @@ class _OfferCardState extends State<OfferCard> {
           ),
           // ProgressIndicator
 
-          _progressPercentage == 100
-              ? Positioned(
-                  bottom: -2.h,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      width: 324.w,
-                      height: 39.h,
-                      decoration: const BoxDecoration(
-                        color: offerCardClaimBackgroundColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Claim',
-                          style: welcomeNameTextStyle,
-                        ),
-                      ),
-                    ),
+          Positioned(
+            bottom: -2.h,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                width: 324.w,
+                height: 39.h,
+                decoration: const BoxDecoration(
+                  color: offerCardClaimBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
                   ),
-                )
-              : Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Stack(alignment: Alignment.center, children: [
-                    LinearProgressIndicator(
-                      backgroundColor: lightGreyColor,
-                      color: blackColor,
-                      value: _progressPercentage / 100,
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                          offerCardClaimBackgroundColor),
-                      minHeight: 39.h,
-                    ),
-                    Text(
-                      '$_progressPercentage%',
-                      style: welcomeNameTextStyle,
-                    ),
-                  ]),
                 ),
-
+                child: Center(
+                  child: Text(
+                    '$_price',
+                    style: welcomeNameTextStyle,
+                  ),
+                ),
+              ),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(left: 32.w),
             child: Align(
@@ -155,10 +136,11 @@ class _OfferCardState extends State<OfferCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Offer Name',
+                    'Store Name',
                     style: totalSpendingsAmountTextStyle,
                   ),
-                  Text('Store Name', style: totalSpendingsTextStyle),
+                  Text('Credits You have in the store',
+                      style: totalSpendingsTextStyle),
                 ],
               ),
             ),
