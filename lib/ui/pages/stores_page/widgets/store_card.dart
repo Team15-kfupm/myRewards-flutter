@@ -1,108 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class StoreCard extends StatelessWidget {
+import '../../../../utils/constants.dart';
+
+class StoreCard extends StatefulWidget {
   const StoreCard({Key? key}) : super(key: key);
 
+  @override
+  State<StoreCard> createState() => _StoreCard();
+}
+
+class _StoreCard extends State<StoreCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
-      child: Column(children: [
-        Container(
-          width: 400,
-          height: 200,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            image: DecorationImage(
-              image: NetworkImage('https://picsum.photos/250?image=2'),
-              fit: BoxFit.fill,
-              opacity: 0.8,
-            ),
+      child: Container(
+        width: 168.w,
+        height: 158.h,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              offerCardprimaryColor,
+              primaryColor,
+            ],
+            begin: Alignment.center,
+            end: Alignment.bottomLeft,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: Colors.grey.withOpacity(0.6),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.store,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Store Name',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.category,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Category',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.location_on,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'location',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: -20.r,
+              bottom: 110.h,
+              child: Transform.rotate(
+                angle: -0.6,
+                child: Container(
+                  width: 64.r,
+                  height: 47.h,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: shapesInCardBackgroundColor,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Positioned(
+              right: 33.w,
+              top: -210.h,
+              bottom: 0,
+              child: Container(
+                width: 60.r,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: shapesInCardBackgroundColor,
+                ),
+              ),
+            ),
+            Positioned(
+              left: -25.r,
+              top: 0,
+              bottom: -100.h,
+              child: Container(
+                width: 65.r,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: shapesInCardBackgroundColor,
+                ),
+              ),
+            ),
+            Positioned(
+              left: 70.r,
+              bottom: -23.h,
+              child: Transform.rotate(
+                angle: 0.4,
+                child: Container(
+                  width: 64.r,
+                  height: 47.h,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: shapesInCardBackgroundColor,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: -35.r,
+              top: 40.h,
+              child: Transform.rotate(
+                angle: -0.5,
+                child: Container(
+                  width: 58.r,
+                  height: 71.h,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: shapesInCardBackgroundColor,
+                  ),
+                ),
+              ),
+            ),
+            // ProgressIndicator
+
+            Padding(
+              padding: EdgeInsets.only(left: 32.w),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FlutterLogo(
+                      size: 100.r,
+                    ),
+                    Text(
+                      'Store Name',
+                      style: totalSpendingsTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 15,
-        ),
-      ]),
+      ),
     );
   }
 }
