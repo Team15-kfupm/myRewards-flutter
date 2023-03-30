@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
+
+import '../store_page/widgets/store_card.dart';
 
 class StoresPage extends StatelessWidget {
   const StoresPage({Key? key}) : super(key: key);

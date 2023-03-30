@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myrewards_flutter/ui/pages/store_page/widgets/offers.dart';
-import 'package:myrewards_flutter/ui/pages/store_page/widgets/store_logo.dart';
-import 'package:myrewards_flutter/ui/pages/store_page/widgets/transactions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/ui/pages/store_page/widgets/offers_list.dart';
+import '../../../utils/constants.dart';
+import 'widgets/store_card.dart';
 
 class StorePage extends StatelessWidget {
   const StorePage({Key? key}) : super(key: key);
@@ -9,34 +10,66 @@ class StorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //transparent appbar
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          title: Text(
+            'Store Name',
+            style: titleTextStyle,
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
-          child: Column(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: transparentColor,
+          leadingWidth: 90.w,
+          leading: Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [Offers(), StoreLogo()],
+              10.horizontalSpace,
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                    width: 42.w,
+                    height: 42.h,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: settingsAppBarIconBackgroundColor,
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: blackColor,
+                      size: 20.r,
+                    )),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Transactions(),
             ],
           ),
-        ));
+          actions: [
+            Row(
+              children: [
+                Container(
+                  width: 42.w,
+                  height: 42.h,
+                  decoration: const BoxDecoration(
+                    color: settingsAppBarIconBackgroundColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.info_outline_rounded,
+                      color: blackColor,
+                      size: 22.r,
+                    ),
+                  ),
+                ),
+                16.horizontalSpace
+              ],
+            ),
+          ],
+        ),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [StoreCard(), 32.verticalSpace, OffersList()])));
   }
 }
