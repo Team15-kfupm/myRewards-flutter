@@ -63,37 +63,39 @@ class _HomePageState extends State<HomePage> {
             child: const Text('Settings Page')),
       ),
     ];
-    return Scaffold(
-      body: Container(
-        child: pages.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedIconTheme: const IconThemeData(color: Colors.grey),
-        onTap: (value) {
-          setState(() {
-            _selectedIndex = value;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.storefront_outlined),
-            label: 'Stores',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pie_chart_rounded),
-            label: 'Statistics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: secondaryColor,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          child: pages.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          unselectedIconTheme: const IconThemeData(color: Colors.grey),
+          onTap: (value) {
+            setState(() {
+              _selectedIndex = value;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.storefront_outlined),
+              label: 'Stores',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.pie_chart_rounded),
+              label: 'Statistics',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: secondaryColor,
+        ),
       ),
     );
   }

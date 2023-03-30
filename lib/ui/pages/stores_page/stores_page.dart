@@ -1,41 +1,62 @@
 import 'package:flutter/material.dart';
+
 import '../store_page/widgets/store_card.dart';
+
+
+import '../../../utils/constants.dart';
+import '../home_page/widgets/avatar_with_welcome.dart';
 
 class StoresPage extends StatelessWidget {
   const StoresPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // opacity app bar
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'Stores',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: const [
-              SizedBox(
-                height: 10,
+    return Padding(
+        padding:
+            const EdgeInsets.only(right: 25, left: 25, bottom: 15, top: 10),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const AvatarWithWelcome(),
+              InkWell(
+                onLongPress: () {},
+                child: Container(
+                    width: 42.w,
+                    height: 42.h,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      color: settingsAppBarIconBackgroundColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.search_rounded,
+                      color: blackColor,
+                      size: 20.r,
+                    )),
               ),
-              StoreCard(),
-              StoreCard(),
-              StoreCard(),
-              StoreCard(),
-              StoreCard(),
             ],
           ),
-        ),
-      ),
-    );
+          32.verticalSpace,
+          SizedBox(
+            height: 610.h,
+            width: 375.w,
+            child: GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 30,
+                mainAxisSpacing: 30,
+                children: const [
+                  StoreCard(),
+                  StoreCard(),
+                  StoreCard(),
+                  StoreCard(),
+                  StoreCard(),
+                  StoreCard(),
+                  StoreCard(),
+                  StoreCard(),
+                ]),
+          )
+        ]));
   }
 }
