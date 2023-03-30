@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../store_page/widgets/store_card.dart';
 
 class StoresPage extends StatelessWidget {
