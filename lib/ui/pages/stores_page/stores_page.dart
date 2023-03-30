@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
+
+import '../store_page/widgets/store_card.dart';
+
 
 import '../../../utils/constants.dart';
 import '../home_page/widgets/avatar_with_welcome.dart';
