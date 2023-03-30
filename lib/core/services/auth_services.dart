@@ -1,11 +1,9 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myrewards_flutter/core/models/auth_user_model.dart';
 import 'package:myrewards_flutter/main.dart';
-import 'package:myrewards_flutter/ui/pages/sign_in_page/otp_page.dart';
 
 import '../../ui/pages/sign_in_page/widgets/go_button.dart';
 
