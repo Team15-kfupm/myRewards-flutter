@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/offers_list.dart';
+import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_list.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
 
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               32.verticalSpace,
               const CreditsCard(),
               32.verticalSpace,
-              const OffersList(),
+              const HomeStoresCardList(),
             ],
           )),
       const StoresPage(),
@@ -80,11 +80,11 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
+            icon: Icon(Icons.storefront_outlined),
             label: 'Stores',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.store),
+            icon: Icon(Icons.pie_chart_rounded),
             label: 'Statistics',
           ),
           BottomNavigationBarItem(
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: secondaryColor,
       ),
     );
   }

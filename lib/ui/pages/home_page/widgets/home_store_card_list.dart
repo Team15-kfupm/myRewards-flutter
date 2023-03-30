@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:myrewards_flutter/ui/pages/home_page/widgets/offer_card.dart';
+import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card.dart';
 
-class OffersList extends StatefulWidget {
-  const OffersList({Key? key}) : super(key: key);
+class HomeStoresCardList extends StatefulWidget {
+  const HomeStoresCardList({Key? key}) : super(key: key);
 
   @override
-  State<OffersList> createState() => _OffersListState();
+  State<HomeStoresCardList> createState() => _HomeStoresCardListState();
 }
 
-class _OffersListState extends State<OffersList> {
+class _HomeStoresCardListState extends State<HomeStoresCardList> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -18,7 +18,7 @@ class _OffersListState extends State<OffersList> {
           itemBuilder: ((context, index) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 9.w),
-              child: const OfferCard(),
+              child: const HomeStoreCard(),
             );
           }),
           separatorBuilder: (context, index) {
