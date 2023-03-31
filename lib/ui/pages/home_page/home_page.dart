@@ -1,24 +1,29 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_list.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
 
+import '../../../main.dart';
 import '../../../utils/constants.dart';
+import '../settings_page/settings_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    log(ref.read(userInfoProvider).asData?.value.name ?? 'error');
     List<Widget> pages = [
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
@@ -57,11 +62,7 @@ class _HomePageState extends State<HomePage> {
       const Center(
         child: Text('Statistics Page'),
       ),
-      Center(
-        child: InkWell(
-            onTap: () => AuthService().signOut(),
-            child: const Text('Settings Page')),
-      ),
+      const SettingsPage(),
     ];
     return SafeArea(
       child: Scaffold(

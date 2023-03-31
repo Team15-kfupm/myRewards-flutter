@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/main.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 
-class AvatarWithWelcome extends StatelessWidget {
+class AvatarWithWelcome extends ConsumerWidget {
   const AvatarWithWelcome({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         CircleAvatar(
@@ -22,7 +24,7 @@ class AvatarWithWelcome extends StatelessWidget {
               style: welcomeTextStyle,
             ),
             Text(
-              'Ahmed',
+              ref.read(userInfoProvider).asData?.value.name ?? '',
               style: welcomeNameTextStyle,
             ),
           ],

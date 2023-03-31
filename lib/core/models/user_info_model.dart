@@ -17,29 +17,12 @@ class UserInfoModel {
     required this.gender,
   });
 
-  // copyWith
-  UserInfoModel copyWith(
-      {String? uid,
-      String? name,
-      String? email,
-      String? phone,
-      DateTime? birthDate,
-      String? gender}) {
-    return UserInfoModel(
-        uid: uid ?? this.uid,
-        name: name ?? this.name,
-        email: email ?? this.email,
-        phone: phone ?? this.phone,
-        birthDate: birthDate ?? this.birthDate,
-        gender: gender ?? this.gender);
-  }
-
   // from snapshot
-  UserInfoModel.fromSnapshot(DocumentSnapshot snapshot)
-      : uid = snapshot.get('uid'),
-        name = snapshot.get('name'),
-        email = snapshot.get('email'),
-        phone = snapshot.get('phoneNumber'),
-        birthDate = snapshot.get('birthDate'),
-        gender = snapshot.get('gender');
+  UserInfoModel.fromSnapshot(DocumentSnapshot userDoc)
+      : uid = userDoc.id,
+        name = userDoc.get('name'),
+        email = userDoc.get('email'),
+        phone = userDoc.get('phone'),
+        birthDate = DateTime.parse(userDoc.get('birth_date')),
+        gender = userDoc.get('gender');
 }

@@ -70,6 +70,10 @@ class StorePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [StoreCard(), 32.verticalSpace, OffersList()])));
+                children: [
+                  const StoreCard(),
+                  32.verticalSpace,
+                  const OffersList()
+                ])));
   }
 }

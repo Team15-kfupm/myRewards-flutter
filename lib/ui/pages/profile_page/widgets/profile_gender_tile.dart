@@ -18,7 +18,7 @@ class ProfileGenderTileState extends ConsumerState<ProfileGenderTile> {
   @override
   void initState() {
     super.initState();
-    _controller.text = ref.read(userInfoProvider).gender;
+    _controller.text = ref.read(userInfoProvider).asData!.value.gender;
   }
 
   @override
@@ -42,14 +42,14 @@ class ProfileGenderTileState extends ConsumerState<ProfileGenderTile> {
           color: greyColor,
           fillColor: primaryColor,
           splashColor: transparentColor,
-          isSelected: [userInfo.gender == 'Male', userInfo.gender == 'Female'],
+          isSelected: [
+            userInfo.asData!.value.gender == 'Male',
+            userInfo.asData!.value.gender == 'Female'
+          ],
           onPressed: (index) {
-            var userInfo = ref.read(userInfoProvider);
-
-            userInfo =
-                userInfo.copyWith(gender: index == 0 ? 'Male' : 'Female');
-
-            ref.read(userInfoProvider.notifier).setUserInfo(userInfo);
+            ref
+                .read(userInfoProvider.notifier)
+                .copyWith(gender: index == 0 ? 'Male' : 'Female');
 
             Flushbar(
               message: 'Gender Updated Successfully',

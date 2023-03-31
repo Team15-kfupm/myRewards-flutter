@@ -24,30 +24,6 @@ class _SettingsPageState extends State<SettingsPage> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: transparentColor,
-        leadingWidth: 90.w,
-        leading: Row(
-          children: [
-            10.horizontalSpace,
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                  width: 42.w,
-                  height: 42.h,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: settingsAppBarIconBackgroundColor,
-                  ),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: blackColor,
-                    size: 20.r,
-                  )),
-            ),
-          ],
-        ),
         actions: [
           Row(
             children: [

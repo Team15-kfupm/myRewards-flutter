@@ -1,16 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/user_info_model.dart';
-import 'package:myrewards_flutter/core/providers/stored_user_provider.dart';
 import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/utils/router.dart' as router;
+// ignore: depend_on_referenced_packages
+import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 import 'core/providers/auth_phone_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
+
+  FlutterError.demangleStackTrace = (StackTrace stack) {
+    if (stack is stack_trace.Trace) return stack.vmTrace;
+    if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+    return stack;
+  };
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -26,14 +34,10 @@ final verificationIdProvider =
     StateNotifierProvider<VerificationIdNotifier, String>(
         (ref) => VerificationIdNotifier());
 
-final userInfoProvider = StateNotifierProvider<UserInfoProvider, UserInfoModel>(
-    (ref) => UserInfoProvider());
+final userInfoProvider = AsyncNotifierProvider<UserInfoProvider, UserInfoModel>(
+    () => UserInfoProvider());
 
 //async provider
-final storedUserProvider =
-    AsyncNotifierProvider<StoredUserProvider, UserInfoModel>(() {
-  return StoredUserProvider();
-});
 
 // final isActiveSessionProvider = StateProvider<bool>((ref) => false);
 // final prevPhoneNumberProvider = StateProvider<String>((ref) => '');

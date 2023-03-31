@@ -19,7 +19,7 @@ class ProfileEmailTileState extends ConsumerState<ProfileEmailTile> {
   @override
   void initState() {
     super.initState();
-    _controller.text = ref.read(userInfoProvider).email;
+    _controller.text = ref.read(userInfoProvider).asData!.value.email;
   }
 
   @override
@@ -35,7 +35,7 @@ class ProfileEmailTileState extends ConsumerState<ProfileEmailTile> {
             SizedBox(
               width: 140.w,
               child: Text(
-                userInfo.email,
+                userInfo.asData!.value.email,
                 style: settingsTileTitleTextStyle,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
@@ -112,15 +112,10 @@ class ProfileEmailTileState extends ConsumerState<ProfileEmailTile> {
 
                                           return;
                                         }
-                                        var userInfo =
-                                            ref.read(userInfoProvider);
-
-                                        userInfo = userInfo.copyWith(
-                                            email: _controller.text);
 
                                         ref
                                             .read(userInfoProvider.notifier)
-                                            .setUserInfo(userInfo);
+                                            .copyWith(email: _controller.text);
 
                                         Navigator.pop(context);
 

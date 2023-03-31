@@ -18,8 +18,13 @@ class ProfileBirthDateTileState extends ConsumerState<ProfileBirthDateTile> {
   @override
   void initState() {
     super.initState();
-    _controller.text =
-        ref.read(userInfoProvider).birthDate.toString().substring(0, 10);
+    _controller.text = ref
+        .read(userInfoProvider)
+        .asData!
+        .value
+        .birthDate
+        .toString()
+        .substring(0, 10);
   }
 
   @override
@@ -34,7 +39,7 @@ class ProfileBirthDateTileState extends ConsumerState<ProfileBirthDateTile> {
             SizedBox(
               width: 140.w,
               child: Text(
-                userInfo.birthDate.toString().substring(0, 10),
+                userInfo.asData!.value.birthDate.toString().substring(0, 10),
                 style: settingsTileTitleTextStyle,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
@@ -61,11 +66,10 @@ class ProfileBirthDateTileState extends ConsumerState<ProfileBirthDateTile> {
 
                     return;
                   }
-                  var userInfo = ref.read(userInfoProvider);
 
-                  userInfo = userInfo.copyWith(birthDate: value);
-
-                  ref.read(userInfoProvider.notifier).setUserInfo(userInfo);
+                  ref
+                      .read(userInfoProvider.notifier)
+                      .copyWith(birthDate: value);
                   Flushbar(
                     message: 'Birth Date Updated Successfully',
                     duration: const Duration(milliseconds: 1100),

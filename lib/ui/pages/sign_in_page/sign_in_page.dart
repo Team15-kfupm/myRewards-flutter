@@ -12,10 +12,10 @@ class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
-  AuthStructurePageState createState() => AuthStructurePageState();
+  SignInPageState createState() => SignInPageState();
 }
 
-class AuthStructurePageState extends ConsumerState<SignInPage> {
+class SignInPageState extends ConsumerState<SignInPage> {
   String _phoneNumber = '';
   @override
   Widget build(BuildContext context) {
