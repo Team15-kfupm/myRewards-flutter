@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/models/store_model.dart';
 
 import '../../../../utils/constants.dart';
 
 class StoreCard extends StatefulWidget {
-  const StoreCard({Key? key}) : super(key: key);
+  final StoreModel store;
+  const StoreCard({Key? key, required this.store}) : super(key: key);
 
   @override
   State<StoreCard> createState() => _StoreCard();
@@ -107,21 +108,20 @@ class _StoreCard extends State<StoreCard> {
 
             Padding(
               padding: EdgeInsets.only(left: 32.w),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FlutterLogo(
-                      size: 100.r,
-                    ),
-                    Text(
-                      'Store Name',
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FlutterLogo(
+                    size: 80.r,
+                  ),
+                  Center(
+                    child: Text(
+                      widget.store.name,
                       style: totalSpendingsTextStyle,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -130,4 +130,3 @@ class _StoreCard extends State<StoreCard> {
     );
   }
 }
-

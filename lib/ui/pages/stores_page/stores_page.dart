@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../store_page/widgets/store_card.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card_grid_view.dart';
 
 import '../../../utils/constants.dart';
 import '../home_page/widgets/avatar_with_welcome.dart';
@@ -40,22 +39,9 @@ class StoresPage extends StatelessWidget {
           ),
           32.verticalSpace,
           SizedBox(
-            height: 610.h,
+            height: 600.h,
             width: 375.w,
-            child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 30,
-                mainAxisSpacing: 30,
-                children: const [
-                  StoreCard(),
-                  StoreCard(),
-                  StoreCard(),
-                  StoreCard(),
-                  StoreCard(),
-                  StoreCard(),
-                  StoreCard(),
-                  StoreCard(),
-                ]),
+            child: const StoreCardGridVIew(),
           )
         ]));
   }

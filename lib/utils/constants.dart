@@ -22,6 +22,8 @@ const settingsTileTitleColor = Color(0xFF1E1E2D);
 const settingsTileArrowIconColor = Color(0xFF7E848D);
 const profileTileValueColor = Color(0xFFA2A2A7);
 const welcomeTextColor = Color(0xFF7E848D);
+var firstShimmerColor = Colors.grey.shade200;
+var secondShimmerColor = Colors.grey.shade400;
 
 // Colors Section End//
 

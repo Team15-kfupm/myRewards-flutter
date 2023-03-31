@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 
 import 'package:flutter/material.dart';
@@ -59,7 +61,7 @@ class OTPPageState extends ConsumerState<OTPPage> {
             Container(),
             Column(children: [
               Text(
-                  'Enter OTP sent to your mobile \n ${ref.read(userInfoProvider).phone}',
+                  'Enter OTP sent to your mobile \n ${ref.read(userInfoProvider).asData!.value.phone}',
                   textAlign: TextAlign.center,
                   style: oTPLabelTextStyle),
               20.verticalSpace,
@@ -90,6 +92,8 @@ class OTPPageState extends ConsumerState<OTPPage> {
                                   ref,
                                   ref
                                       .read(userInfoProvider)
+                                      .asData!
+                                      .value
                                       .phone
                                       .substring(1));
                             }
@@ -109,6 +113,7 @@ class OTPPageState extends ConsumerState<OTPPage> {
                   try {
                     await AuthService()
                         .verifyOTP(ref.read(verificationIdProvider), getOtp());
+                    await ref.read(userInfoProvider.notifier).verifyUser();
                   } catch (e) {
                     Flushbar(
                       message: 'Please enter a valid OTP',

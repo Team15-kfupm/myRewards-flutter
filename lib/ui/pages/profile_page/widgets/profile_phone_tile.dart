@@ -18,7 +18,7 @@ class ProfilePhoneTileState extends ConsumerState<ProfilePhoneTile> {
   @override
   void initState() {
     super.initState();
-    _controller.text = ref.read(userInfoProvider).phone;
+    _controller.text = ref.read(userInfoProvider).asData!.value.phone;
   }
 
   @override
@@ -34,7 +34,7 @@ class ProfilePhoneTileState extends ConsumerState<ProfilePhoneTile> {
             SizedBox(
               width: 140.w,
               child: Text(
-                userInfo.phone,
+                userInfo.asData!.value.phone,
                 style: settingsTileTitleTextStyle,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
@@ -111,15 +111,10 @@ class ProfilePhoneTileState extends ConsumerState<ProfilePhoneTile> {
 
                                           return;
                                         }
-                                        var userInfo =
-                                            ref.read(userInfoProvider);
-
-                                        userInfo = userInfo.copyWith(
-                                            phone: _controller.text);
 
                                         ref
                                             .read(userInfoProvider.notifier)
-                                            .setUserInfo(userInfo);
+                                            .copyWith(phone: _controller.text);
 
                                         Navigator.pop(context);
                                         Flushbar(

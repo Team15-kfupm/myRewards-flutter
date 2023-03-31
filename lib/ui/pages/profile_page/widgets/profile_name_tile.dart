@@ -18,7 +18,7 @@ class ProfileNameTileState extends ConsumerState<ProfileNameTile> {
   @override
   void initState() {
     super.initState();
-    _controller.text = ref.read(userInfoProvider).name;
+    _controller.text = ref.read(userInfoProvider).asData!.value.name;
   }
 
   @override
@@ -34,7 +34,7 @@ class ProfileNameTileState extends ConsumerState<ProfileNameTile> {
             SizedBox(
               width: 140.w,
               child: Text(
-                userInfo.name,
+                userInfo.asData!.value.name,
                 style: settingsTileTitleTextStyle,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
@@ -110,15 +110,10 @@ class ProfileNameTileState extends ConsumerState<ProfileNameTile> {
 
                                           return;
                                         }
-                                        var userInfo =
-                                            ref.read(userInfoProvider);
-
-                                        userInfo = userInfo.copyWith(
-                                            name: _controller.text);
 
                                         ref
                                             .read(userInfoProvider.notifier)
-                                            .setUserInfo(userInfo);
+                                            .copyWith(name: _controller.text);
 
                                         Navigator.pop(context);
 
