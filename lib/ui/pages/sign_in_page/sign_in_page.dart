@@ -15,6 +15,8 @@ class SignInPage extends ConsumerStatefulWidget {
   SignInPageState createState() => SignInPageState();
 }
 
+final phoneProvider = StateProvider<String>((ref) => '');
+
 class SignInPageState extends ConsumerState<SignInPage> {
   String _phoneNumber = '';
   @override

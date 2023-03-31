@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/ui/pages/store_page/widgets/offers_list.dart';
 import '../../../utils/constants.dart';
-import 'widgets/store_card.dart';
+import '../stores_page/widgets/store_card.dart';
+import '../store_page/widgets/store_card.dart' as store_card;
 
-class StorePage extends StatelessWidget {
+class StorePage extends ConsumerWidget {
   const StorePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final store = ref.read(currentStoreProvider);
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Store Name',
+            store.name,
             style: titleTextStyle,
           ),
           centerTitle: true,
@@ -71,7 +74,7 @@ class StorePage extends StatelessWidget {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const StoreCard(),
+                  const store_card.StoreCard(),
                   32.verticalSpace,
                   const OffersList()
                 ])));

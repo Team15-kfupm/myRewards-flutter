@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
 
 import '../../../../utils/constants.dart';
 
-class StoreCard extends StatelessWidget {
+class StoreCard extends ConsumerWidget {
   const StoreCard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: 335.w,
       height: 199.h,
@@ -106,8 +108,7 @@ class StoreCard extends StatelessWidget {
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    width: 350.w,
-                    height: 60.h,
+                    width: 335.w,
                     decoration: const BoxDecoration(
                       color: offerCardClaimBackgroundColor,
                       borderRadius: BorderRadius.only(
@@ -116,14 +117,15 @@ class StoreCard extends StatelessWidget {
                       ),
                     ),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          '150',
-                          style: welcomeNameTextStyle,
+                          ref.read(currentStoreProvider).points.toString(),
+                          style: storePointsTextStyle,
                         ),
                         Text(
                           'Total Points',
-                          style: welcomeNameTextStyle,
+                          style: storePointsTextStyle,
                         ),
                       ],
                     ),

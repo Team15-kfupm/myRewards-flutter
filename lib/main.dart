@@ -13,13 +13,11 @@ import 'core/providers/auth_phone_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
-
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -36,8 +34,6 @@ final verificationIdProvider =
 
 final userInfoProvider = AsyncNotifierProvider<UserInfoProvider, UserInfoModel>(
     () => UserInfoProvider());
-
-//async provider
 
 // final isActiveSessionProvider = StateProvider<bool>((ref) => false);
 // final prevPhoneNumberProvider = StateProvider<String>((ref) => '');

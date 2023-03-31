@@ -91,6 +91,12 @@ final welcomeNameTextStyle = GoogleFonts.poppins(
   color: settingsTileTitleColor,
 );
 
+final storePointsTextStyle = GoogleFonts.poppins(
+  fontSize: 17.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
+);
+
 final settingsUsernameTextStyle = GoogleFonts.poppins(
   fontSize: 17.spMin,
   fontWeight: FontWeight.w500,

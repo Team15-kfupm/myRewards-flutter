@@ -1,31 +1,36 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
 
 import 'offer_card.dart';
 
-class OffersList extends StatefulWidget {
+class OffersList extends ConsumerStatefulWidget {
   const OffersList({Key? key}) : super(key: key);
 
   @override
-  State<OffersList> createState() => _OffersList();
+  OffersListState createState() => OffersListState();
 }
 
-class _OffersList extends State<OffersList> {
+class OffersListState extends ConsumerState<OffersList> {
   @override
   Widget build(BuildContext context) {
+    final offers = ref.read(currentStoreProvider).offers;
     return Expanded(
       child: ListView.separated(
           cacheExtent: 99999999999,
           itemBuilder: ((context, index) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 9.w),
-              child: const OfferCard(),
+              child: OfferCard(
+                offer: offers[index],
+              ),
             );
           }),
           separatorBuilder: (context, index) {
             return 16.verticalSpace;
           },
-          itemCount: 5),
+          itemCount: offers.length),
     );
   }
 }
