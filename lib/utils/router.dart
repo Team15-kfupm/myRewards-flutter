@@ -6,15 +6,17 @@ import 'package:myrewards_flutter/ui/pages/store_page/store_page.dart';
 import 'package:myrewards_flutter/ui/shared/pages/auth_checker/auth_checker.dart';
 
 import '../ui/pages/sign_in_page/otp_page.dart';
-import '../ui/pages/stores_page/stores_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (context) => const HomePage());
+      return MaterialPageRoute(builder: (context) => const AuthChecker());
 
     case '/home':
       return MaterialPageRoute(builder: (context) => const HomePage());
+
+    case '/storePage':
+      return MaterialPageRoute(builder: (context) => const StorePage());
 
     case '/profile':
       return MaterialPageRoute(builder: (context) => const ProfilePage());

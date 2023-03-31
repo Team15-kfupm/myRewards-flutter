@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:another_flushbar/flushbar.dart';
 
 import 'package:flutter/material.dart';
@@ -7,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:myrewards_flutter/main.dart';
+import 'package:myrewards_flutter/ui/pages/sign_in_page/sign_in_page.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 
 List<String> _otp = ['', '', '', '', '', ''];
@@ -61,7 +60,7 @@ class OTPPageState extends ConsumerState<OTPPage> {
             Container(),
             Column(children: [
               Text(
-                  'Enter OTP sent to your mobile \n ${ref.read(userInfoProvider).asData!.value.phone}',
+                  'Enter OTP sent to your mobile \n ${ref.read(phoneProvider)}',
                   textAlign: TextAlign.center,
                   style: oTPLabelTextStyle),
               20.verticalSpace,
@@ -89,13 +88,7 @@ class OTPPageState extends ConsumerState<OTPPage> {
                           ? () {
                               ref.read(countDownProvider.notifier).state = 50;
                               AuthService().signInWithPhoneNumber(
-                                  ref,
-                                  ref
-                                      .read(userInfoProvider)
-                                      .asData!
-                                      .value
-                                      .phone
-                                      .substring(1));
+                                  ref, ref.read(phoneProvider).substring(1));
                             }
                           : () {},
                       style: noBackgroundButtonStyle,

@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 
 import '../../../../utils/constants.dart';
 
-class StoreCard extends StatefulWidget {
+class StoreCard extends ConsumerStatefulWidget {
   final StoreModel store;
   const StoreCard({Key? key, required this.store}) : super(key: key);
 
   @override
-  State<StoreCard> createState() => _StoreCard();
+  StoreCardState createState() => StoreCardState();
 }
 
-class _StoreCard extends State<StoreCard> {
+final currentStoreProvider = StateProvider(
+    (ref) => StoreModel(id: '', location: '', name: '', offers: [], points: 0));
+
+class StoreCardState extends ConsumerState<StoreCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        ref.read(currentStoreProvider.notifier).state = widget.store;
+        Navigator.pushNamed(context, '/storePage');
+      },
       child: Container(
         width: 168.w,
         height: 158.h,

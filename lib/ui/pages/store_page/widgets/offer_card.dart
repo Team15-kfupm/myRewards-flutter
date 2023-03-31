@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/models/offer_model.dart';
 
 import '../../../../utils/constants.dart';
+import '../../stores_page/widgets/store_card.dart';
 
-class OfferCard extends StatelessWidget {
-  const OfferCard({Key? key}) : super(key: key);
+class OfferCard extends ConsumerStatefulWidget {
+  final OfferModel offer;
+  const OfferCard({Key? key, required this.offer}) : super(key: key);
 
   @override
+  OfferCardState createState() => OfferCardState();
+}
+
+class OfferCardState extends ConsumerState<OfferCard> {
+  @override
   Widget build(BuildContext context) {
+    final store = ref.watch(currentStoreProvider);
+    bool isEnoughtPoints = store.points >= widget.offer.points;
     return Container(
       width: 315.w,
       height: 172.h,
@@ -100,13 +111,19 @@ class OfferCard extends StatelessWidget {
           Positioned(
             bottom: -2.h,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                if (!isEnoughtPoints) {
+                  return;
+                }
+              },
               child: Container(
                 width: 324.w,
                 height: 39.h,
-                decoration: const BoxDecoration(
-                  color: offerCardClaimBackgroundColor,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: isEnoughtPoints
+                      ? offerCardClaimBackgroundColor
+                      : welcomeTextColor,
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
                   ),
@@ -129,10 +146,11 @@ class OfferCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Offer Title',
+                    widget.offer.title,
                     style: totalSpendingsAmountTextStyle,
                   ),
-                  Text('Points: 40', style: totalSpendingsTextStyle),
+                  Text('Points: ${widget.offer.points}',
+                      style: totalSpendingsTextStyle),
                 ],
               ),
             ),

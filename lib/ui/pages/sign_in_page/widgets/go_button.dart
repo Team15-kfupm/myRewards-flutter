@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:myrewards_flutter/main.dart';
+import 'package:myrewards_flutter/ui/pages/sign_in_page/sign_in_page.dart';
 
 import '../../../../core/services/auth_services.dart';
 import '../../../../utils/constants.dart';
@@ -44,9 +44,11 @@ class GoButtonState extends ConsumerState<GoButton> {
             .signInWithPhoneNumber(ref, widget.phoneNumber.substring(1).trim());
         ref.read(isLoadingProvider.notifier).state = true;
 
-        ref
-            .read(userInfoProvider.notifier)
-            .copyWith(phone: '+966${widget.phoneNumber.substring(1).trim()}');
+        ref.read(phoneProvider.notifier).state =
+            '+966${widget.phoneNumber.substring(1).trim()}';
+        // ref
+        //     .read(userInfoProvider.notifier)
+        //     .copyWith(phone: '+966${widget.phoneNumber.substring(1).trim()}');
 
         Navigator.pushNamed(context, '/otp');
       },

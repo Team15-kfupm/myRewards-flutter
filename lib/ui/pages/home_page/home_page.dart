@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +6,6 @@ import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_lis
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
 
-import '../../../main.dart';
 import '../../../utils/constants.dart';
 import '../settings_page/settings_page.dart';
 
@@ -23,7 +20,6 @@ class HomePageState extends ConsumerState<HomePage> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    log(ref.read(userInfoProvider).asData?.value.name ?? 'error');
     List<Widget> pages = [
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
@@ -35,7 +31,7 @@ class HomePageState extends ConsumerState<HomePage> {
                 children: [
                   const AvatarWithWelcome(),
                   InkWell(
-                    onLongPress: () {},
+                    onTap: () {},
                     child: Container(
                         width: 42.w,
                         height: 42.h,
