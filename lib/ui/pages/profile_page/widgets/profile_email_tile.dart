@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../main.dart';
+import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
 
 class ProfileEmailTile extends ConsumerStatefulWidget {
@@ -113,9 +113,9 @@ class ProfileEmailTileState extends ConsumerState<ProfileEmailTile> {
                                           return;
                                         }
 
-                                        ref
-                                            .read(userInfoProvider.notifier)
-                                            .copyWith(email: _controller.text);
+                                        // ref
+                                        //     .read(userInfoProvider.notifier)
+                                        //     .copyWith(email: _controller.text);
 
                                         Navigator.pop(context);
 

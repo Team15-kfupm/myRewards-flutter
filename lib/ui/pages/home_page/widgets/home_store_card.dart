@@ -1,20 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/models/store_model.dart';
 import '../../../../utils/constants.dart';
+import '../../stores_page/widgets/store_card.dart';
 
-class HomeStoreCard extends StatefulWidget {
-  const HomeStoreCard({Key? key}) : super(key: key);
+class HomeStoreCard extends ConsumerStatefulWidget {
+  final StoreModel topStore;
+  const HomeStoreCard({Key? key, required this.topStore}) : super(key: key);
 
   @override
-  State<HomeStoreCard> createState() => _HomeStoreCard();
+  HomeStoreCardState createState() => HomeStoreCardState();
 }
 
-class _HomeStoreCard extends State<HomeStoreCard> {
+class HomeStoreCardState extends ConsumerState<HomeStoreCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        log("store points: ${widget.topStore.points}");
+        ref.read(currentStoreProvider.notifier).state = widget.topStore;
+        Navigator.pushNamed(context, '/storePage');
+      },
       child: Container(
         width: 315.w,
         height: 172.h,
@@ -113,10 +123,10 @@ class _HomeStoreCard extends State<HomeStoreCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Store Name',
+                      widget.topStore.name,
                       style: totalSpendingsAmountTextStyle,
                     ),
-                    Text('Credits You have in the store',
+                    Text("Points: ${widget.topStore.points.toString()}",
                         style: totalSpendingsTextStyle),
                   ],
                 ),

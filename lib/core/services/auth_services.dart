@@ -32,7 +32,7 @@ class AuthService {
 
   Future<void> signInWithPhoneNumber(WidgetRef ref, String phoneNumber) async {
     await _auth.verifyPhoneNumber(
-      phoneNumber: "+966$phoneNumber",
+      phoneNumber: phoneNumber,
       verificationCompleted: ((phoneAuthCredential) {
         log('verify success');
 
@@ -69,6 +69,7 @@ class AuthService {
         verificationId: verification, smsCode: token);
 
     final user = await _auth.signInWithCredential(phoneCredential);
+
     _userFromFirebaseUser(user.user!);
   }
 

@@ -11,7 +11,7 @@ class StorePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final store = ref.read(currentStoreProvider);
+    final store = ref.watch(currentStoreProvider);
     return Scaffold(
         appBar: AppBar(
           title: Text(

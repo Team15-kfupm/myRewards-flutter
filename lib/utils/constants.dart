@@ -155,7 +155,7 @@ final signInButtonStyle = BoxDecoration(
 );
 
 ButtonStyle noBackgroundButtonStyle = TextButton.styleFrom(
-  primary: whiteColor,
+  foregroundColor: whiteColor,
 );
 
 // Button Style Section End//

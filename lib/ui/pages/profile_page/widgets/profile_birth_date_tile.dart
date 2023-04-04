@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../main.dart';
+import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
 
 class ProfileBirthDateTile extends ConsumerStatefulWidget {
@@ -67,9 +67,6 @@ class ProfileBirthDateTileState extends ConsumerState<ProfileBirthDateTile> {
                     return;
                   }
 
-                  ref
-                      .read(userInfoProvider.notifier)
-                      .copyWith(birthDate: value);
                   Flushbar(
                     message: 'Birth Date Updated Successfully',
                     duration: const Duration(milliseconds: 1100),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../main.dart';
+import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
 
 class ProfileGenderTile extends ConsumerStatefulWidget {
@@ -47,9 +47,9 @@ class ProfileGenderTileState extends ConsumerState<ProfileGenderTile> {
             userInfo.asData!.value.gender == 'Female'
           ],
           onPressed: (index) {
-            ref
-                .read(userInfoProvider.notifier)
-                .copyWith(gender: index == 0 ? 'Male' : 'Female');
+            // ref
+            //     .read(userInfoProvider.notifier)
+            //     .copyWith(gender: index == 0 ? 'Male' : 'Female');
 
             Flushbar(
               message: 'Gender Updated Successfully',
