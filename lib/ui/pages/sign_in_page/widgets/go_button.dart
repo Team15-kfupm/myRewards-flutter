@@ -40,8 +40,8 @@ class GoButtonState extends ConsumerState<GoButton> {
           return;
         }
 
-        AuthService()
-            .signInWithPhoneNumber(ref, widget.phoneNumber.substring(1).trim());
+        AuthService().signInWithPhoneNumber(
+            ref, "+966${widget.phoneNumber.substring(1).trim()}");
         ref.read(isLoadingProvider.notifier).state = true;
 
         ref.read(phoneProvider.notifier).state =

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
 
 import '../../../../utils/constants.dart';
@@ -120,7 +121,11 @@ class StoreCard extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          ref.read(currentStoreProvider).points.toString(),
+                          ref
+                              .watch(userInfoProvider)
+                              .value!
+                              .points[ref.read(currentStoreProvider).id]
+                              .toString(),
                           style: storePointsTextStyle,
                         ),
                         Text(

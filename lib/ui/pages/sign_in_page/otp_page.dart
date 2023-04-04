@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 
 import 'package:flutter/material.dart';
@@ -87,8 +89,9 @@ class OTPPageState extends ConsumerState<OTPPage> {
                       onPressed: ref.watch(countDownProvider) == 0
                           ? () {
                               ref.read(countDownProvider.notifier).state = 50;
+
                               AuthService().signInWithPhoneNumber(
-                                  ref, ref.read(phoneProvider).substring(1));
+                                  ref, ref.read(phoneProvider));
                             }
                           : () {},
                       style: noBackgroundButtonStyle,
@@ -106,8 +109,8 @@ class OTPPageState extends ConsumerState<OTPPage> {
                   try {
                     await AuthService()
                         .verifyOTP(ref.read(verificationIdProvider), getOtp());
-                    await ref.read(userInfoProvider.notifier).verifyUser();
                   } catch (e) {
+                    log(e.toString());
                     Flushbar(
                       message: 'Please enter a valid OTP',
                       duration: const Duration(milliseconds: 1300),

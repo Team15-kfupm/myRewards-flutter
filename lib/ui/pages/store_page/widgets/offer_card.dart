@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/offer_model.dart';
 
+import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../stores_page/widgets/store_card.dart';
 
@@ -17,8 +20,12 @@ class OfferCard extends ConsumerStatefulWidget {
 class OfferCardState extends ConsumerState<OfferCard> {
   @override
   Widget build(BuildContext context) {
-    final store = ref.watch(currentStoreProvider);
-    bool isEnoughtPoints = store.points >= widget.offer.points;
+    final storePoints = ref
+        .watch(userInfoProvider)
+        .value!
+        .points[ref.read(currentStoreProvider).id];
+
+    bool isEnoughtPoints = storePoints >= widget.offer.points;
     return Container(
       width: 315.w,
       height: 172.h,

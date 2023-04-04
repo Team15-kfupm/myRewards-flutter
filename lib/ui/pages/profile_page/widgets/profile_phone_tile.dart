@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../main.dart';
+import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
 
 class ProfilePhoneTile extends ConsumerStatefulWidget {
@@ -112,9 +112,9 @@ class ProfilePhoneTileState extends ConsumerState<ProfilePhoneTile> {
                                           return;
                                         }
 
-                                        ref
-                                            .read(userInfoProvider.notifier)
-                                            .copyWith(phone: _controller.text);
+                                        // ref
+                                        //     .read(userInfoProvider)
+                                        //     .copyWith(phone: _controller.text);
 
                                         Navigator.pop(context);
                                         Flushbar(

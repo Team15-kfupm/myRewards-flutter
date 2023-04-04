@@ -14,4 +14,18 @@ class StoreModel {
     required this.offers,
     required this.points,
   });
+
+  StoreModel.fromDocument(store)
+      : id = store['id'] as String,
+        name = store['name'] as String,
+        location = store['location'] as String,
+        offers = store['offers'] as List<OfferModel>,
+        points = store['points'] as int;
+
+  StoreModel.fromSnapshot(store)
+      : id = store['id'] as String,
+        name = store['name'] as String,
+        location = store['location'] as String,
+        offers = store['offers'] as List<OfferModel>,
+        points = store['points'] as int;
 }

@@ -72,7 +72,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
                   ),
                 ),
                 60.verticalSpace,
-                GoButton(phoneNumber: _phoneNumber),
+                GoButton(phoneNumber: _phoneNumber.trim()),
               ],
             ),
           )

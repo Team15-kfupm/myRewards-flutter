@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 
 class CreditsCard extends StatefulWidget {
@@ -106,9 +108,20 @@ class _CreditsCardState extends State<CreditsCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '432.00',
-                    style: totalSpendingsAmountTextStyle,
+                  Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      final totalPoints = ref
+                              .watch(userInfoProvider)
+                              .asData
+                              ?.value
+                              .totalPoints ??
+                          0;
+                      return Text(
+                        totalPoints.toString(),
+                        style: totalSpendingsAmountTextStyle,
+                      );
+                    },
                   ),
                   Text('Credits', style: totalSpendingsTextStyle),
                 ],

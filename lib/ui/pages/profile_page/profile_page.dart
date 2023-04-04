@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/ui/pages/profile_page/widgets/profile_birth_date_tile.dart';
 import 'package:myrewards_flutter/ui/pages/profile_page/widgets/profile_name_tile.dart';
 
-import '../../../main.dart';
+import '../../../core/providers/user_info_provider.dart';
 import '../../../utils/constants.dart';
 import 'widgets/profile_email_tile.dart';
 import 'widgets/profile_gender_tile.dart';
