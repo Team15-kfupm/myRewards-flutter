@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
+import 'package:myrewards_flutter/core/models/transaction_model.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 
 import '../models/offer_model.dart';
@@ -63,57 +62,6 @@ class DB {
   Map _fetchTopStoresPoints(DocumentSnapshot store) {
     final storeData = store.data()! as Map<String, dynamic>;
     return storeData['points'];
-
-// // Get the user points map
-//     Map<String, dynamic> userPointsMap = store.get('points');
-
-// // Create a list to hold the store IDs and points
-//     var storesPoints = userPointsMap.entries.toList();
-
-// // sort the stores by points in descending order
-//     storesPoints.sort((a, b) => b.value.compareTo(a.value));
-
-// // Get the top 5 stores
-//     var top5Stores = storesPoints.sublist(
-//         0, storesPoints.length >= 5 ? 5 : storesPoints.length);
-
-// // Create an array to hold the top 5 store documents
-//     List<Map<String, dynamic>> top5StoresDocs = [];
-//     List<OfferModel> offers = [];
-
-// Iterate through each top 5 store and retrieve the store document
-//     for (var store in top5Stores) {
-//       final storeRef =
-//           FirebaseFirestore.instance.collection('stores').doc(store.key);
-//       final storeDoc = await storeRef.get();
-
-// // get offers for each store
-//       final storeOffersSnapshot = await storeRef.collection('offers').get();
-
-//       for (final storeOfferDoc in storeOffersSnapshot.docs) {
-//         final offer = OfferModel(
-//           id: storeOfferDoc.id,
-//           title: storeOfferDoc.data()['title'],
-//           startDate: DateTime.parse(storeOfferDoc.data()['start_date']),
-//           endDate: DateTime.parse(storeOfferDoc.data()['end_date']),
-//           points: storeOfferDoc.data()['points'],
-//         );
-
-//         offers.add(offer);
-//       }
-
-//       // Add the store document to the top5StoresDocs list with updated points
-//       var storeData = storeDoc.data() ?? {};
-//       var updatedStoreData = {
-//         ...storeData,
-//         'points': store.value,
-//         'offers': offers
-//       };
-//       top5StoresDocs.add(updatedStoreData);
-//     }
-// return top5StoresDocs
-//         .map<StoreModel>((store) => StoreModel.fromSnapshot(store))
-//         .toList();
   }
 
   Stream<Map> getTopStoresPoints(String userId) async* {
@@ -121,53 +69,6 @@ class DB {
     final userSnapshot =
         FirebaseFirestore.instance.collection('users').doc(userId).snapshots();
 
-// // Get the user points map
-//     Map<String, dynamic> userPointsMap = store.get('points');
-
-// // Create a list to hold the store IDs and points
-//     var storesPoints = userPointsMap.entries.toList();
-
-// // sort the stores by points in descending order
-//     storesPoints.sort((a, b) => b.value.compareTo(a.value));
-
-// // Get the top 5 stores
-//     var top5Stores = storesPoints.sublist(
-//         0, storesPoints.length >= 5 ? 5 : storesPoints.length);
-
-// // Create an array to hold the top 5 store documents
-//     List<Map<String, dynamic>> top5StoresDocs = [];
-//     List<OfferModel> offers = [];
-
-// Iterate through each top 5 store and retrieve the store document
-//     for (var store in top5Stores) {
-//       final storeRef =
-//           FirebaseFirestore.instance.collection('stores').doc(store.key);
-//       final storeDoc = await storeRef.get();
-
-// // get offers for each store
-//       final storeOffersSnapshot = await storeRef.collection('offers').get();
-
-//       for (final storeOfferDoc in storeOffersSnapshot.docs) {
-//         final offer = OfferModel(
-//           id: storeOfferDoc.id,
-//           title: storeOfferDoc.data()['title'],
-//           startDate: DateTime.parse(storeOfferDoc.data()['start_date']),
-//           endDate: DateTime.parse(storeOfferDoc.data()['end_date']),
-//           points: storeOfferDoc.data()['points'],
-//         );
-
-//         offers.add(offer);
-//       }
-
-//       // Add the store document to the top5StoresDocs list with updated points
-//       var storeData = storeDoc.data() ?? {};
-//       var updatedStoreData = {
-//         ...storeData,
-//         'points': store.value,
-//         'offers': offers
-//       };
-//       top5StoresDocs.add(updatedStoreData);
-//     }
 // Return the top 5 stores
     yield* userSnapshot.map(_fetchTopStoresPoints);
 
@@ -205,7 +106,7 @@ class DB {
       'store_name': storeName,
       'amount': amount,
       'type': type,
-      'date': Timestamp.fromDate(date),
+      'date': date.toString().substring(0, 10).replaceAll('/', '-'),
       'bank_name': bankName,
     };
     await FirebaseFirestore.instance
@@ -216,13 +117,18 @@ class DB {
   }
 
 // Get all transactions for a user
-  Stream<QuerySnapshot> getTransactions(String userId) {
-    return FirebaseFirestore.instance
+  Stream<List<TransactionModel>> getTransactions(String userId) {
+    final transactionsQuery = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('transactions')
         .orderBy('date', descending: true)
         .snapshots();
+
+    return transactionsQuery.map((transactionSnapshot) => transactionSnapshot
+        .docs
+        .map((transactionDoc) => TransactionModel.fromSnapshot(transactionDoc))
+        .toList());
   }
 
 // Update a specific key in the "points" field for a user
@@ -250,47 +156,6 @@ class DB {
 
     await batch.commit();
   }
-
-//   Future<void> initiateHomePage(String userId) async {
-//     final storesRef = firebaseInstance.collection('stores');
-//     final pointsRef =
-//         firebaseInstance.collection('users').doc(userId).collection('points');
-
-//     final storesSnapshot = await storesRef.get();
-//     final pointsSnapshot = await pointsRef.get();
-
-//     final storesPointsMap = {};
-
-// // Iterate through the stores to initialize the storesPointsMap with the points for each store
-//     storesSnapshot.docs.forEach((storeDoc) {
-//       final storeId = storeDoc.id;
-//       storesPointsMap[storeId] = 0;
-//     });
-
-// // Iterate through the points to update the storesPointsMap with the total points for each store
-//     pointsSnapshot.docs.forEach((pointDoc) {
-//       final storeId = pointDoc.id;
-//       final points = pointDoc.data()['value'];
-//       storesPointsMap[storeId] += points;
-//     });
-
-// // Sort the storesPointsMap in descending order by points
-//     final sortedStoresPointsList = storesPointsMap.entries.toList()
-//       ..sort((a, b) => b.value.compareTo(a.value));
-
-// // Get the top 5 stores with the highest points
-//     final top5Stores = sortedStoresPointsList.take(5);
-
-// // Get the store details for the top 5 stores
-//     final top5StoresDetails = await Future.wait(
-//         top5Stores.map((storeEntry) => storesRef.doc(storeEntry.key).get()));
-
-// // Print the details of the top 5 stores
-//     top5StoresDetails.forEach((storeDoc) {
-//       print(
-//           'Store name: ${storeDoc.data()!['name']}, Points: ${storesPointsMap[storeDoc.id]}');
-//     });
-//   }
 
   Future<List<StoreModel>> getStoresWithOffers() async {
     final user = await AuthService().user.first;
