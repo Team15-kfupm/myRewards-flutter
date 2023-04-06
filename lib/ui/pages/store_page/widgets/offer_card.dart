@@ -1,9 +1,13 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/offer_model.dart';
+import 'package:myrewards_flutter/core/providers/stores_provider.dart';
 
+import '../../../../core/providers/offer_code_provider.dart';
 import '../../../../core/providers/user_info_provider.dart';
+import '../../../../core/services/db_services.dart';
 import '../../../../utils/constants.dart';
 import '../../stores_page/widgets/store_card.dart';
 
@@ -22,6 +26,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
         .watch(userInfoProvider)
         .value!
         .points[ref.read(currentStoreProvider).id];
+    final offerCode = ref.watch(offerCodeProvider(widget.offer.id));
 
     bool isEnoughtPoints = storePoints >= widget.offer.points;
     return Container(
@@ -121,24 +126,87 @@ class OfferCardState extends ConsumerState<OfferCard> {
                   return;
                 }
               },
-              child: Container(
-                width: 324.w,
-                height: 39.h,
-                decoration: BoxDecoration(
-                  color: isEnoughtPoints
-                      ? offerCardClaimBackgroundColor
-                      : welcomeTextColor,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'Claim',
-                    style: welcomeNameTextStyle,
-                  ),
-                ),
+              child: InkWell(
+                onTap: () async {
+                  if (!isEnoughtPoints || offerCode.asData != null) {
+                    return;
+                  }
+                  final code = await DB().claimOffer(
+                    ref.read(userInfoProvider).value!.uid,
+                    widget.offer.id,
+                  );
+
+                  if (code.isEmpty) {
+                    //TODO: show error
+                    Flushbar(
+                      message: 'Something went wrong :(',
+                      duration: const Duration(milliseconds: 1000),
+                      flushbarStyle: FlushbarStyle.FLOATING,
+                      backgroundColor: Colors.red,
+                      flushbarPosition: FlushbarPosition.TOP,
+                    ).show(context);
+                    return;
+                  }
+                  DB().updateStorePoints(ref.read(userInfoProvider).value!.uid,
+                      ref.read(currentStoreProvider).id, widget.offer.points);
+                  // ref
+                  //     .read(storesProvider)
+                  //     .value!
+                  //     .where((store) =>
+                  //         store.id == ref.read(currentStoreProvider).id)
+                  //     .first;
+
+                  Flushbar(
+                    message: 'Offer claimed!',
+                    duration: const Duration(milliseconds: 1000),
+                    flushbarStyle: FlushbarStyle.FLOATING,
+                    backgroundColor: Colors.green,
+                    flushbarPosition: FlushbarPosition.TOP,
+                  ).show(context);
+                },
+                child: ref
+                            .watch(offerCodeProvider(
+                              widget.offer.id,
+                            ))
+                            .asData
+                            ?.value !=
+                        null
+                    ? Container(
+                        width: 324.w,
+                        height: 39.h,
+                        decoration: const BoxDecoration(
+                          color: lightGreyColor,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            offerCode.asData!.value,
+                            style: welcomeNameTextStyle,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: 324.w,
+                        height: 39.h,
+                        decoration: BoxDecoration(
+                          color: isEnoughtPoints
+                              ? offerCardClaimBackgroundColor
+                              : welcomeTextColor,
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Claim',
+                            style: welcomeNameTextStyle,
+                          ),
+                        ),
+                      ),
               ),
             ),
           ),

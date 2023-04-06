@@ -39,7 +39,7 @@ class StoresPage extends StatelessWidget {
           ),
           32.verticalSpace,
           SizedBox(
-            height: 600.h,
+            height: 550.h,
             width: 375.w,
             child: const StoreCardGridVIew(),
           )

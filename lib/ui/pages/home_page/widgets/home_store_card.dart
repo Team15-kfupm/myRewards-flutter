@@ -21,7 +21,6 @@ class HomeStoreCardState extends ConsumerState<HomeStoreCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        log("store points: ${widget.topStore.points}");
         ref.read(currentStoreProvider.notifier).state = widget.topStore;
         Navigator.pushNamed(context, '/storePage');
       },

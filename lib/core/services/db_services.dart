@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 import 'package:myrewards_flutter/core/models/transaction_model.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
@@ -7,6 +10,51 @@ import '../models/offer_model.dart';
 
 class DB {
   final firebaseInstance = FirebaseFirestore.instance;
+
+  Future<String> claimOffer(String userId, String offerId) async {
+    final HttpsCallable callable =
+        FirebaseFunctions.instance.httpsCallable('claimOffer');
+
+    final result = await callable.call({'offerId': offerId, 'userId': userId});
+
+    return result.data['code'];
+  }
+
+  Stream<String> isExpired(String offerId) async* {
+    final tempClaimSnapshot =
+        firebaseInstance.collection('temp-claim').snapshots();
+
+    final user = await AuthService().user.first;
+
+    yield* tempClaimSnapshot
+        .map((snapShot) => _fetchCode(snapShot, offerId, user.uid));
+  }
+
+  String _fetchCode(QuerySnapshot<Map<String, dynamic>> snapshot,
+      String offerId, String userId) {
+    final tempClaimDoc = snapshot.docs;
+    final code = tempClaimDoc
+        .where((tempClaim) =>
+            tempClaim.get('offer_id') == offerId &&
+            tempClaim.get('uid') == userId)
+        .first
+        .get('code');
+
+    return code;
+  }
+
+  Future<void> updateStorePoints(
+      String userId, String storeId, int points) async {
+    final userRef = firebaseInstance.collection('users').doc(userId);
+
+    final userDoc = await userRef.get();
+
+    final userPoints = userDoc.data()!['points'] as Map<String, dynamic>;
+
+    userPoints.update(storeId, (vlaue) => vlaue - points);
+
+    await userRef.update({'points': userPoints});
+  }
 
   Future<List<StoreModel>> getTopStores(Map storesPointsMap) async {
 // Create a list to hold the store IDs and points
@@ -71,18 +119,6 @@ class DB {
 
 // Return the top 5 stores
     yield* userSnapshot.map(_fetchTopStoresPoints);
-
-    // final HttpsCallable callable =
-    //     FirebaseFunctions.instance.httpsCallable('getTopStores');
-
-    // final result = await callable.call({'userId': userId});
-
-    // final topStores = List<Map<Object?, Object?>>.from(result.data);
-    // print(topStores);
-
-    // yield topStores
-    //     .map<StoreModel>((store) => StoreModel.fromSnapshot(store))
-    //     .toList();
   }
 
   Future<String?> getStoreIdByName(String storeName) async {
@@ -138,23 +174,6 @@ class DB {
     final pointsMap = (await userDoc.get())['points'] ?? {};
     pointsMap[storeId] = newPoints;
     await userDoc.update({'points': pointsMap});
-  }
-
-  Future<void> updateUserPoints(
-      String storeId, String userId, int points) async {
-    final batch = firebaseInstance.batch();
-
-// Update points in the store collection
-    final storeRef = firebaseInstance.collection('stores').doc(storeId);
-    final storePointsRef = storeRef.collection('points').doc(userId);
-    batch.set(storePointsRef, {'value': points});
-
-// Update points in the user collection
-    final userRef = firebaseInstance.collection('users').doc(userId);
-    final userPointsRef = userRef.collection('points').doc(storeId);
-    batch.set(userPointsRef, {'value': points});
-
-    await batch.commit();
   }
 
   Future<List<StoreModel>> getStoresWithOffers() async {
