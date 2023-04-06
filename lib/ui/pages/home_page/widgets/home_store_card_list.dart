@@ -27,7 +27,6 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
 
           return topStores.when(
               data: (topStoresList) {
-                log('${topStoresList.first.points}');
                 return Expanded(
                   child: ListView.separated(
                       cacheExtent: 99999999999,

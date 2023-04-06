@@ -123,7 +123,7 @@ class _CreditsCardState extends State<CreditsCard> {
                       );
                     },
                   ),
-                  Text('Credits', style: totalSpendingsTextStyle),
+                  Text('Total Points', style: totalSpendingsTextStyle),
                 ],
               ),
             ),
