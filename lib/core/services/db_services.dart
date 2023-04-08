@@ -237,11 +237,13 @@ class DB {
         .toList());
   }
 
-  Future<String> claimOffer(String userId, String offerId) async {
+  Future<String> claimOffer(
+      String userId, String offerId, String storeId) async {
     final HttpsCallable callable =
         FirebaseFunctions.instance.httpsCallable('claimOffer');
 
-    final result = await callable.call({'offerId': offerId, 'userId': userId});
+    final result = await callable
+        .call({'offerId': offerId, 'userId': userId, 'storeId': storeId});
 
     return result.data['code'];
   }
@@ -259,10 +261,11 @@ class DB {
   String _fetchCode(QuerySnapshot<Map<String, dynamic>> snapshot,
       String offerId, String userId) {
     final tempClaimDoc = snapshot.docs;
+
     final code = tempClaimDoc
         .where((tempClaim) =>
-            tempClaim.get('offer_id') == offerId &&
-            tempClaim.get('uid') == userId)
+            tempClaim.data()['offer_id'] == offerId &&
+            tempClaim.data()['uid'] == userId)
         .first
         .get('code');
 

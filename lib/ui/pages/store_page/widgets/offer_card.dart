@@ -134,6 +134,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
                   final code = await DB().claimOffer(
                     ref.read(userInfoProvider).value!.uid,
                     widget.offer.id,
+                    ref.read(currentStoreProvider).id,
                   );
 
                   if (code.isEmpty) {
