@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/home_page.dart';
 import 'package:myrewards_flutter/ui/pages/settings_page/settings_page.dart';
+import 'package:myrewards_flutter/ui/pages/sms_testing/sms_testing.dart';
 
 import '../../../../core/providers/auth_user_state_provider.dart';
 
@@ -21,10 +22,10 @@ class _StaState extends ConsumerState<AuthChecker> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authUserProvider);
-    final userData = ref.watch(userInfoProvider);
 
     return authState.when(
       data: (user) {
+        final userData = ref.watch(userInfoProvider);
         return userData.when(
           data: (userInfo) {
             return const HomePage();

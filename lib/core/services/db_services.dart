@@ -1,15 +1,241 @@
 import 'dart:developer';
 
+import 'package:background_fetch/background_fetch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 import 'package:myrewards_flutter/core/models/transaction_model.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:telephony/telephony.dart';
 
+import '../../utils/constants.dart';
 import '../models/offer_model.dart';
 
 class DB {
   final firebaseInstance = FirebaseFirestore.instance;
+
+  void initBackgroundFetch() async {
+    BackgroundFetch.configure(
+      BackgroundFetchConfig(
+        minimumFetchInterval: 15,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        forceAlarmManager: false,
+        startOnBoot: true,
+      ),
+      (taskId) async {
+        log('background fetch started');
+        try {
+          await Firebase.initializeApp(
+              options: const FirebaseOptions(
+                  apiKey: apiKey,
+                  appId: appId,
+                  messagingSenderId: messagingSenderId,
+                  projectId: projectId));
+          Telephony telephony = Telephony.instance;
+          final user = await AuthService().user.first;
+          final userDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+
+          log('userId: ${user.uid.toString()}');
+          final batch = FirebaseFirestore.instance.batch();
+          final transactionsCollection = FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .collection('transactions');
+
+          final lastTransactionDateTime = userDoc.get('last_transaction_date');
+          log('last transaction time:  ${lastTransactionDateTime.toString()}');
+          final lastTransactionDate =
+              lastTransactionDateTime.toString().substring(0, 10);
+          final lastTransactionTime =
+              lastTransactionDateTime.toString().substring(10, 15);
+          final lastTransactionDateTimeInMilliSecond =
+              DateTime.parse("$lastTransactionDate $lastTransactionTime:00")
+                  .millisecondsSinceEpoch;
+          log('last transaction time in milli second:  $lastTransactionDateTimeInMilliSecond');
+
+          List<SmsMessage> messages = await telephony.getInboxSms(
+              filter: SmsFilter.where(SmsColumn.DATE).greaterThan(
+                  lastTransactionDateTimeInMilliSecond.toString()));
+          log('messages length: ${messages.length}');
+
+          for (var message in messages) {
+            final messageInfo = DB().extractPurchaseInfoFromMessage(message);
+            log(messageInfo.amount.toString());
+            if (messageInfo.amount != 0) {
+              final docRef = transactionsCollection.doc();
+              batch.set(docRef, {
+                'store_name': messageInfo.storeName,
+                'amount': messageInfo.amount,
+                'date': messageInfo.date,
+                'time': messageInfo.time,
+                'bank_name': messageInfo.bankName,
+              });
+            }
+          }
+          await batch.commit();
+          log('background fetch finished');
+          BackgroundFetch.finish(taskId);
+        } catch (e) {
+          log('Error message: ${e.toString()}');
+          BackgroundFetch.finish(taskId);
+        }
+      },
+    );
+    log('background fetch initialized');
+  }
+
+  // Define a top-level function to handle background messages
+  static myBackgroundMessageHandler(SmsMessage message) async {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: apiKey,
+            appId: appId,
+            messagingSenderId: messagingSenderId,
+            projectId: projectId));
+    // Extract the SMS message from the map
+
+    final user = await AuthService().user.first;
+    log('back: ${message.body!}');
+    // Handle the SMS message
+    final messageInfo = DB().extractPurchaseInfoFromMessage(message);
+    if (messageInfo.amount != 0) {
+      DB().addTransaction(user.uid, messageInfo.storeName, messageInfo.amount,
+          messageInfo.date, messageInfo.time, messageInfo.bankName);
+    }
+  }
+
+  // initialize messages listener
+  initMessagesListener() async {
+    Telephony telephony = Telephony.instance;
+    log('start initi messages listener');
+    final user = await AuthService().user.first;
+
+    telephony.listenIncomingSms(
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onNewMessage: (message) async {
+          log('front: ${message.body!}');
+          final messageInfo = DB().extractPurchaseInfoFromMessage(message);
+          if (messageInfo.amount != 0) {
+            await DB().addTransaction(
+                user.uid,
+                messageInfo.storeName,
+                messageInfo.amount,
+                messageInfo.date,
+                messageInfo.time,
+                messageInfo.bankName);
+          }
+        });
+
+    log('messages listener initialized');
+  }
+
+  Future<void> runOnceAfterInstallation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+
+    if (isFirstTime) {
+      Telephony telephony = Telephony.instance;
+      List<SmsMessage> messages = await telephony.getInboxSms();
+      //final user = await AuthService().user.first;
+      log('run once after installation');
+
+      prefs.setBool('isFirstTime', false);
+    }
+  }
+
+  MessageModel extractPurchaseInfoFromMessage(SmsMessage sms) {
+    // Check if text matches either pattern
+    final enMatch = RegExp(enPattern).firstMatch(sms.body!);
+    final arMatch = RegExp(arPattern).firstMatch(sms.body!);
+    final MessageModel messageInfo;
+
+    if (enMatch != null) {
+      log(enMatch.group(1)!);
+      log(enMatch.group(3)!);
+      log(enMatch.group(4)!);
+      log(enMatch.group(5)!);
+      final amount = double.parse(enMatch.group(1)!);
+      final storeName = enMatch.group(3)!;
+      final date = enMatch.group(4)!;
+      final time = enMatch.group(5)!;
+      // final time = enMatch.group(6);
+      messageInfo = MessageModel(
+        amount: amount,
+        storeName: storeName,
+        date: date,
+        time: time,
+        bankName: sms.address!,
+      );
+    } else if (arMatch != null) {
+      final amount = double.parse(arMatch.group(2)!);
+      final storeName = arMatch.group(4);
+      final date = arMatch.group(5)!;
+      final time = arMatch.group(6) ?? '';
+      messageInfo = MessageModel(
+        amount: amount,
+        storeName: storeName!,
+        date: date,
+        time: time,
+        bankName: sms.address!,
+      );
+    } else {
+      log('no match');
+      return MessageModel(
+        storeName: '',
+        amount: 0,
+        date: '',
+        time: '',
+        bankName: '',
+      );
+    }
+
+    log('message extracted');
+
+    return messageInfo;
+  }
+
+  // Add a new transaction document to a user's "transactions" subcollection
+  Future<void> addTransaction(String userId, String storeName, double amount,
+      String date, String time, String bankName) async {
+    log('add transaction: $userId, $storeName, $amount, $date, $bankName');
+    final transactionData = {
+      'store_name': storeName,
+      'amount': amount,
+      'date': date.toString().substring(0, 10),
+      'time': time,
+      'bank_name': bankName,
+    };
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('transactions')
+        .add(transactionData);
+
+    log('doc id: ${doc.id}');
+  }
+
+// Get all transactions for a user
+  Stream<List<TransactionModel>> getTransactions(String userId) {
+    final transactionsQuery = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('transactions')
+        .orderBy('date', descending: true)
+        .snapshots();
+
+    return transactionsQuery.map((transactionSnapshot) => transactionSnapshot
+        .docs
+        .map((transactionDoc) => TransactionModel.fromSnapshot(transactionDoc))
+        .toList());
+  }
 
   Future<String> claimOffer(String userId, String offerId) async {
     final HttpsCallable callable =
@@ -133,38 +359,6 @@ class DB {
 
     final storeDoc = storeQuery.docs.first;
     return storeDoc.id;
-  }
-
-// Add a new transaction document to a user's "transactions" subcollection
-  Future<void> addTransaction(String userId, String storeName, double amount,
-      String type, DateTime date, String bankName) async {
-    final transactionData = {
-      'store_name': storeName,
-      'amount': amount,
-      'type': type,
-      'date': date.toString().substring(0, 10).replaceAll('/', '-'),
-      'bank_name': bankName,
-    };
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('transactions')
-        .add(transactionData);
-  }
-
-// Get all transactions for a user
-  Stream<List<TransactionModel>> getTransactions(String userId) {
-    final transactionsQuery = FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('transactions')
-        .orderBy('date', descending: true)
-        .snapshots();
-
-    return transactionsQuery.map((transactionSnapshot) => transactionSnapshot
-        .docs
-        .map((transactionDoc) => TransactionModel.fromSnapshot(transactionDoc))
-        .toList());
   }
 
 // Update a specific key in the "points" field for a user

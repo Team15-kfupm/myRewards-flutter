@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,7 +38,7 @@ class AvatarWithWelcome extends ConsumerWidget {
             ],
           );
         },
-        error: (e, s) => const Text(''),
+        error: (e, s) => Text('avatar with welcome error: $e'),
         loading: () => const Text('loading'));
   }
 }

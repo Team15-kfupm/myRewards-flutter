@@ -4,17 +4,16 @@ class TransactionModel {
   final String id;
   final String storeName;
   final String bankName;
-  final int amount;
+  final double amount;
   final DateTime date;
-  final String type;
 
-  TransactionModel(
-      {required this.id,
-      required this.storeName,
-      required this.amount,
-      required this.date,
-      required this.bankName,
-      required this.type});
+  TransactionModel({
+    required this.id,
+    required this.storeName,
+    required this.amount,
+    required this.date,
+    required this.bankName,
+  });
 
   TransactionModel.fromSnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> transactionMap)
@@ -22,6 +21,5 @@ class TransactionModel {
         storeName = transactionMap.data()['store_name'],
         amount = transactionMap.data()['amount'],
         date = DateTime.parse(transactionMap.data()['date']),
-        bankName = transactionMap.data()['bank_name'],
-        type = transactionMap.data()['type'];
+        bankName = transactionMap.data()['bank_name'];
 }
