@@ -51,7 +51,7 @@ class AuthService {
             .read(verificationIdProvider.notifier)
             .setVerificationId(verificationId);
         ref.read(isLoadingProvider.notifier).state = false;
-
+        log('resendToken: $resendToken');
         _forceResendingToken = resendToken!;
       },
       codeAutoRetrievalTimeout: (String verificationId) {

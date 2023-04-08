@@ -44,10 +44,11 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
                       itemCount: topStoresList.length),
                 );
               },
-              error: (error, _) => Text(error.toString()),
+              error: (error, _) =>
+                  Text('top store card list points: ${error.toString()}'),
               loading: () => const TopStoresShimmer());
         },
-        error: (error, _) => Text(error.toString()),
+        error: (error, _) => Text('top store card list : ${error.toString()}'),
         loading: () => const TopStoresShimmer());
   }
 }

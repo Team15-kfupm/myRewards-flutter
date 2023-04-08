@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/services/db_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_list.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
@@ -17,6 +18,13 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class HomePageState extends ConsumerState<HomePage> {
+  @override
+  initState() {
+    super.initState();
+    DB().initMessagesListener();
+    DB().initBackgroundFetch();
+  }
+
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {

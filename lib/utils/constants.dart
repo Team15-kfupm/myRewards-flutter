@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Firebase Options Section Start//
+const apiKey = 'AIzaSyBGlVY6MQ6n6Iv2UZjq-E4PAZm5_wQCN3w';
+const appId = '1:654852290280:android:a7fe0fbe3154dd9b82bb5d';
+const messagingSenderId = '654852290280';
+const projectId = 'myrewards-e3b0c';
+
+// Firebase Options Section End//
+
 // Colors Section Start//
 
 const primaryColor = Color(0xFFFEC54B);
@@ -182,6 +190,19 @@ final largeButtonTextStyle =
 
 // Regex Section Start//
 var phoneNumberRegex = RegExp(r'^(05)+(\d{8})$');
+
+// English regex pattern
+const enPattern =
+    r'Purchase \(Mada Pay\)\s+Amount: (\d+\.\d{2}) SAR\s+Mada Card: (\d{4}\*)\s+From: ([\w\s]+)\s+Date: (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})';
+
+// r'Local Purchase\s*Card: \\\\d+;?\s(mada\s?\(Atheer\))?[\n\s]Amount:\s(\d+\.\d{2}\s*(SAR)?)\s*At:\s*([\w\s]+)[\n\s]Date:\s(\d{4}\/\d{2}\/\d{2})\s*(\d{2}:\d{2}:\d{2})';
+
+// Arabic regex pattern
+const arPattern =
+    r'^شراء\s*\((مدى Pay)\)\s*مبلغ:\s*(\d+\.\d{2})\s*SAR\s*بطاقة\s*مدى:\s*(\d{4}\*)\s*من:\s*(\w+\s*\w*\s*\w*\s*\w*\s*\w*\s*\w*)\s*في:\s*(\d{4}-\d{2}-\d{2})\s*(\d{2}:\d{2})$';
+
+  //  r'(شراء|Local Purchase)(.)(بطاقة|Card):(\s)(\+\d+)(.)(مبلغ|Amount):(\s*)(\d+[\.\d]\s*SAR)(.)(لدى|At):(\s*)([\w\s]+)(.)(في|Date):(\s)([\d-]+)(\s*)([\d:]+)?';
+
 
 // Regex Section End//
 
