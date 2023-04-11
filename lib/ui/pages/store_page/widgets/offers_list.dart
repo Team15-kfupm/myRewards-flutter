@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +18,7 @@ class OffersListState extends ConsumerState<OffersList> {
   @override
   Widget build(BuildContext context) {
     final offers = ref.read(currentStoreProvider).offers;
+
     return Expanded(
       child: ListView.separated(
           cacheExtent: 99999999999,
