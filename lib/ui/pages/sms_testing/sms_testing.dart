@@ -19,16 +19,13 @@ class _SmsTestingState extends State<SmsTesting> {
 
     final date = DateTime.parse('2023-04-05 04:13:00').millisecondsSinceEpoch;
     Future<List<SmsMessage>> messages = telephony.getInboxSms(
-      filter: SmsFilter.where(SmsColumn.DATE).greaterThan(date.toString()),
+      filter: SmsFilter.where(SmsColumn.DATE).greaterThan('1680084457646'),
     );
 
     return Scaffold(
         body: FutureBuilder(
       builder: (context, messages) {
         if (messages.hasData) {
-          log('${messages.data![6].body}');
-          DB().extractPurchaseInfoFromMessage(messages.data![6]);
-
           return ListView.builder(
               itemCount: messages.data!.length,
               itemBuilder: (context, index) {

@@ -121,11 +121,14 @@ class StoreCard extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          ref
-                              .watch(userInfoProvider)
-                              .value!
-                              .points[ref.read(currentStoreProvider).id]
-                              .toString(),
+                          ref.watch(userInfoProvider).value!.points.containsKey(
+                                  ref.read(currentStoreProvider).id)
+                              ? ref
+                                  .watch(userInfoProvider)
+                                  .value!
+                                  .points[ref.read(currentStoreProvider).id]!
+                                  .toString()
+                              : "0",
                           style: storePointsTextStyle,
                         ),
                         Text(

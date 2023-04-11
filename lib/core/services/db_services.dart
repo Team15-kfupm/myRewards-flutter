@@ -49,27 +49,25 @@ class DB {
               .doc(user.uid)
               .collection('transactions');
 
-          final lastTransactionDateTime = userDoc.get('last_transaction_date');
-          log('last transaction time:  ${lastTransactionDateTime.toString()}');
-          final lastTransactionDate =
-              lastTransactionDateTime.toString().substring(0, 10);
-          final lastTransactionTime =
-              lastTransactionDateTime.toString().substring(10, 15);
           final lastTransactionDateTimeInMilliSecond =
-              DateTime.parse("$lastTransactionDate $lastTransactionTime:00")
-                  .millisecondsSinceEpoch;
-          log('last transaction time in milli second:  $lastTransactionDateTimeInMilliSecond');
+              userDoc.get('last_transaction_date');
+          var lastTransactionDate = lastTransactionDateTimeInMilliSecond;
 
           List<SmsMessage> messages = await telephony.getInboxSms(
               filter: SmsFilter.where(SmsColumn.DATE).greaterThan(
                   lastTransactionDateTimeInMilliSecond.toString()));
           log('messages length: ${messages.length}');
 
-          for (var message in messages) {
+          for (var message in messages.reversed) {
+            lastTransactionDate = message.date ?? -1;
+            if (message.address!.contains('+')) {
+              continue;
+            }
             final messageInfo = DB().extractPurchaseInfoFromMessage(message);
             log(messageInfo.amount.toString());
             if (messageInfo.amount != 0) {
               final docRef = transactionsCollection.doc();
+
               batch.set(docRef, {
                 'store_name': messageInfo.storeName,
                 'amount': messageInfo.amount,
@@ -79,6 +77,9 @@ class DB {
               });
             }
           }
+          batch.update(userDoc.reference, {
+            'last_transaction_date': lastTransactionDate,
+          });
           await batch.commit();
           log('background fetch finished');
           BackgroundFetch.finish(taskId);
@@ -237,11 +238,13 @@ class DB {
         .toList());
   }
 
-  Future<String> claimOffer(String userId, String offerId) async {
+  Future<String> claimOffer(
+      String userId, String offerId, String storeId) async {
     final HttpsCallable callable =
         FirebaseFunctions.instance.httpsCallable('claimOffer');
 
-    final result = await callable.call({'offerId': offerId, 'userId': userId});
+    final result = await callable
+        .call({'offerId': offerId, 'userId': userId, 'storeId': storeId});
 
     return result.data['code'];
   }
@@ -259,14 +262,33 @@ class DB {
   String _fetchCode(QuerySnapshot<Map<String, dynamic>> snapshot,
       String offerId, String userId) {
     final tempClaimDoc = snapshot.docs;
-    final code = tempClaimDoc
-        .where((tempClaim) =>
-            tempClaim.get('offer_id') == offerId &&
-            tempClaim.get('uid') == userId)
-        .first
-        .get('code');
+    final codeDocs = tempClaimDoc.where((tempClaim) =>
+        tempClaim.get('offer_id') == offerId && tempClaim.get('uid') == userId);
+    final code = codeDocs.isNotEmpty ? codeDocs.first.get('code') : '';
 
     return code;
+  }
+
+  Stream<bool> hasOtherCode(String storeId) async* {
+    final tempClaimSnapshot =
+        firebaseInstance.collection('temp-claim').snapshots();
+
+    final user = await AuthService().user.first;
+
+    yield* tempClaimSnapshot.map((tempClaimSnapShot) =>
+        _fetchHasOtherCode(tempClaimSnapShot, storeId, user.uid));
+  }
+
+  bool _fetchHasOtherCode(QuerySnapshot<Map<String, dynamic>> snapshot,
+      String storeId, String userId) {
+    final tempClaimDoc = snapshot.docs;
+    final hasCode = tempClaimDoc
+        .where((tempClaim) =>
+            tempClaim.get('store_id') == storeId &&
+            tempClaim.get('uid') == userId)
+        .isNotEmpty;
+
+    return hasCode;
   }
 
   Future<void> updateStorePoints(
@@ -305,13 +327,7 @@ class DB {
       final storeOffersSnapshot = await storeRef.collection('offers').get();
 
       for (final storeOfferDoc in storeOffersSnapshot.docs) {
-        final offer = OfferModel(
-          id: storeOfferDoc.id,
-          title: storeOfferDoc.data()['title'],
-          startDate: DateTime.parse(storeOfferDoc.data()['start_date']),
-          endDate: DateTime.parse(storeOfferDoc.data()['end_date']),
-          points: storeOfferDoc.data()['points'],
-        );
+        final offer = OfferModel.fromDocument(storeOfferDoc.data());
 
         offers.add(offer);
       }
@@ -334,8 +350,8 @@ class DB {
   }
 
   Map _fetchTopStoresPoints(DocumentSnapshot store) {
-    final storeData = store.data()! as Map<String, dynamic>;
-    return storeData['points'];
+    final userData = store.data()! as Map<String, dynamic>;
+    return userData['points'];
   }
 
   Stream<Map> getTopStoresPoints(String userId) async* {
@@ -387,13 +403,7 @@ class DB {
           await storeDoc.reference.collection('offers').get();
 
       for (final storeOfferDoc in storeOffersSnapshot.docs) {
-        final offer = OfferModel(
-          id: storeOfferDoc.id,
-          title: storeOfferDoc.data()['title'],
-          startDate: DateTime.parse(storeOfferDoc.data()['start_date']),
-          endDate: DateTime.parse(storeOfferDoc.data()['end_date']),
-          points: storeOfferDoc.data()['points'],
-        );
+        final offer = OfferModel.fromDocument(storeOfferDoc.data());
         offers.add(offer);
       }
       // get points for each store for the current user
