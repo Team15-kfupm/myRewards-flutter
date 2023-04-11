@@ -51,19 +51,23 @@ class DB {
 
           final lastTransactionDateTimeInMilliSecond =
               userDoc.get('last_transaction_date');
-          var lastTransactionDate = 0;
+          var lastTransactionDate = lastTransactionDateTimeInMilliSecond;
 
           List<SmsMessage> messages = await telephony.getInboxSms(
               filter: SmsFilter.where(SmsColumn.DATE).greaterThan(
                   lastTransactionDateTimeInMilliSecond.toString()));
           log('messages length: ${messages.length}');
 
-          for (var message in messages) {
+          for (var message in messages.reversed) {
+            lastTransactionDate = message.date ?? -1;
+            if (message.address!.contains('+')) {
+              continue;
+            }
             final messageInfo = DB().extractPurchaseInfoFromMessage(message);
             log(messageInfo.amount.toString());
             if (messageInfo.amount != 0) {
               final docRef = transactionsCollection.doc();
-              lastTransactionDate = message.date ?? -1;
+
               batch.set(docRef, {
                 'store_name': messageInfo.storeName,
                 'amount': messageInfo.amount,
@@ -277,7 +281,6 @@ class DB {
 
   bool _fetchHasOtherCode(QuerySnapshot<Map<String, dynamic>> snapshot,
       String storeId, String userId) {
-    log('fetch has other code: $storeId, $userId');
     final tempClaimDoc = snapshot.docs;
     final hasCode = tempClaimDoc
         .where((tempClaim) =>
