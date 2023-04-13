@@ -5,6 +5,7 @@ import 'package:myrewards_flutter/core/services/db_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_list.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
+import 'package:myrewards_flutter/ui/pages/statistics_page/statistics_page.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
 
 import '../../../utils/constants.dart';
@@ -56,9 +57,7 @@ class HomePageState extends ConsumerState<HomePage> {
             ],
           )),
       const StoresPage(),
-      const Center(
-        child: Text('Statistics Page'),
-      ),
+      const StatisticsPage(),
       const SettingsPage(),
     ];
     return SafeArea(

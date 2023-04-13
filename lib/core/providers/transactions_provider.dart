@@ -4,5 +4,5 @@ import 'package:myrewards_flutter/core/services/db_services.dart';
 
 final transactionsProvider = StreamProvider((ref) {
   final userId = ref.watch(userInfoProvider).value!.uid;
-  return DB().getTransactions(userId);
+  return DB().getTransactionsByMonth(userId);
 });

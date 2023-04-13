@@ -18,81 +18,6 @@ import '../models/offer_model.dart';
 class DB {
   final firebaseInstance = FirebaseFirestore.instance;
 
-  // void initBackgroundFetch() async {
-  //   BackgroundFetch.configure(
-  //     BackgroundFetchConfig(
-  //       minimumFetchInterval: 15,
-  //       stopOnTerminate: false,
-  //       enableHeadless: true,
-  //       forceAlarmManager: false,
-  //       startOnBoot: true,
-  //     ),
-  //     (taskId) async {
-  //       log('background fetch started');
-  //       try {
-  //         await Firebase.initializeApp(
-  //             options: const FirebaseOptions(
-  //                 apiKey: apiKey,
-  //                 appId: appId,
-  //                 messagingSenderId: messagingSenderId,
-  //                 projectId: projectId));
-  //         Telephony telephony = Telephony.instance;
-  //         final user = await AuthService().user.first;
-  //         final userDoc = await FirebaseFirestore.instance
-  //             .collection('users')
-  //             .doc(user.uid)
-  //             .get();
-
-  //         log('userId: ${user.uid.toString()}');
-  //         final batch = FirebaseFirestore.instance.batch();
-  //         final transactionsCollection = FirebaseFirestore.instance
-  //             .collection('users')
-  //             .doc(user.uid)
-  //             .collection('transactions');
-
-  //         final lastTransactionDateTimeInMilliSecond =
-  //             userDoc.get('last_transaction_date');
-  //         var lastTransactionDate = lastTransactionDateTimeInMilliSecond;
-
-  //         List<SmsMessage> messages = await telephony.getInboxSms(
-  //             filter: SmsFilter.where(SmsColumn.DATE).greaterThan(
-  //                 lastTransactionDateTimeInMilliSecond.toString()));
-  //         log('messages length: ${messages.length}');
-
-  //         for (var message in messages.reversed) {
-  //           lastTransactionDate = message.date ?? -1;
-  //           if (message.address!.contains('+')) {
-  //             continue;
-  //           }
-  //           final messageInfo = DB().extractPurchaseInfoFromMessage(message);
-  //           log(messageInfo.amount.toString());
-  //           if (messageInfo.amount != 0) {
-  //             final docRef = transactionsCollection.doc();
-
-  //             batch.set(docRef, {
-  //               'store_name': messageInfo.storeName,
-  //               'amount': messageInfo.amount,
-  //               'date': messageInfo.date,
-  //               'time': messageInfo.time,
-  //               'bank_name': messageInfo.bankName,
-  //             });
-  //           }
-  //         }
-  //         batch.update(userDoc.reference, {
-  //           'last_transaction_date': lastTransactionDate,
-  //         });
-  //         await batch.commit();
-  //         log('background fetch finished');
-  //         BackgroundFetch.finish(taskId);
-  //       } catch (e) {
-  //         log('Error message: ${e.toString()}');
-  //         BackgroundFetch.finish(taskId);
-  //       }
-  //     },
-  //   );
-  //   log('background fetch initialized');
-  // }
-
   void initBackgroundFetch() async {
     BackgroundFetch.configure(
       BackgroundFetchConfig(
@@ -165,6 +90,7 @@ class DB {
                 'date': messageInfo.date,
                 'time': messageInfo.time,
                 'bank_name': messageInfo.bankName,
+                'category': '',
               });
             }
           }
@@ -235,11 +161,103 @@ class DB {
 
     if (isFirstTime) {
       Telephony telephony = Telephony.instance;
-      List<SmsMessage> messages = await telephony.getInboxSms();
-      //final user = await AuthService().user.first;
-      log('run once after installation');
+      final user = await AuthService().user.first;
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
 
+      log('userId: ${user.uid.toString()}');
+      final batch = FirebaseFirestore.instance.batch();
+      final transactionsByMonthCollection = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions-by-month');
+
+      final currentMonth = DateFormat('yyyy-MM').format(DateTime.now());
+      final lastMonth = DateFormat('yyyy-MM').format(DateTime.now().day == 31
+          ? DateTime.now().subtract(const Duration(days: 31))
+          : DateTime.now().subtract(const Duration(days: 30)));
+      final lastMonth2 = DateFormat('yyyy-MM').format(DateTime.now().day == 31
+          ? DateTime.now().subtract(const Duration(days: 62))
+          : DateTime.now().subtract(const Duration(days: 60)));
+
+      await transactionsByMonthCollection
+          .doc(currentMonth)
+          .set({}, SetOptions(merge: true));
+      await transactionsByMonthCollection
+          .doc(lastMonth)
+          .set({}, SetOptions(merge: true));
+      await transactionsByMonthCollection
+          .doc(lastMonth2)
+          .set({}, SetOptions(merge: true));
+
+      await transactionsByMonthCollection
+          .doc(currentMonth)
+          .collection('transactions')
+          .doc('0')
+          .set({});
+
+      await transactionsByMonthCollection
+          .doc(lastMonth)
+          .collection('transactions')
+          .doc('0')
+          .set({});
+
+      await transactionsByMonthCollection
+          .doc(lastMonth2)
+          .collection('transactions')
+          .doc('0')
+          .set({});
+
+      var lastTransactionDate = -1;
+
+      List<SmsMessage> messages = await telephony.getInboxSms(
+          filter: SmsFilter.where(SmsColumn.DATE).greaterThan(
+              DateFormat("yyyy-MM-dd")
+                  .parse("$lastMonth2-01")
+                  .millisecondsSinceEpoch
+                  .toString()));
+      for (var message in messages.reversed) {
+        lastTransactionDate = message.date ?? -1;
+        if (message.address!.contains('+') || message.address!.contains('0')) {
+          continue;
+        }
+        final messageInfo = DB().extractPurchaseInfoFromMessage(message);
+
+        if (messageInfo.amount != 0) {
+          final monthRef = transactionsByMonthCollection
+              .doc(messageInfo.date.substring(0, 7));
+          final transactionRef = monthRef.collection('transactions').doc();
+
+          batch.set(transactionRef, {
+            'store_name': messageInfo.storeName,
+            'amount': messageInfo.amount,
+            'date': messageInfo.date,
+            'time': messageInfo.time,
+            'bank_name': messageInfo.bankName,
+            'category': '',
+          });
+        }
+      }
+      batch.update(userDoc.reference, {
+        'last_transaction_date': lastTransactionDate,
+      });
+      batch.delete(transactionsByMonthCollection
+          .doc(currentMonth)
+          .collection('transactions')
+          .doc('0'));
+      batch.delete(transactionsByMonthCollection
+          .doc(lastMonth)
+          .collection('transactions')
+          .doc('0'));
+      batch.delete(transactionsByMonthCollection
+          .doc(lastMonth2)
+          .collection('transactions')
+          .doc('0'));
+      await batch.commit();
       prefs.setBool('isFirstTime', false);
+      log('initiate is finished');
     }
   }
 
@@ -304,6 +322,8 @@ class DB {
     final doc = await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
+        .collection('transactions-by-month')
+        .doc(date.toString().substring(0, 7))
         .collection('transactions')
         .add(transactionData);
 
@@ -311,12 +331,11 @@ class DB {
   }
 
 // Get all transactions for a user
-  Stream<List<TransactionModel>> getTransactions(String userId) {
+  Stream<List<TransactionModel>> getTransactionsByMonth(String userId) {
     final transactionsQuery = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('transactions')
-        .orderBy('date', descending: true)
+        .collection('transactions-by-month')
         .snapshots();
 
     return transactionsQuery.map((transactionSnapshot) => transactionSnapshot
@@ -375,7 +394,6 @@ class DB {
             tempClaim.get('store_id') == storeId &&
             tempClaim.get('uid') == userId)
         .isNotEmpty;
-
 
     return hasCode;
   }
