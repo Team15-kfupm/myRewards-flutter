@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 // Firebase Options Section Start//
 const apiKey = 'AIzaSyBGlVY6MQ6n6Iv2UZjq-E4PAZm5_wQCN3w';
@@ -314,8 +315,9 @@ const enPattern =
 const arPattern =
     r'^شراء\s*\((مدى Pay)\)\s*مبلغ:\s*(\d+\.\d{2})\s*SAR\s*بطاقة\s*مدى:\s*(\d{4}\*)\s*من:\s*(\w+\s*\w*\s*\w*\s*\w*\s*\w*\s*\w*)\s*في:\s*(\d{4}-\d{2}-\d{2})\s*(\d{2}:\d{2})$';
 
-  //  r'(شراء|Local Purchase)(.)(بطاقة|Card):(\s)(\+\d+)(.)(مبلغ|Amount):(\s*)(\d+[\.\d]\s*SAR)(.)(لدى|At):(\s*)([\w\s]+)(.)(في|Date):(\s)([\d-]+)(\s*)([\d:]+)?';
-
+//  r'(شراء|Local Purchase)(.)(بطاقة|Card):(\s)(\+\d+)(.)(مبلغ|Amount):(\s*)(\d+[\.\d]\s*SAR)(.)(لدى|At):(\s*)([\w\s]+)(.)(في|Date):(\s)([\d-]+)(\s*)([\d:]+)?';
 
 // Regex Section End//
+
+
 
