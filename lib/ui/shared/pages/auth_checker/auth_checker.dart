@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/home_page.dart';
 import 'package:myrewards_flutter/ui/pages/settings_page/settings_page.dart';
 import 'package:myrewards_flutter/ui/pages/sms_testing/sms_testing.dart';
+import 'package:myrewards_flutter/ui/pages/statistics_page/donut_chart.dart';
 
 import '../../../../core/providers/auth_user_state_provider.dart';
 

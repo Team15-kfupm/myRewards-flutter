@@ -5,7 +5,6 @@ import 'package:myrewards_flutter/core/services/db_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_list.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
-import 'package:myrewards_flutter/ui/pages/statistics_page/statistics_page.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
 
 import '../../../utils/constants.dart';
@@ -19,13 +18,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class HomePageState extends ConsumerState<HomePage> {
-  @override
-  initState() {
-    super.initState();
-    DB().initMessagesListener();
-    DB().initBackgroundFetch();
-  }
-
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -64,13 +56,15 @@ class HomePageState extends ConsumerState<HomePage> {
             ],
           )),
       const StoresPage(),
-      const StatisticsPage(),
+      const Center(
+        child: Text('Statistics Page'),
+      ),
       const SettingsPage(),
     ];
     return SafeArea(
       child: Scaffold(
         body: Container(
-          child: StatisticsPage(),
+          child: pages.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
           unselectedIconTheme: const IconThemeData(color: Colors.grey),

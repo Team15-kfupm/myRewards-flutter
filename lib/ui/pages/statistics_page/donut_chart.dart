@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +12,6 @@ class DonutChartWidget extends StatefulWidget {
 }
 
 class DonutChartWidgetState extends State<DonutChartWidget> {
-  final List<charts.Series<Task, String>> _seriesList = [];
-
   var data = [
     Task('Coffe Shop', 35.8, coffeShopLegendGradient),
     Task('Restaurant', 42.3, restaurantLegendGradient),
@@ -34,31 +30,6 @@ class DonutChartWidgetState extends State<DonutChartWidget> {
     otherLegendGradient,
   ];
   var prevIndex = -1;
-  List<bool> explode = [];
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the explode list with values indicating which data points to explode
-
-    // _seriesList.add(
-    //   charts.Series(
-    //     data: data,
-    //     domainFn: (Task task, _) => task.task,
-    //     measureFn: (Task task, _) => task.taskValue,
-    //     colorFn: (Task task, _) => charts.ColorUtil.fromDartColor(task.color),
-    //     id: 'Category',
-    //     labelAccessorFn: (Task row, _) => '${row.task}: ${row.taskValue}%',
-    //     insideLabelStyleAccessorFn: (Task row, _) {
-    //       return charts.TextStyleSpec(
-    //           color: charts.MaterialPalette.red.shadeDefault);
-    //     },
-    //     outsideLabelStyleAccessorFn: (Task row, _) {
-    //       return charts.TextStyleSpec(
-    //           color: charts.MaterialPalette.blue.shadeDefault);
-    //     },
-    //   ),
-    // );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +55,7 @@ class DonutChartWidgetState extends State<DonutChartWidget> {
                     series: <CircularSeries>[
                       DoughnutSeries<Task, String>(
                         dataSource: data,
-
                         legendIconType: LegendIconType.values[0],
-
                         onPointTap: (pointInteractionDetails) {
                           // Get the index of the tapped data point
                           int index = pointInteractionDetails.pointIndex!;
@@ -123,7 +92,6 @@ class DonutChartWidgetState extends State<DonutChartWidget> {
                         },
                         xValueMapper: (Task data, _) => data.task,
                         yValueMapper: (Task data, _) => data.taskValue,
-
                         pointShaderMapper: (datum, index, color, rect) {
                           // index switch
                           switch (index) {
@@ -153,12 +121,8 @@ class DonutChartWidgetState extends State<DonutChartWidget> {
                               ).createShader(rect);
                           }
                         },
-
                         cornerStyle: CornerStyle.bothCurve,
-
                         innerRadius: '85%',
-
-                        // Explode the segments on tap
                       ),
                     ]),
               ),
@@ -213,17 +177,6 @@ class DonutChartWidgetState extends State<DonutChartWidget> {
         ),
       ),
     );
-  }
-
-  void _onSelectionChanged(charts.SelectionModel model) {
-    if (model.hasDatumSelection) {
-      final selectedDatum = model.selectedDatum[0];
-      setState(() {
-        selectedDatum.datum.color = Colors.red;
-      });
-
-      log('Selected ${model.selectedDatum.length} datum: ${selectedDatum.datum.task} ${selectedDatum.datum.taskValue}');
-    }
   }
 }
 
