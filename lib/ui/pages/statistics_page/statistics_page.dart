@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/ui/pages/statistics_page/widgets/sp_line_chart.dart';
 import 'package:myrewards_flutter/ui/pages/statistics_page/widgets/transactions_category.dart';
 
+import '../../../core/services/db_services.dart';
 import '../../../utils/constants.dart';
 import '../home_page/widgets/avatar_with_welcome.dart';
 
@@ -14,6 +15,14 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
+  @override
+  initState() {
+    super.initState();
+    DB().runOnceAfterInstallation();
+    // DB().initMessagesListener();
+    // DB().initBackgroundFetch();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
