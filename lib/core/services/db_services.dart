@@ -4,6 +4,7 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/intl.dart';
 import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 import 'package:myrewards_flutter/core/models/transaction_model.dart';
@@ -16,6 +17,81 @@ import '../models/offer_model.dart';
 
 class DB {
   final firebaseInstance = FirebaseFirestore.instance;
+
+  // void initBackgroundFetch() async {
+  //   BackgroundFetch.configure(
+  //     BackgroundFetchConfig(
+  //       minimumFetchInterval: 15,
+  //       stopOnTerminate: false,
+  //       enableHeadless: true,
+  //       forceAlarmManager: false,
+  //       startOnBoot: true,
+  //     ),
+  //     (taskId) async {
+  //       log('background fetch started');
+  //       try {
+  //         await Firebase.initializeApp(
+  //             options: const FirebaseOptions(
+  //                 apiKey: apiKey,
+  //                 appId: appId,
+  //                 messagingSenderId: messagingSenderId,
+  //                 projectId: projectId));
+  //         Telephony telephony = Telephony.instance;
+  //         final user = await AuthService().user.first;
+  //         final userDoc = await FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(user.uid)
+  //             .get();
+
+  //         log('userId: ${user.uid.toString()}');
+  //         final batch = FirebaseFirestore.instance.batch();
+  //         final transactionsCollection = FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(user.uid)
+  //             .collection('transactions');
+
+  //         final lastTransactionDateTimeInMilliSecond =
+  //             userDoc.get('last_transaction_date');
+  //         var lastTransactionDate = lastTransactionDateTimeInMilliSecond;
+
+  //         List<SmsMessage> messages = await telephony.getInboxSms(
+  //             filter: SmsFilter.where(SmsColumn.DATE).greaterThan(
+  //                 lastTransactionDateTimeInMilliSecond.toString()));
+  //         log('messages length: ${messages.length}');
+
+  //         for (var message in messages.reversed) {
+  //           lastTransactionDate = message.date ?? -1;
+  //           if (message.address!.contains('+')) {
+  //             continue;
+  //           }
+  //           final messageInfo = DB().extractPurchaseInfoFromMessage(message);
+  //           log(messageInfo.amount.toString());
+  //           if (messageInfo.amount != 0) {
+  //             final docRef = transactionsCollection.doc();
+
+  //             batch.set(docRef, {
+  //               'store_name': messageInfo.storeName,
+  //               'amount': messageInfo.amount,
+  //               'date': messageInfo.date,
+  //               'time': messageInfo.time,
+  //               'bank_name': messageInfo.bankName,
+  //             });
+  //           }
+  //         }
+  //         batch.update(userDoc.reference, {
+  //           'last_transaction_date': lastTransactionDate,
+  //         });
+  //         await batch.commit();
+  //         log('background fetch finished');
+  //         BackgroundFetch.finish(taskId);
+  //       } catch (e) {
+  //         log('Error message: ${e.toString()}');
+  //         BackgroundFetch.finish(taskId);
+  //       }
+  //     },
+  //   );
+  //   log('background fetch initialized');
+  // }
 
   void initBackgroundFetch() async {
     BackgroundFetch.configure(
@@ -44,10 +120,22 @@ class DB {
 
           log('userId: ${user.uid.toString()}');
           final batch = FirebaseFirestore.instance.batch();
-          final transactionsCollection = FirebaseFirestore.instance
+          final transactionsByMonthCollection = FirebaseFirestore.instance
               .collection('users')
               .doc(user.uid)
-              .collection('transactions');
+              .collection('transactions-by-month');
+
+          final date = DateFormat('yyyy-MM').format(DateTime.now());
+
+          await transactionsByMonthCollection
+              .doc(date)
+              .set({}, SetOptions(merge: true));
+
+          await transactionsByMonthCollection
+              .doc(date)
+              .collection('transactions')
+              .doc('0')
+              .set({});
 
           final lastTransactionDateTimeInMilliSecond =
               userDoc.get('last_transaction_date');
@@ -60,15 +148,18 @@ class DB {
 
           for (var message in messages.reversed) {
             lastTransactionDate = message.date ?? -1;
-            if (message.address!.contains('+')) {
+            if (message.address!.contains('+') ||
+                message.address!.contains('0')) {
               continue;
             }
             final messageInfo = DB().extractPurchaseInfoFromMessage(message);
             log(messageInfo.amount.toString());
             if (messageInfo.amount != 0) {
-              final docRef = transactionsCollection.doc();
+              final monthRef = transactionsByMonthCollection
+                  .doc(messageInfo.date.substring(0, 7));
+              final transactionRef = monthRef.collection('transactions').doc();
 
-              batch.set(docRef, {
+              batch.set(transactionRef, {
                 'store_name': messageInfo.storeName,
                 'amount': messageInfo.amount,
                 'date': messageInfo.date,
@@ -159,10 +250,7 @@ class DB {
     final MessageModel messageInfo;
 
     if (enMatch != null) {
-      log(enMatch.group(1)!);
-      log(enMatch.group(3)!);
-      log(enMatch.group(4)!);
-      log(enMatch.group(5)!);
+      log('EN Match');
       final amount = double.parse(enMatch.group(1)!);
       final storeName = enMatch.group(3)!;
       final date = enMatch.group(4)!;
@@ -176,6 +264,7 @@ class DB {
         bankName: sms.address!,
       );
     } else if (arMatch != null) {
+      log('AR Match');
       final amount = double.parse(arMatch.group(2)!);
       final storeName = arMatch.group(4);
       final date = arMatch.group(5)!;
@@ -197,8 +286,6 @@ class DB {
         bankName: '',
       );
     }
-
-    log('message extracted');
 
     return messageInfo;
   }
