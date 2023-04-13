@@ -18,13 +18,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class HomePageState extends ConsumerState<HomePage> {
-  @override
-  initState() {
-    super.initState();
-    DB().initMessagesListener();
-    DB().initBackgroundFetch();
-  }
-
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {

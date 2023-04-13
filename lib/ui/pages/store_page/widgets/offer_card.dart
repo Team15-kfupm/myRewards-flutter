@@ -52,6 +52,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
                 ),
                 borderRadius: BorderRadius.circular(20.r),
               ),
+
               child: Stack(
                 children: [
                   Positioned(
@@ -62,6 +63,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
                       child: Container(
                         width: 109.r,
                         height: 65.h,
+
                         decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.all(Radius.circular(5)),

@@ -349,6 +349,7 @@ class DB {
   String _fetchCode(QuerySnapshot<Map<String, dynamic>> snapshot,
       String offerId, String userId) {
     final tempClaimDoc = snapshot.docs;
+
     final codeDocs = tempClaimDoc.where((tempClaim) =>
         tempClaim.get('offer_id') == offerId && tempClaim.get('uid') == userId);
     final code = codeDocs.isNotEmpty ? codeDocs.first.get('code') : '';
@@ -374,6 +375,7 @@ class DB {
             tempClaim.get('store_id') == storeId &&
             tempClaim.get('uid') == userId)
         .isNotEmpty;
+
 
     return hasCode;
   }

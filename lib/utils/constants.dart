@@ -33,10 +33,117 @@ const profileTileValueColor = Color(0xFFA2A2A7);
 const welcomeTextColor = Color(0xFF7E848D);
 var firstShimmerColor = Colors.grey.shade200;
 var secondShimmerColor = Colors.grey.shade400;
+const lineChartAreaColor = Color(0xFFEBF3FF);
+const secondlineChartAreaColor = Color(0xFFEEf5FF);
+const brightCoffeShopLegendColor = Color(0xFFFFC165);
+const darkCoffeShopLegendColor = Color(0xFFFFAA7E);
+const brightRestuarantLegendColor = Color(0xFFC53172);
+const darkRestuarantLegendColor = Color(0xFFA671CA);
+const darkTravelLegendColor = Color(0xFFB778FF);
+const brightTravelLegendColor = Color(0xFF33CBFA);
+const brightEntertainmentLegendColor = Color(0xFF9CF5C6);
+const darkEntertainmentLegendColor = Color(0xFF54E1c3);
+const brightShoppingLegendColor = Color(0xFF5DF377);
+const darkShoppingLegendColor = Color(0xFF329D95);
+const brightOtherLegendColor = Color(0xFFD2ADE2);
+const darkOtherLegendColor = Color(0xFFF770A2);
 
 // Colors Section End//
 
+// LinearGradient Section Start//
+const coffeShopLegendGradient = LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: <Color>[darkCoffeShopLegendColor, brightCoffeShopLegendColor]);
+
+const restaurantLegendGradient = LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: <Color>[darkRestuarantLegendColor, brightRestuarantLegendColor]);
+
+const travelLegendGradient = LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: <Color>[darkTravelLegendColor, brightTravelLegendColor]);
+
+const entertainmentLegendGradient = LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: <Color>[
+      darkEntertainmentLegendColor,
+      brightEntertainmentLegendColor
+    ]);
+
+const shoppingLegendGradient = LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: <Color>[darkShoppingLegendColor, brightShoppingLegendColor]);
+
+const otherLegendGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: <Color>[darkOtherLegendColor, brightOtherLegendColor]);
+
+const unSelectedLegendGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: <Color>[greyColor, lightGreyColor]);
+
+// LinearGradient Section End//
+
 // Text Style Section Start//
+
+final statTotalSpendingsLabelTextStyle = GoogleFonts.poppins(
+  fontSize: 18.spMin,
+  fontWeight: FontWeight.w400,
+  color: profileTileValueColor,
+);
+
+final statTotalSpendingsTextStyle = GoogleFonts.poppins(
+  fontSize: 24.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
+);
+
+final statXAxisLableTextStyle = GoogleFonts.poppins(
+  fontSize: 15.spMin,
+  fontWeight: FontWeight.w500,
+  color: profileTileValueColor,
+);
+final statCategoryLabelTextStyle = GoogleFonts.poppins(
+  fontSize: 16.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
+);
+
+final statSeeAllTextStyle = GoogleFonts.poppins(
+  fontSize: 16.spMin,
+  fontWeight: FontWeight.w500,
+  color: primaryColor,
+);
+final statCategoryPercentageTextStyle = GoogleFonts.poppins(
+  fontSize: 16.spMin,
+  fontWeight: FontWeight.w400,
+  color: blackColor,
+);
+
+final statCategoryTypeTextStyle = GoogleFonts.poppins(
+  fontSize: 16.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
+);
+
+final donutTotalSpendingsAmountTextStyle = GoogleFonts.poppins(
+  fontSize: 36.spMin,
+  fontWeight: FontWeight.w600,
+  color: settingsTileTitleColor,
+);
+
+final donutTotalSpendingsLabelTextStyle = GoogleFonts.poppins(
+  fontSize: 14.spMin,
+  fontWeight: FontWeight.w400,
+  color: profileTileValueColor,
+);
 
 final smallPrimaryTextStyle = GoogleFonts.poppins(
   fontSize: 14.spMin,
@@ -72,6 +179,12 @@ final totalSpendingsTextStyle = GoogleFonts.poppins(
   fontSize: 16.spMin,
   fontWeight: FontWeight.w500,
   color: settingsTileTitleColor,
+);
+
+final xAxisLabelTextStyle = GoogleFonts.poppins(
+  fontSize: 15.spMin,
+  fontWeight: FontWeight.w400,
+  color: profileTileValueColor,
 );
 
 final expireOTPCountdownTextStyle =
