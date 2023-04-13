@@ -26,6 +26,16 @@ class _SmsTestingState extends State<SmsTesting> {
         body: FutureBuilder(
       builder: (context, messages) {
         if (messages.hasData) {
+          for (var element in messages.data!) {
+            final sms =
+                DB().extractPurchaseInfoFromMessage(element as SmsMessage);
+            log(sms.amount.toString());
+            log(sms.storeName);
+            log(sms.bankName);
+            log(sms.date.toString());
+            log(sms.time.toString());
+            log('-----------------');
+          }
           return ListView.builder(
               itemCount: messages.data!.length,
               itemBuilder: (context, index) {
