@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/models/sp_line_data_model.dart';
 
 import 'package:myrewards_flutter/utils/constants.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' as charts;
@@ -13,19 +14,8 @@ class SpLineChart extends StatefulWidget {
 
 class _SpLineChartState extends State<SpLineChart> {
   // list of SpendData
-  final List<SpendData> data = [
-    SpendData('Jan', 35.8),
-    SpendData('Feb', 42.3),
-    SpendData('Mar', 30),
-    SpendData('Apr', 22.0),
-    SpendData('May', 9),
-    SpendData('Jun', 12.0),
-    SpendData('Jul', 35.8),
-    SpendData('Aug', 42.3),
-    SpendData('Sep', 30),
-    SpendData('Oct', 22.0),
-    SpendData('Nov', 9),
-    SpendData('Dec', 12.0),
+  final List<SpLineDataModel> data = [
+    SpLineDataModel(month: 'Jan', totalSpend: 33),
   ];
 
   @override
@@ -35,17 +25,20 @@ class _SpLineChartState extends State<SpLineChart> {
         margin: const EdgeInsets.all(0),
         child: charts.SfCartesianChart(
             zoomPanBehavior: charts.ZoomPanBehavior(
-              enablePanning: true,
-            ),
+                enablePanning: true,
+                enablePinching: true,
+                zoomMode: charts.ZoomMode.x),
             borderWidth: 0,
             borderColor: transparentColor,
             plotAreaBorderColor: transparentColor,
             primaryXAxis: charts.CategoryAxis(
-              desiredIntervals: 6,
+              desiredIntervals: 1,
               interval: 1,
               isVisible: true,
-              visibleMaximum: 6,
-              visibleMinimum: 3,
+              axisLine: const charts.AxisLine(
+                width: 0,
+              ),
+              visibleMaximum: 3,
               rangePadding: charts.ChartRangePadding.none,
               majorTickLines: const charts.MajorTickLines(
                 size: 0,
@@ -60,11 +53,11 @@ class _SpLineChartState extends State<SpLineChart> {
               visibleMaximum: 100,
               visibleMinimum: 0,
             ),
-            series: <charts.ChartSeries<SpendData, String>>[
+            series: <charts.ChartSeries<SpLineDataModel, String>>[
               charts.SplineAreaSeries(
                 dataSource: data,
-                xValueMapper: (SpendData spend, _) => spend.month,
-                yValueMapper: (SpendData spend, _) => spend.spend,
+                xValueMapper: (SpLineDataModel spend, _) => spend.month,
+                yValueMapper: (SpLineDataModel spend, _) => spend.totalSpend,
                 borderWidth: 2,
                 animationDuration: 2,
                 animationDelay: 2,
@@ -81,8 +74,8 @@ class _SpLineChartState extends State<SpLineChart> {
               ),
               charts.SplineSeries(
                 dataSource: data,
-                xValueMapper: (SpendData spend, _) => spend.month,
-                yValueMapper: (SpendData spend, _) => spend.spend,
+                xValueMapper: (SpLineDataModel spend, _) => spend.month,
+                yValueMapper: (SpLineDataModel spend, _) => spend.totalSpend,
                 color: primaryColor,
                 width: 4,
                 isVisible: true,
@@ -96,7 +89,7 @@ class _SpLineChartState extends State<SpLineChart> {
                   labelIntersectAction: charts.LabelIntersectAction.hide,
                 ),
                 dataLabelMapper: (datum, index) {
-                  return datum.spend.toString();
+                  return datum.totalSpend.toString();
                 },
                 markerSettings: const charts.MarkerSettings(
                   isVisible: true,
@@ -109,10 +102,4 @@ class _SpLineChartState extends State<SpLineChart> {
               ),
             ]));
   }
-}
-
-class SpendData {
-  SpendData(this.month, this.spend);
-  final String month;
-  final double spend;
 }
