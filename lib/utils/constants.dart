@@ -89,6 +89,15 @@ const unSelectedLegendGradient = LinearGradient(
     end: Alignment.centerRight,
     colors: <Color>[greyColor, lightGreyColor]);
 
+var donutChartcolors = {
+  "cafe": coffeShopLegendGradient,
+  "restaurant": restaurantLegendGradient,
+  "shopping": shoppingLegendGradient,
+  "entertainment": entertainmentLegendGradient,
+  "travel": travelLegendGradient,
+  "other": otherLegendGradient,
+};
+
 // LinearGradient Section End//
 
 // Text Style Section Start//
@@ -122,7 +131,7 @@ final statSeeAllTextStyle = GoogleFonts.poppins(
   color: primaryColor,
 );
 final statCategoryPercentageTextStyle = GoogleFonts.poppins(
-  fontSize: 16.spMin,
+  fontSize: 14.spMin,
   fontWeight: FontWeight.w400,
   color: blackColor,
 );
