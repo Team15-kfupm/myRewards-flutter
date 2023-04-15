@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserInfoModel {
@@ -7,6 +5,7 @@ class UserInfoModel {
   final String name;
   final String email;
   final String phone;
+  final String createdAt;
   final DateTime birthDate;
   final String gender;
   final Map points;
@@ -17,6 +16,7 @@ class UserInfoModel {
       required this.name,
       required this.email,
       required this.phone,
+      required this.createdAt,
       required this.birthDate,
       required this.gender,
       required this.points,
@@ -28,6 +28,7 @@ class UserInfoModel {
         name = userDoc.get('name'),
         email = userDoc.get('email'),
         phone = userDoc.get('phone'),
+        createdAt = userDoc.get('created_at'),
         birthDate = DateTime.parse(userDoc.get('birth_date')),
         gender = userDoc.get('gender'),
         points = userDoc.get('points'),
@@ -37,6 +38,7 @@ class UserInfoModel {
     return UserInfoModel(
         name: snapshot['name'],
         email: snapshot['email'],
+        createdAt: snapshot['created_at'],
         birthDate: DateTime.parse(snapshot['birth_date']),
         gender: snapshot['gender'],
         phone: snapshot['phone'],
