@@ -17,15 +17,20 @@ class TransactionsCategory extends ConsumerWidget {
         transactionsByMonthProvider(ref.read(userInfoProvider).value!.uid));
     return categories.when(
         data: (data) {
-          final categoriesList = data.last.categories.entries
-              .where((spendings) => spendings.value > 0)
-              .toList();
+          var categoriesList = <MapEntry<String, double>>[];
+          var totalSpendings = 0.0;
+          if (data.isNotEmpty) {
+            categoriesList = data.last.categories.entries
+                .where((spendings) => spendings.value > 0)
+                .toList();
 
-          categoriesList.sort((a, b) => b.value.compareTo(a.value));
+            categoriesList.sort((a, b) => b.value.compareTo(a.value));
 
-          final totalSpendings = data.last.categories.values.reduce(
-              (totalSpendings, categorySpendings) =>
-                  totalSpendings + categorySpendings);
+            totalSpendings = data.last.categories.values.reduce(
+                (totalSpendings, categorySpendings) =>
+                    totalSpendings + categorySpendings);
+          }
+
           return ListView.separated(
             itemBuilder: (context, index) {
               return Row(

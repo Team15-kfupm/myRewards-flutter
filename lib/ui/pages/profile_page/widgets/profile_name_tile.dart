@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/services/db_services.dart';
 
 import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
@@ -94,7 +95,7 @@ class ProfileNameTileState extends ConsumerState<ProfileNameTile> {
                                         style: smallPrimaryTextStyle,
                                       )),
                                   TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         if (_controller.text.isEmpty) {
                                           Flushbar(
                                             message:
@@ -111,12 +112,25 @@ class ProfileNameTileState extends ConsumerState<ProfileNameTile> {
                                           return;
                                         }
 
-                                        // ref
-                                        //     .read(userInfoProvider.notifier)
-                                        //     .copyWith(name: _controller.text);
+                                        final isUpdated = await DB()
+                                            .updateUserName(_controller.text,
+                                                userInfo.value!.uid);
 
                                         Navigator.pop(context);
-
+                                        if (!isUpdated) {
+                                          Flushbar(
+                                            message:
+                                                'Something went wrong. Please try again later',
+                                            duration: const Duration(
+                                                milliseconds: 2000),
+                                            flushbarStyle:
+                                                FlushbarStyle.FLOATING,
+                                            backgroundColor: Colors.red,
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                          ).show(context);
+                                          return;
+                                        }
                                         Flushbar(
                                           message: 'Name Updated Successfully',
                                           duration: const Duration(

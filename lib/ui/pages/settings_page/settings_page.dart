@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 
+import '../../../core/providers/user_info_provider.dart';
 import 'widgets/settings_tile.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -74,7 +71,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         )),
                     23.horizontalSpace,
                     Text(
-                      'Ahmed',
+                      ref.read(userInfoProvider).value!.name,
                       style: settingsUsernameTextStyle,
                     ),
                   ],

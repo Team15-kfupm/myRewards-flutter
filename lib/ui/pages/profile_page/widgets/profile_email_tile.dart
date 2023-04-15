@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/services/db_services.dart';
 
 import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
@@ -113,11 +114,26 @@ class ProfileEmailTileState extends ConsumerState<ProfileEmailTile> {
                                           return;
                                         }
 
-                                        // ref
-                                        //     .read(userInfoProvider.notifier)
-                                        //     .copyWith(email: _controller.text);
-
+                                        final isUpdated =
+                                            await DB().updateEmail(
+                                          _controller.text,
+                                          userInfo.value!.uid,
+                                        );
                                         Navigator.pop(context);
+                                        if (!isUpdated) {
+                                          Flushbar(
+                                            message:
+                                                'Something went wrong. Please try again',
+                                            duration: const Duration(
+                                                milliseconds: 2000),
+                                            flushbarStyle:
+                                                FlushbarStyle.FLOATING,
+                                            backgroundColor: Colors.red,
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                          ).show(context);
+                                          return;
+                                        }
 
                                         Flushbar(
                                           message: 'Email Updated Successfully',

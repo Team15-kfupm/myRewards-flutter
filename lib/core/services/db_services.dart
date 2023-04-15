@@ -9,6 +9,7 @@ import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 import 'package:myrewards_flutter/core/models/transaction_model.dart';
 import 'package:myrewards_flutter/core/models/transactions_by_month.dart';
+import 'package:myrewards_flutter/core/models/user_info_model.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony/telephony.dart';
@@ -185,13 +186,13 @@ class DB {
 
       await transactionsByMonthCollection
           .doc(currentMonth)
-          .set({}, SetOptions(merge: true));
+          .set({'categories': {}}, SetOptions(merge: true));
       await transactionsByMonthCollection
           .doc(lastMonth)
-          .set({}, SetOptions(merge: true));
+          .set({'categories': {}}, SetOptions(merge: true));
       await transactionsByMonthCollection
           .doc(lastMonth2)
-          .set({}, SetOptions(merge: true));
+          .set({'categories': {}}, SetOptions(merge: true));
 
       await transactionsByMonthCollection
           .doc(currentMonth)
@@ -338,6 +339,7 @@ class DB {
         .doc(userId)
         .collection('transactions-by-month')
         .snapshots();
+    log('transactions by month snapshot: $transactionsByMonthSnapshot');
 
     return transactionsByMonthSnapshot.map((transactionsByMonthQuery) =>
         transactionsByMonthQuery.docs
@@ -514,7 +516,9 @@ class DB {
 
   Future<List<StoreModel>> getStoresWithOffers() async {
     final user = await AuthService().user.first;
-    final storesRef = firebaseInstance.collection('stores');
+    final storesRef = firebaseInstance
+        .collection('stores')
+        .where('num_of_offers', isGreaterThan: 0);
     final storesSnapshot = await storesRef.get();
     final userDoc =
         await firebaseInstance.collection('users').doc(user.uid).get();
@@ -541,14 +545,14 @@ class DB {
       }
       final store = StoreModel(
         id: storeDoc.id,
-        name: storeDoc.data()['name'],
-        location: storeDoc.data()['location'],
+        name: storeDoc.data()['store_name'],
         offers: offers,
         points: points,
       );
 
       stores.add(store);
     }
+
     return stores;
   }
 
@@ -576,4 +580,78 @@ class DB {
   //     }
   //   }
   // }
+
+  Future addNewUser(UserInfoModel userInfo) async {
+    await firebaseInstance.collection('users').doc(userInfo.uid).set({
+      'name': userInfo.name,
+      'email': userInfo.email,
+      'phone': userInfo.phone,
+      'gender': userInfo.gender,
+      'birth_date': userInfo.birthDate.toString(),
+      'total_points': 0,
+      'last_transaction_date': 0,
+      'top_stores': {},
+      'points': {},
+    });
+  }
+
+  void isNewUser() async {
+    final user = await AuthService().user.first;
+    final userDoc =
+        await firebaseInstance.collection('users').doc(user.uid).get();
+    final sharedPref = await SharedPreferences.getInstance();
+    if (userDoc.exists) {
+      sharedPref.setBool('isFirst', false);
+    } else {
+      sharedPref.setBool('isFirst', false);
+    }
+  }
+
+  Future<bool> updateUserName(String userName, String uid) async {
+    final userDoc = await firebaseInstance.collection('users').doc(uid).get();
+    if (userDoc.exists) {
+      await firebaseInstance.collection('users').doc(uid).update({
+        'name': userName,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateEmail(String email, String uid) async {
+    final userDoc = await firebaseInstance.collection('users').doc(uid).get();
+    if (userDoc.exists) {
+      await firebaseInstance.collection('users').doc(uid).update({
+        'email': email,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> upDateBirthDate(String birthDate, String uid) async {
+    final userDoc = await firebaseInstance.collection('users').doc(uid).get();
+    if (userDoc.exists) {
+      await firebaseInstance.collection('users').doc(uid).update({
+        'birth_date': birthDate,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateGender(String gender, String uid) async {
+    final userDoc = await firebaseInstance.collection('users').doc(uid).get();
+    if (userDoc.exists) {
+      await firebaseInstance.collection('users').doc(uid).update({
+        'gender': gender,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

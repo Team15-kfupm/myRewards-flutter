@@ -40,15 +40,11 @@ class GoButtonState extends ConsumerState<GoButton> {
           return;
         }
 
+        ref.read(phoneProvider.notifier).state =
+            '+966${widget.phoneNumber.substring(1).trim()}';
         AuthService().signInWithPhoneNumber(
             ref, "+966${widget.phoneNumber.substring(1).trim()}");
         ref.read(isLoadingProvider.notifier).state = true;
-
-        ref.read(phoneProvider.notifier).state =
-            '+966${widget.phoneNumber.substring(1).trim()}';
-        // ref
-        //     .read(userInfoProvider.notifier)
-        //     .copyWith(phone: '+966${widget.phoneNumber.substring(1).trim()}');
 
         Navigator.pushNamed(context, '/otp');
       },

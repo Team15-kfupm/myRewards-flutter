@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/services/db_services.dart';
 
 import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
@@ -53,7 +54,7 @@ class ProfileBirthDateTileState extends ConsumerState<ProfileBirthDateTile> {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
-                ).then((value) {
+                ).then((value) async {
                   if (value == null) return;
                   if (DateTime.now().year - value.year < 18) {
                     Flushbar(
@@ -67,6 +68,19 @@ class ProfileBirthDateTileState extends ConsumerState<ProfileBirthDateTile> {
                     return;
                   }
 
+                  final isUpdated = await DB().upDateBirthDate(
+                      value.toString().substring(0, 10).trim(),
+                      userInfo.value!.uid);
+                  if (!isUpdated) {
+                    Flushbar(
+                      message: 'Birth Date Update Failed',
+                      duration: const Duration(milliseconds: 2000),
+                      flushbarStyle: FlushbarStyle.FLOATING,
+                      backgroundColor: Colors.red,
+                      flushbarPosition: FlushbarPosition.TOP,
+                    ).show(context);
+                    return;
+                  }
                   Flushbar(
                     message: 'Birth Date Updated Successfully',
                     duration: const Duration(milliseconds: 1100),

@@ -75,7 +75,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                 )),
             21.verticalSpace,
             Text(
-              userInfo.asData!.value.name,
+              userInfo.value?.name ?? '',
               style: settingsUsernameTextStyle,
             ),
             50.verticalSpace,
@@ -107,11 +107,11 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Joined',
+                      'Joined  ',
                       style: joinedTextStyle,
                     ),
                     Text(
-                      ' 28 Jan 2023',
+                      ref.read(userInfoProvider).value?.createdAt ?? '',
                       style: joinedDateTextStyle,
                     ),
                   ],

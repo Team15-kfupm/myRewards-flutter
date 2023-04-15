@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
+import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 
 import '../../../../utils/constants.dart';
 
@@ -13,14 +16,15 @@ class StoreCard extends ConsumerStatefulWidget {
   StoreCardState createState() => StoreCardState();
 }
 
-final currentStoreProvider = StateProvider(
-    (ref) => StoreModel(id: '', location: '', name: '', offers: [], points: 0));
+final currentStoreProvider =
+    StateProvider((ref) => StoreModel(id: '', name: '', offers: [], points: 0));
 
 class StoreCardState extends ConsumerState<StoreCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        log(ref.read(userInfoProvider).value!.createdAt.toString());
         ref.read(currentStoreProvider.notifier).state = widget.store;
         Navigator.pushNamed(context, '/storePage');
       },
