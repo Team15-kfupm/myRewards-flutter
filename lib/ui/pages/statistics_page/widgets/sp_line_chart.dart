@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,18 +20,24 @@ class SpLineChart extends ConsumerWidget {
         transactionsByMonthProvider(ref.read(userInfoProvider).value!.uid));
     return data.when(
       data: (data) {
-        final List<SpLineDataModel> spLineData = data
-            .map((transactionsByMonthData) => SpLineDataModel(
-                month: DateFormat('MMM')
-                    .format(DateTime(
-                        2000, int.parse(transactionsByMonthData.month)))
-                    .toString(), //transactionsByMonthData.month,
-                totalSpend: double.parse(transactionsByMonthData
-                    .categories.values
-                    .reduce((totalSpendings, categorySpendings) =>
-                        totalSpendings + categorySpendings)
-                    .toStringAsFixed(2))))
-            .toList();
+        List<SpLineDataModel> spLineData = [];
+
+        if (data.isNotEmpty) {
+          spLineData = data
+              .map((transactionsByMonthData) => SpLineDataModel(
+                  month: DateFormat('MMM')
+                      .format(DateTime(
+                          2000, int.parse(transactionsByMonthData.month)))
+                      .toString(), //transactionsByMonthData.month,
+                  totalSpend: double.parse(transactionsByMonthData
+                      .categories.values
+                      .reduce((totalSpendings, categorySpendings) =>
+                          totalSpendings + categorySpendings)
+                      .toStringAsFixed(2))))
+              .toList();
+        }
+
+        log('spLineData: ${spLineData}');
 
         return Container(
             height: 250.h,
@@ -63,13 +71,15 @@ class SpLineChart extends ConsumerWidget {
                 ),
                 primaryYAxis: charts.NumericAxis(
                   isVisible: false,
-                  visibleMaximum: spLineData
-                          .reduce((value, element) =>
-                              value.totalSpend > element.totalSpend
-                                  ? value
-                                  : element)
-                          .totalSpend +
-                      500,
+                  visibleMaximum: spLineData.isNotEmpty
+                      ? spLineData
+                              .reduce((value, element) =>
+                                  value.totalSpend > element.totalSpend
+                                      ? value
+                                      : element)
+                              .totalSpend +
+                          500
+                      : 100,
                   visibleMinimum: 0,
                 ),
                 series: <charts.ChartSeries<SpLineDataModel, String>>[

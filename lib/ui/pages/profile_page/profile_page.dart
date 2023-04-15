@@ -75,7 +75,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                 )),
             21.verticalSpace,
             Text(
-              userInfo.asData!.value.name,
+              userInfo.value?.name ?? '',
               style: settingsUsernameTextStyle,
             ),
             50.verticalSpace,

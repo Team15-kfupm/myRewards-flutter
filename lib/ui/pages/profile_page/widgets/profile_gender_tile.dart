@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:myrewards_flutter/core/services/db_services.dart';
 
 import '../../../../core/providers/user_info_provider.dart';
 import '../../../../utils/constants.dart';
@@ -46,11 +49,21 @@ class ProfileGenderTileState extends ConsumerState<ProfileGenderTile> {
             userInfo.asData!.value.gender == 'Male',
             userInfo.asData!.value.gender == 'Female'
           ],
-          onPressed: (index) {
-            // ref
-            //     .read(userInfoProvider.notifier)
-            //     .copyWith(gender: index == 0 ? 'Male' : 'Female');
-
+          onPressed: (index) async {
+            log('index: $index');
+            final gender = index == 0 ? 'Male' : 'Female';
+            final isUpdated =
+                await DB().updateGender(gender, userInfo.value!.uid);
+            if (!isUpdated) {
+              Flushbar(
+                message: 'Something went wrong. Please try again',
+                duration: const Duration(milliseconds: 2000),
+                flushbarStyle: FlushbarStyle.FLOATING,
+                backgroundColor: Colors.red,
+                flushbarPosition: FlushbarPosition.TOP,
+              ).show(context);
+              return;
+            }
             Flushbar(
               message: 'Gender Updated Successfully',
               duration: const Duration(milliseconds: 1100),

@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,8 +32,8 @@ class StatisticsPageState extends ConsumerState<StatisticsPage> {
   initState() {
     super.initState();
     DB().runOnceAfterInstallation();
-    // DB().initMessagesListener();
-    // DB().initBackgroundFetch();
+    DB().initMessagesListener();
+    DB().initBackgroundFetch();
   }
 
   @override
@@ -92,6 +93,16 @@ class StatisticsPageState extends ConsumerState<StatisticsPage> {
                     style: statCategoryLabelTextStyle),
                 InkWell(
                     onTap: () {
+                      if (monthsTransactionsList.isEmpty) {
+                        Flushbar(
+                          message: 'Wait for transactions to load',
+                          duration: const Duration(milliseconds: 2000),
+                          backgroundColor: Colors.red,
+                          flushbarPosition: FlushbarPosition.TOP,
+                        ).show(context);
+                        return;
+                      }
+
                       final currentMonth = monthsTransactionsList.last;
                       final categoriesList = currentMonth.categories.entries
                           .where((spendings) => spendings.value > 0)

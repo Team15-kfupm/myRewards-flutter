@@ -13,8 +13,8 @@ class StoreCard extends ConsumerStatefulWidget {
   StoreCardState createState() => StoreCardState();
 }
 
-final currentStoreProvider = StateProvider(
-    (ref) => StoreModel(id: '', location: '', name: '', offers: [], points: 0));
+final currentStoreProvider =
+    StateProvider((ref) => StoreModel(id: '', name: '', offers: [], points: 0));
 
 class StoreCardState extends ConsumerState<StoreCard> {
   @override

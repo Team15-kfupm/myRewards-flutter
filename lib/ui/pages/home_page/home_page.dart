@@ -7,6 +7,7 @@ import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_lis
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
 import 'package:myrewards_flutter/ui/pages/statistics_page/statistics_page.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/constants.dart';
 import '../settings_page/settings_page.dart';
@@ -19,6 +20,12 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
+    DB().isNewUser();
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
