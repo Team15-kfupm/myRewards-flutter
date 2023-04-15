@@ -17,7 +17,7 @@ class StoreModel {
 
   StoreModel.fromDocument(store)
       : id = store['id'] as String,
-        name = store['name'] as String,
+        name = store['store_name'] as String,
         location = store['location'] as String,
         offers = store['offers'] as List<OfferModel>,
         points = store['points'] as int;

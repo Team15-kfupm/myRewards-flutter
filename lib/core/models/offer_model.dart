@@ -26,9 +26,16 @@ class OfferModel {
         endDate = _dateFormatted(offer['end_date']);
 }
 
-String _dateFormatted(Timestamp offerTimestamp) {
-  final offerDate = DateTime.fromMillisecondsSinceEpoch(
-      offerTimestamp.millisecondsSinceEpoch.toInt());
+String _dateFormatted(String offerTimestamp) {
+  var f = DateFormat('EEE MMM d yyyy');
+  var date2 = f.parse(offerTimestamp);
 
-  return DateFormat('yyyy-MM-dd').format(offerDate);
+  return DateFormat('yyyy-MM-dd').format(date2);
 }
+
+// String _dateFormatted(Timestamp offerTimestamp) {
+//   final offerDate = DateTime.fromMillisecondsSinceEpoch(
+//       offerTimestamp.millisecondsSinceEpoch.toInt());
+
+//   return DateFormat('yyyy-MM-dd').format(offerDate);
+// }

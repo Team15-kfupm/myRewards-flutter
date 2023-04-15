@@ -468,7 +468,7 @@ class DB {
       };
       top5StoresDocs.add(updatedStoreData);
     }
-
+    log('top5StoresDocs: ${top5StoresDocs.length}');
     // Create a list of StoreModel objects from the top5StoresDocs list
     return top5StoresDocs
         .map((store) => StoreModel.fromDocument(store))

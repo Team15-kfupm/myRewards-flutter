@@ -64,6 +64,7 @@ class DonutChartWidgetState extends ConsumerState<DonutChartWidget> {
                           ref
                               .read(donutChartDataProvider.notifier)
                               .resetColors();
+                          prevIndex = -1;
                           return;
                         }
 
