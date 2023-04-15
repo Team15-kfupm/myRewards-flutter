@@ -370,8 +370,10 @@ class DB {
     final HttpsCallable callable =
         FirebaseFunctions.instance.httpsCallable('claimOffer');
 
+    log('claim offer: $userId, $offerId, $storeId');
+
     final result = await callable
-        .call({'offerId': offerId, 'userId': userId, 'storeId': storeId});
+        .call({'offer_id': offerId, 'user_id': userId, 'store_id': storeId});
 
     return result.data['code'];
   }

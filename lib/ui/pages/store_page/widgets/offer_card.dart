@@ -52,7 +52,6 @@ class OfferCardState extends ConsumerState<OfferCard> {
                 ),
                 borderRadius: BorderRadius.circular(20.r),
               ),
-
               child: Stack(
                 children: [
                   Positioned(
@@ -63,7 +62,6 @@ class OfferCardState extends ConsumerState<OfferCard> {
                       child: Container(
                         width: 109.r,
                         height: 65.h,
-
                         decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -169,14 +167,6 @@ class OfferCardState extends ConsumerState<OfferCard> {
                             ).show(context);
                             return;
                           }
-                          // DB().updateStorePoints(ref.read(userInfoProvider).value!.uid,
-                          //     ref.read(currentStoreProvider).id, widget.offer.points);
-                          // ref
-                          //     .read(storesProvider)
-                          //     .value!
-                          //     .where((store) =>
-                          //         store.id == ref.read(currentStoreProvider).id)
-                          //     .first;
 
                           Flushbar(
                             message: 'Offer claimed!',

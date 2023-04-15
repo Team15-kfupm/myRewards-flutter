@@ -25,6 +25,7 @@ class _StaState extends ConsumerState<AuthChecker> {
     return authState.when(
       data: (user) {
         final userData = ref.watch(userInfoProvider);
+
         return userData.when(
           data: (userInfo) {
             return const HomePage();
@@ -32,6 +33,7 @@ class _StaState extends ConsumerState<AuthChecker> {
           loading: () => const Center(child: CircularProgressIndicator()),
           // should return a page that shows a form to fill in the user's info page
           error: (error, stack) {
+            //   log(userData.asData!.value.toString());
             log(error.toString());
             return const SignUpPage();
           },

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/providers/top_stores_provider.dart';
+import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/top_stores_shimmer.dart';
 
@@ -19,23 +20,18 @@ class HomeStoresCardList extends ConsumerStatefulWidget {
 class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
   @override
   Widget build(BuildContext context) {
-    final topStoresPoints = ref.watch(topStoresPointsProvider);
+    final topStoresPoints = ref
+        .watch(topStoresPointsProvider(ref.read(userInfoProvider).value!.uid));
 
     return topStoresPoints.when(
         data: (topStoresPointsMap) {
-          topStoresPointsMap.forEach((key, value) {
-            log('key: $key, value: $value');
-          });
+          log('topStoresPointsMap: ${topStoresPointsMap.toString()}');
           final topStores = ref.watch(topStoresProvider(topStoresPointsMap));
-          log('topStores: $topStores');
+
           return topStores.when(
               data: (topStoresList) {
-                topStoresList.forEach((element) {
-                  log(element.name);
-                });
                 return Expanded(
                   child: ListView.separated(
-                      cacheExtent: 99999999999,
                       itemBuilder: ((context, index) {
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: 9.w),
