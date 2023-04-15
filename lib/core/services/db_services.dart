@@ -157,6 +157,7 @@ class DB {
   }
 
   Future<void> runOnceAfterInstallation() async {
+    await isNewUser();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
@@ -193,24 +194,6 @@ class DB {
       await transactionsByMonthCollection
           .doc(lastMonth2)
           .set({'categories': {}}, SetOptions(merge: true));
-
-      await transactionsByMonthCollection
-          .doc(currentMonth)
-          .collection('transactions')
-          .doc('0')
-          .set({});
-
-      await transactionsByMonthCollection
-          .doc(lastMonth)
-          .collection('transactions')
-          .doc('0')
-          .set({});
-
-      await transactionsByMonthCollection
-          .doc(lastMonth2)
-          .collection('transactions')
-          .doc('0')
-          .set({});
 
       var lastTransactionDate = -1;
 
@@ -321,15 +304,13 @@ class DB {
       'category': '',
       'bank_name': bankName,
     };
-    final doc = await FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('transactions-by-month')
         .doc(date.toString().substring(0, 7))
         .collection('transactions')
         .add(transactionData);
-
-    log('doc id: ${doc.id}');
   }
 
 // Get all transactions for a user
@@ -594,10 +575,14 @@ class DB {
     });
   }
 
-  void isNewUser() async {
+  Future<void> isNewUser() async {
     final user = await AuthService().user.first;
-    final userDoc =
-        await firebaseInstance.collection('users').doc(user.uid).get();
+    final userDoc = await firebaseInstance
+        .collection('users')
+        .doc(user.uid)
+        .collection('transactions-by-month')
+        .doc(DateFormat('yyyy-MM').format(DateTime.now()))
+        .get();
     final sharedPref = await SharedPreferences.getInstance();
     if (userDoc.exists) {
       sharedPref.setBool('isFirst', false);
