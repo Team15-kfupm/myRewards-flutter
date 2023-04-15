@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class OfferModel {
@@ -27,10 +24,8 @@ class OfferModel {
 }
 
 String _dateFormatted(String offerTimestamp) {
-  log(offerTimestamp);
   var f = DateFormat('EEE MMM d yyyy');
   var date2 = f.parse(offerTimestamp);
-  log(date2.toString());
 
   return DateFormat('yyyy-MM-dd').format(date2);
 }

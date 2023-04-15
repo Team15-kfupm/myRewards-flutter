@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +23,6 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
 
     return topStoresPoints.when(
         data: (topStoresPointsMap) {
-          log('topStoresPointsMap: ${topStoresPointsMap.toString()}');
           final topStores = ref.watch(topStoresProvider(topStoresPointsMap));
 
           return topStores.when(

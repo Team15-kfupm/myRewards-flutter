@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +34,6 @@ class OfferCardState extends ConsumerState<OfferCard> {
       data: (offerCode) {
         return hasOtherCode.when(
           data: (hasOtherCode) {
-            log(hasOtherCode.toString());
             return Container(
               width: 315.w,
               height: 172.h,

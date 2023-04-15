@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +22,6 @@ class StoreCardState extends ConsumerState<StoreCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        log(ref.read(userInfoProvider).value!.createdAt.toString());
         ref.read(currentStoreProvider.notifier).state = widget.store;
         Navigator.pushNamed(context, '/storePage');
       },

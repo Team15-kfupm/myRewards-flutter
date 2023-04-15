@@ -313,12 +313,12 @@ class DB {
   // Add a new transaction document to a user's "transactions" subcollection
   Future<void> addTransaction(String userId, String storeName, double amount,
       String date, String time, String bankName) async {
-    log('add transaction: $userId, $storeName, $amount, $date, $bankName');
     final transactionData = {
       'store_name': storeName,
       'amount': amount,
       'date': date.toString().substring(0, 10),
       'time': time,
+      'category': '',
       'bank_name': bankName,
     };
     final doc = await FirebaseFirestore.instance
@@ -339,7 +339,6 @@ class DB {
         .doc(userId)
         .collection('transactions-by-month')
         .snapshots();
-    log('transactions by month snapshot: $transactionsByMonthSnapshot');
 
     return transactionsByMonthSnapshot.map((transactionsByMonthQuery) =>
         transactionsByMonthQuery.docs
@@ -369,8 +368,6 @@ class DB {
       String userId, String offerId, String storeId) async {
     final HttpsCallable callable =
         FirebaseFunctions.instance.httpsCallable('claimOffer');
-
-    log('claim offer: $userId, $offerId, $storeId');
 
     final result = await callable
         .call({'offer_id': offerId, 'user_id': userId, 'store_id': storeId});
@@ -472,7 +469,7 @@ class DB {
       };
       top5StoresDocs.add(updatedStoreData);
     }
-    log('top5StoresDocs: ${top5StoresDocs.length}');
+
     // Create a list of StoreModel objects from the top5StoresDocs list
     return top5StoresDocs
         .map((store) => StoreModel.fromDocument(store))

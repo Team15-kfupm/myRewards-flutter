@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,7 +48,6 @@ class ProfileGenderTileState extends ConsumerState<ProfileGenderTile> {
             userInfo.asData!.value.gender == 'Female'
           ],
           onPressed: (index) async {
-            log('index: $index');
             final gender = index == 0 ? 'Male' : 'Female';
             final isUpdated =
                 await DB().updateGender(gender, userInfo.value!.uid);

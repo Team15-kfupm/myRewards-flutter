@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,8 +34,6 @@ class SpLineChart extends ConsumerWidget {
                       .toStringAsFixed(2))))
               .toList();
         }
-
-        log('spLineData: ${spLineData}');
 
         return Container(
             height: 250.h,
