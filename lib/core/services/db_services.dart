@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 import 'package:myrewards_flutter/core/models/transaction_model.dart';
+import 'package:myrewards_flutter/core/models/transactions_by_month.dart';
 import 'package:myrewards_flutter/core/services/auth_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony/telephony.dart';
@@ -331,17 +332,35 @@ class DB {
   }
 
 // Get all transactions for a user
-  Stream<List<TransactionModel>> getTransactionsByMonth(String userId) {
-    final transactionsQuery = FirebaseFirestore.instance
+  Stream<List<TransactionsByMonthModel>> getTransactionsByMonth(String userId) {
+    final transactionsByMonthSnapshot = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection('transactions-by-month')
         .snapshots();
 
-    return transactionsQuery.map((transactionSnapshot) => transactionSnapshot
-        .docs
-        .map((transactionDoc) => TransactionModel.fromSnapshot(transactionDoc))
-        .toList());
+    return transactionsByMonthSnapshot.map((transactionsByMonthQuery) =>
+        transactionsByMonthQuery.docs
+            .map((transactionsByMonthDoc) =>
+                TransactionsByMonthModel.fromDoc(transactionsByMonthDoc))
+            .toList());
+  }
+
+  // Get transactions for a user for a specific month
+  Future<List<TransactionModel>> getTransactionsForMonth(
+      String userId, String docId) async {
+    final transactionsQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('transactions-by-month')
+        .doc(docId)
+        .collection('transactions')
+        .get();
+
+    return transactionsQuery.docs
+        .map(
+            (transactionsDoc) => TransactionModel.fromSnapshot(transactionsDoc))
+        .toList();
   }
 
   Future<String> claimOffer(
@@ -449,7 +468,7 @@ class DB {
       };
       top5StoresDocs.add(updatedStoreData);
     }
-
+    log('top5StoresDocs: ${top5StoresDocs.length}');
     // Create a list of StoreModel objects from the top5StoresDocs list
     return top5StoresDocs
         .map((store) => StoreModel.fromDocument(store))

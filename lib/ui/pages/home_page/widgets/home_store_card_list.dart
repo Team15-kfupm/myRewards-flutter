@@ -23,10 +23,16 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
 
     return topStoresPoints.when(
         data: (topStoresPointsMap) {
+          topStoresPointsMap.forEach((key, value) {
+            log('key: $key, value: $value');
+          });
           final topStores = ref.watch(topStoresProvider(topStoresPointsMap));
-
+          log('topStores: $topStores');
           return topStores.when(
               data: (topStoresList) {
+                topStoresList.forEach((element) {
+                  log(element.name);
+                });
                 return Expanded(
                   child: ListView.separated(
                       cacheExtent: 99999999999,
