@@ -157,12 +157,12 @@ class DB {
   }
 
   Future<void> runOnceAfterInstallation() async {
-    await isNewUser();
+    final isFirst = await isNewUser();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
-
-    if (isFirstTime) {
+    log('isFirstTime: $isFirstTime');
+    if (isFirst) {
       Telephony telephony = Telephony.instance;
       final user = await AuthService().user.first;
       final userDoc = await FirebaseFirestore.instance
@@ -567,6 +567,7 @@ class DB {
       'email': userInfo.email,
       'phone': userInfo.phone,
       'gender': userInfo.gender,
+      'created_at': DateFormat('dd EEE yyyy').format(DateTime.now()),
       'birth_date': userInfo.birthDate.toString(),
       'total_points': 0,
       'last_transaction_date': 0,
@@ -575,7 +576,7 @@ class DB {
     });
   }
 
-  Future<void> isNewUser() async {
+  Future<bool> isNewUser() async {
     final user = await AuthService().user.first;
     final userDoc = await firebaseInstance
         .collection('users')
@@ -583,11 +584,13 @@ class DB {
         .collection('transactions-by-month')
         .doc(DateFormat('yyyy-MM').format(DateTime.now()))
         .get();
-    final sharedPref = await SharedPreferences.getInstance();
+
     if (userDoc.exists) {
-      sharedPref.setBool('isFirst', false);
+      log('user is not new');
+      return false;
     } else {
-      sharedPref.setBool('isFirst', false);
+      log('user is new');
+      return true;
     }
   }
 
