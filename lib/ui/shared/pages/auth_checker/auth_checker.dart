@@ -7,6 +7,7 @@ import '../../../../core/providers/auth_user_state_provider.dart';
 import '../../../../core/providers/user_info_provider.dart';
 import '../../../pages/sign_in_page/sign_in_page.dart';
 import '../../../pages/sign_up_page/sign_up_page.dart';
+import '../../widgets/progress_indicator.dart';
 
 class AuthChecker extends ConsumerStatefulWidget {
   const AuthChecker({super.key});
@@ -28,14 +29,14 @@ class _StaState extends ConsumerState<AuthChecker> {
           data: (userInfo) {
             return const HomePage();
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: LoadingScreen()),
           // should return a page that shows a form to fill in the user's info page
           error: (error, stack) {
             return const SignUpPage();
           },
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: LoadingScreen()),
       error: (error, stack) => const SignInPage(),
     );
   }
