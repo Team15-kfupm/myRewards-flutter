@@ -33,7 +33,8 @@ class WelcomePage extends ConsumerWidget {
               InkWell(
                 onTap: () {
                   if (sharedPref.getBool('isFirstTime') ?? true) {
-                    Navigator.pushNamed(context, '/introPage');
+                    Navigator.pushNamed(context, '/introPage').then(
+                        (value) => sharedPref.setBool('isFirstTime', false));
                   } else {
                     showModalBottomSheet(
                       context: context,
