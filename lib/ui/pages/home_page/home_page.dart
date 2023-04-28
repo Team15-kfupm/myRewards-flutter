@@ -40,7 +40,9 @@ class HomePageState extends ConsumerState<HomePage> {
                 children: [
                   const AvatarWithWelcome(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/searchPage');
+                    },
                     child: Container(
                         width: 42.w,
                         height: 42.h,

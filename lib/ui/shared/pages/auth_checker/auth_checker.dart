@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/home_page.dart';
+import 'package:myrewards_flutter/ui/pages/welcome_page/welcome_page.dart';
 
 import '../../../../core/providers/auth_user_state_provider.dart';
 
@@ -29,15 +30,15 @@ class _StaState extends ConsumerState<AuthChecker> {
           data: (userInfo) {
             return const HomePage();
           },
-          loading: () => const Center(child: LoadingScreen()),
+          loading: () => const Center(child: CircularProgressIndicator()),
           // should return a page that shows a form to fill in the user's info page
           error: (error, stack) {
             return const SignUpPage();
           },
         );
       },
-      loading: () => const Center(child: LoadingScreen()),
-      error: (error, stack) => const SignInPage(),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => const WelcomePage(),
     );
   }
 }

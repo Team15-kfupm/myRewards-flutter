@@ -107,8 +107,8 @@ class OTPPageState extends ConsumerState<OTPPage> {
               child: InkWell(
                 onTap: () async {
                   try {
-                    await AuthService()
-                        .verifyOTP(ref.read(verificationIdProvider), getOtp());
+                    await AuthService().verifyOTP(
+                        ref.read(verificationIdProvider), getOtp(), context);
                   } catch (e) {
                     log(e.toString());
                     Flushbar(

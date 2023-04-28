@@ -35,8 +35,10 @@ class GoButtonState extends ConsumerState<GoButton> {
           ).show(context);
           return;
         }
+
         if (isLoading) {
           Navigator.pushNamed(context, '/otp');
+
           return;
         }
 

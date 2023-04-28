@@ -51,7 +51,9 @@ class StatisticsPageState extends ConsumerState<StatisticsPage> {
               children: [
                 const AvatarWithWelcome(),
                 InkWell(
-                  onLongPress: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, '/searchPage');
+                  },
                   child: Container(
                       width: 42.w,
                       height: 42.h,
@@ -69,17 +71,6 @@ class StatisticsPageState extends ConsumerState<StatisticsPage> {
               ],
             ),
             80.verticalSpace,
-            // Center(
-            //     child: Text(
-            //   'Total Spendings',
-            //   style: statTotalSpendingsLabelTextStyle,
-            // )),
-            // Center(
-            //   child: Text(
-            //     '326.50 SAR',
-            //     style: statTotalSpendingsTextStyle,
-            //   ),
-            // ),
 
             // line chart with months as x axix and spendings as y axis
             const SpLineChart(),

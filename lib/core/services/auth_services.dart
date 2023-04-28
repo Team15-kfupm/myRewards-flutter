@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myrewards_flutter/core/models/auth_user_model.dart';
 import 'package:myrewards_flutter/main.dart';
@@ -14,19 +15,6 @@ class AuthService {
   AuthUserModel? _userFromFirebaseUser(User user) {
     return AuthUserModel(uid: user.uid);
   }
-
-  // // sign in with email and password
-  // Future signInWithEmailAndPassword() async {
-  //   try {
-  //     final result = await _auth.signInWithEmailAndPassword(
-  //         email: 'emad@emad.com', password: '12345678');
-  //     final user = result.user;
-  //     return _userFromFirebaseUser(user!);
-  //   } catch (e) {
-  //     log(e.toString());
-  //     return null;
-  //   }
-  // }
 
   int _forceResendingToken = 0;
 
@@ -64,13 +52,15 @@ class AuthService {
     );
   }
 
-  Future<void> verifyOTP(String verification, String token) async {
+  Future<void> verifyOTP(
+      String verification, String token, BuildContext context) async {
     PhoneAuthCredential phoneCredential = PhoneAuthProvider.credential(
         verificationId: verification, smsCode: token);
 
     final user = await _auth.signInWithCredential(phoneCredential);
 
     _userFromFirebaseUser(user.user!);
+    Navigator.pop(context);
   }
 
   // sign out

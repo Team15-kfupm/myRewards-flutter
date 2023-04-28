@@ -20,7 +20,9 @@ class StoresPage extends StatelessWidget {
             children: [
               const AvatarWithWelcome(),
               InkWell(
-                onLongPress: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/searchPage');
+                },
                 child: Container(
                     width: 42.w,
                     height: 42.h,

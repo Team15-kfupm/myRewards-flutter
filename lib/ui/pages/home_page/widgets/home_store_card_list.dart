@@ -7,6 +7,7 @@ import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card.dar
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/top_stores_shimmer.dart';
 
 import '../../../../core/providers/top_stores_points_provider.dart';
+import '../../../../utils/constants.dart';
 
 class HomeStoresCardList extends ConsumerStatefulWidget {
   const HomeStoresCardList({Key? key}) : super(key: key);
@@ -28,19 +29,32 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
           return topStores.when(
               data: (topStoresList) {
                 return Expanded(
-                  child: ListView.separated(
-                      itemBuilder: ((context, index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 9.w),
-                          child: HomeStoreCard(
-                            topStore: topStoresList[index],
-                          ),
-                        );
-                      }),
-                      separatorBuilder: (context, index) {
-                        return 16.verticalSpace;
-                      },
-                      itemCount: topStoresList.length),
+                  child: topStoresList.isEmpty
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              Text(
+                                'You don\'t have any points in a store!',
+                                style: statCategoryLabelTextStyle,
+                              ),
+                              Text(
+                                'You need to allow the app to read SMS messages and make a purchase.',
+                                style: settingsSectionTitleTextStyle,
+                              ),
+                            ])
+                      : ListView.separated(
+                          itemBuilder: ((context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 9.w),
+                              child: HomeStoreCard(
+                                topStore: topStoresList[index],
+                              ),
+                            );
+                          }),
+                          separatorBuilder: (context, index) {
+                            return 16.verticalSpace;
+                          },
+                          itemCount: topStoresList.length),
                 );
               },
               error: (error, _) =>
