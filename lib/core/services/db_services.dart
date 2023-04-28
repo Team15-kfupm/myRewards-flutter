@@ -339,6 +339,10 @@ class DB {
         .collection('transactions')
         .get();
 
+    transactionsQuery.docs.forEach((element) {
+      log(element.data().toString());
+    });
+
     return transactionsQuery.docs
         .map(
             (transactionsDoc) => TransactionModel.fromSnapshot(transactionsDoc))

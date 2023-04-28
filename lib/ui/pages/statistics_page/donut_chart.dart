@@ -131,8 +131,9 @@ class DonutChartWidgetState extends ConsumerState<DonutChartWidget> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                50.verticalSpace,
                 Text(
-                  '323\$',
+                  '${donutChartData.fold(0.0, (previousValue, element) => previousValue + element.amount).toString()}\$',
                   style: donutTotalSpendingsAmountTextStyle,
                 ),
                 Text(
@@ -149,9 +150,9 @@ class DonutChartWidgetState extends ConsumerState<DonutChartWidget> {
               Text('Transactions History',
                   overflow: TextOverflow.ellipsis,
                   style: statCategoryLabelTextStyle),
-              InkWell(
-                  onTap: () {},
-                  child: Text('See All', style: statSeeAllTextStyle))
+              // InkWell(
+              //     onTap: () {},
+              //     child: Text('See All', style: statSeeAllTextStyle))
             ],
           ),
           5.verticalSpace,
@@ -183,7 +184,7 @@ class DonutChartWidgetState extends ConsumerState<DonutChartWidget> {
             }, loading: () {
               return const Center(child: CircularProgressIndicator());
             }, error: (error, stackTrace) {
-              return const Center(child: Text('Error'));
+              return Center(child: Text(error.toString()));
             });
           }),
         ],

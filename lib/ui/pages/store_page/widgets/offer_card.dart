@@ -224,6 +224,8 @@ class OfferCardState extends ConsumerState<OfferCard> {
                           Text(
                             widget.offer.title,
                             style: totalSpendingsAmountTextStyle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text('Points: ${widget.offer.worthPoints}',
                               style: totalSpendingsTextStyle),

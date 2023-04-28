@@ -143,7 +143,7 @@ final statCategoryTypeTextStyle = GoogleFonts.poppins(
 );
 
 final donutTotalSpendingsAmountTextStyle = GoogleFonts.poppins(
-  fontSize: 36.spMin,
+  fontSize: 30.spMin,
   fontWeight: FontWeight.w600,
   color: settingsTileTitleColor,
 );

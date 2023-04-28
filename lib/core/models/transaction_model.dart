@@ -23,7 +23,7 @@ class TransactionModel {
       : id = transactionMap.id,
         storeName = transactionMap.data()['store_name'],
         category = transactionMap.data()['category'],
-        amount = transactionMap.data()['amount'],
+        amount = double.parse(transactionMap.data()['amount'].toString()),
         date = DateTime.parse(transactionMap.data()['date']),
         bankName = transactionMap.data()['bank_name'];
 }
