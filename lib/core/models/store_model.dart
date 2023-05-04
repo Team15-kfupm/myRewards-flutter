@@ -3,7 +3,6 @@ import 'offer_model.dart';
 class StoreModel {
   final String id;
   final String name;
-
   final List<OfferModel> offers;
   final int points;
 

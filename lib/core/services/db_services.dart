@@ -79,6 +79,7 @@ class DB {
                 message.address!.contains('0')) {
               continue;
             }
+            message.body!.replaceAll('\n', ' ');
             final messageInfo = DB().extractPurchaseInfoFromMessage(message);
             log(messageInfo.amount.toString());
             if (messageInfo.amount != 0) {
@@ -99,6 +100,10 @@ class DB {
           batch.update(userDoc.reference, {
             'last_transaction_date': lastTransactionDate,
           });
+          batch.delete(transactionsByMonthCollection
+              .doc(date)
+              .collection('transactions')
+              .doc('0'));
           await batch.commit();
           log('background fetch finished');
           BackgroundFetch.finish(taskId);
@@ -249,7 +254,9 @@ class DB {
   MessageModel extractPurchaseInfoFromMessage(SmsMessage sms) {
     // Check if text matches either pattern
     final enMatch = RegExp(enPattern).firstMatch(sms.body!);
+    final enMatch2 = RegExp(enPattern2, dotAll: true).firstMatch(sms.body!);
     final arMatch = RegExp(arPattern).firstMatch(sms.body!);
+    final arMatch2 = RegExp(arPattern2, dotAll: true).firstMatch(sms.body!);
     final MessageModel messageInfo;
 
     if (enMatch != null) {
@@ -258,7 +265,7 @@ class DB {
       final storeName = enMatch.group(3)!;
       final date = enMatch.group(4)!;
       final time = enMatch.group(5)!;
-      // final time = enMatch.group(6);
+
       messageInfo = MessageModel(
         amount: amount,
         storeName: storeName,
@@ -266,12 +273,38 @@ class DB {
         time: time,
         bankName: sms.address!,
       );
+    } else if (enMatch2 != null) {
+      log('EN Match2');
+      final amount = double.parse(enMatch2.group(1)!);
+      final storeName = enMatch2.group(2);
+      final date = enMatch2.group(3)!;
+      final time = enMatch2.group(3) ?? '';
+      messageInfo = MessageModel(
+        amount: amount,
+        storeName: storeName!,
+        date: date,
+        time: time,
+        bankName: sms.address!,
+      );
+    } else if (arMatch2 != null) {
+      log('AR Match2');
+      final amount = double.parse(arMatch2.group(1)!);
+      final storeName = arMatch2.group(2);
+      final date = arMatch2.group(3)!;
+      final time = arMatch2.group(3) ?? '';
+      messageInfo = MessageModel(
+        amount: amount,
+        storeName: storeName!,
+        date: date,
+        time: time,
+        bankName: sms.address!,
+      );
     } else if (arMatch != null) {
       log('AR Match');
-      final amount = double.parse(arMatch.group(2)!);
-      final storeName = arMatch.group(4);
-      final date = arMatch.group(5)!;
-      final time = arMatch.group(6) ?? '';
+      final amount = double.parse(arMatch.group(1)!);
+      final storeName = arMatch.group(2);
+      final date = arMatch.group(3)!;
+      final time = arMatch.group(3) ?? '';
       messageInfo = MessageModel(
         amount: amount,
         storeName: storeName!,
@@ -403,18 +436,18 @@ class DB {
     return hasCode;
   }
 
-  Future<void> updateStorePoints(
-      String userId, String storeId, int points) async {
-    final userRef = firebaseInstance.collection('users').doc(userId);
+  // Future<void> updateStorePoints(
+  //     String userId, String storeId, int points) async {
+  //   final userRef = firebaseInstance.collection('users').doc(userId);
 
-    final userDoc = await userRef.get();
+  //   final userDoc = await userRef.get();
 
-    final userPoints = userDoc.data()!['points'] as Map<String, dynamic>;
+  //   final userPoints = userDoc.data()!['points'] as Map<String, dynamic>;
 
-    userPoints.update(storeId, (vlaue) => vlaue - points);
+  //   userPoints.update(storeId, (vlaue) => vlaue - points);
 
-    await userRef.update({'points': userPoints});
-  }
+  //   await userRef.update({'points': userPoints});
+  // }
 
   Future<List<StoreModel>> getTopStores(Map storesPointsMap) async {
 // Create a list to hold the store IDs and points
@@ -431,8 +464,11 @@ class DB {
     List<Map<String, dynamic>> top5StoresDocs = [];
 
     for (var store in top5Stores) {
-      final storeRef = firebaseInstance.collection('stores').doc(store.key);
+      final storeRef = firebaseInstance
+          .collection('stores')
+          .doc(store.key.toString().trim());
       final storeDoc = await storeRef.get();
+
       List<OfferModel> offers = [];
 
 // get offers for each store
@@ -446,6 +482,7 @@ class DB {
 
       // Add the store document to the top5StoresDocs list with updated points
       var storeData = storeDoc.data() ?? {};
+
       var updatedStoreData = {
         ...storeData,
         'points': store.value,
@@ -475,28 +512,28 @@ class DB {
     yield* userSnapshot.map(_fetchTopStoresPoints);
   }
 
-  Future<String?> getStoreIdByName(String storeName) async {
-    final storeQuery = await FirebaseFirestore.instance
-        .collection('stores')
-        .where('name', isEqualTo: storeName)
-        .get();
+  // Future<String?> getStoreIdByName(String storeName) async {
+  //   final storeQuery = await FirebaseFirestore.instance
+  //       .collection('stores')
+  //       .where('name', isEqualTo: storeName)
+  //       .get();
 
-    if (storeQuery.docs.isEmpty) {
-      return null; // no store with the given name was found
-    }
+  //   if (storeQuery.docs.isEmpty) {
+  //     return null; // no store with the given name was found
+  //   }
 
-    final storeDoc = storeQuery.docs.first;
-    return storeDoc.id;
-  }
+  //   final storeDoc = storeQuery.docs.first;
+  //   return storeDoc.id;
+  // }
 
 // Update a specific key in the "points" field for a user
-  Future<void> updatePoints(
-      String userId, String storeId, double newPoints) async {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-    final pointsMap = (await userDoc.get())['points'] ?? {};
-    pointsMap[storeId] = newPoints;
-    await userDoc.update({'points': pointsMap});
-  }
+  // Future<void> updatePoints(
+  //     String userId, String storeId, double newPoints) async {
+  //   final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+  //   final pointsMap = (await userDoc.get())['points'] ?? {};
+  //   pointsMap[storeId] = newPoints;
+  //   await userDoc.update({'points': pointsMap});
+  // }
 
   Future<List<StoreModel>> getStoresWithOffers() async {
     final user = await AuthService().user.first;

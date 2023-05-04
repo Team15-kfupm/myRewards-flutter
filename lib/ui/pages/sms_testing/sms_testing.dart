@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/services/db_services.dart';
 import 'package:telephony/telephony.dart';
 
@@ -17,31 +18,38 @@ class _SmsTestingState extends State<SmsTesting> {
   Widget build(BuildContext context) {
     Telephony telephony = Telephony.instance;
 
-    final date = DateTime.parse('2023-04-05 04:13:00').millisecondsSinceEpoch;
     Future<List<SmsMessage>> messages = telephony.getInboxSms(
-      filter: SmsFilter.where(SmsColumn.DATE).greaterThan('1680084457646'),
+      filter:
+          SmsFilter.where(SmsColumn.DATE).greaterThanOrEqualTo('1680084457646'),
     );
-
+    List<MessageModel> messagesModel = [];
     return Scaffold(
         body: FutureBuilder(
       builder: (context, messages) {
-        if (messages.hasData) {
-          for (var element in messages.data!) {
-            final sms =
-                DB().extractPurchaseInfoFromMessage(element as SmsMessage);
-            log(sms.amount.toString());
-            log(sms.storeName);
-            log(sms.bankName);
-            log(sms.date.toString());
-            log(sms.time.toString());
-            log('-----------------');
+        if (messages.connectionState == ConnectionState.done) {
+          for (SmsMessage element in messages.data!) {
+            // if (!element.body!.substring(0, 4).contains('شراء')) {
+            //   continue;
+            // }
+            element.body!.replaceAll('\n', ' ');
+
+            final sms = DB().extractPurchaseInfoFromMessage(element);
+            if (sms.amount != 0) messagesModel.add(sms);
+
+            // log(sms.amount.toString());
+            // log(sms.storeName);
+            // log(sms.bankName);
+            // log(sms.date.toString());
+            // log(sms.time.toString());
+            // log('-----------------');
           }
+          log('length: ${messagesModel.length.toString()}');
           return ListView.builder(
-              itemCount: messages.data!.length,
+              itemCount: messagesModel.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(messages.data![index].date.toString()),
-                  subtitle: Text(messages.data![index].body),
+                  title: Text(messagesModel[index].bankName.toString().trim()),
+                  subtitle: Text(messagesModel[index].date.toString().trim()),
                 );
               });
         } else {
@@ -50,7 +58,7 @@ class _SmsTestingState extends State<SmsTesting> {
         }
       },
       future: messages,
-      initialData: [],
+      initialData: const [],
     ));
   }
 }

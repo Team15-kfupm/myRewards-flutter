@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +30,8 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
 
           return topStores.when(
               data: (topStoresList) {
+                log('top store card list points: ${topStoresPointsMap.toString()}',
+                    name: 'HomeStoresCardListState');
                 return Expanded(
                   child: topStoresList.isEmpty
                       ? Column(

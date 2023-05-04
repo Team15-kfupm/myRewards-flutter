@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/home_page.dart';
+import 'package:myrewards_flutter/ui/pages/sms_testing/sms_testing.dart';
 import 'package:myrewards_flutter/ui/pages/welcome_page/welcome_page.dart';
 
 import '../../../../core/providers/auth_user_state_provider.dart';
@@ -28,7 +29,7 @@ class _StaState extends ConsumerState<AuthChecker> {
 
         return userData.when(
           data: (userInfo) {
-            return const HomePage();
+            return const SmsTesting();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           // should return a page that shows a form to fill in the user's info page

@@ -318,11 +318,18 @@ var phoneNumberRegex = RegExp(r'^(05)+(\d{8})$');
 const enPattern =
     r'Purchase \(Mada Pay\)\s+Amount: (\d+\.\d{2}) SAR\s+Mada Card: (\d{4}\*)\s+From: ([\w\s]+)\s+Date: (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})';
 
+const enPattern2 =
+    r'(?<=Amount:\s)(\d+\.\d+)\sSAR.*?(?<=At:\s)([A-Za-z]+(?:\s[A-Za-z]+)*).*?(?<=Date:\s)(\S+\s\S+)';
+
 // r'Local Purchase\s*Card: \\\\d+;?\s(mada\s?\(Atheer\))?[\n\s]Amount:\s(\d+\.\d{2}\s*(SAR)?)\s*At:\s*([\w\s]+)[\n\s]Date:\s(\d{4}\/\d{2}\/\d{2})\s*(\d{2}:\d{2}:\d{2})';
 
 // Arabic regex pattern
 const arPattern =
-    r'^شراء\s*\((مدى Pay)\)\s*مبلغ:\s*(\d+\.\d{2})\s*SAR\s*بطاقة\s*مدى:\s*(\d{4}\*)\s*من:\s*(\w+\s*\w*\s*\w*\s*\w*\s*\w*\s*\w*)\s*في:\s*(\d{4}-\d{2}-\d{2})\s*(\d{2}:\d{2})$';
+    r'شراء(?:\s\(مدى\s(?:Pay|أثير)\))?\s*\n(?:مبلغ\s*:?\s*(\d+(?:\.\d{1,2})?)\s*SAR\s*\n)?(?:بطاقة\s*مدى\s*:?\s*\*?\d+\*?\s*\n)?(?:اسم\s*المتجر\s*[\w\s]*\n)?(?:حساب\s*\d+\*?\d+\s*\n)?من\s*:\s*([\w\s]+)\n(?:في\s*:?)\s*(\d{2,4}[-/]\d{2}[-/]\d{2,4}\s*\d{2}:\d{2})';
+
+const arPattern2 =
+    r'(?<=مبلغ\s)(\d+\.\d+)(?=\sSAR).*?(?:(?<=اسم المتجر\s)|(?<=من\s))([A-z]+(?:\s[A-z]+)*)\s.*?(?<=في\s)(\S+\s\S+)$';
+  //  r'^شراء\s*\((مدى Pay)\)\s*مبلغ:\s*(\d+\.\d{2})\s*SAR\s*بطاقة\s*مدى:\s*(\d{4}\*)\s*من:\s*(\w+\s*\w*\s*\w*\s*\w*\s*\w*\s*\w*)\s*في:\s*(\d{4}-\d{2}-\d{2})\s*(\d{2}:\d{2})$';
 
 //  r'(شراء|Local Purchase)(.)(بطاقة|Card):(\s)(\+\d+)(.)(مبلغ|Amount):(\s*)(\d+[\.\d]\s*SAR)(.)(لدى|At):(\s*)([\w\s]+)(.)(في|Date):(\s)([\d-]+)(\s*)([\d:]+)?';
 
