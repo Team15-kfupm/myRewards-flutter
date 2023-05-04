@@ -10,6 +10,7 @@ import '../../../../core/services/db_services.dart';
 import '../../../../utils/constants.dart';
 import '../../stores_page/widgets/grid_view_shimmer.dart';
 import '../../stores_page/widgets/store_card.dart';
+import 'offer_card_shimmer.dart';
 
 class OfferCard extends ConsumerStatefulWidget {
   final OfferModel offer;
@@ -242,7 +243,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
         );
       },
       error: (error, stack) => Text(error.toString()),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const Center(child: OfferCardShimmer()),
     );
   }
 }
