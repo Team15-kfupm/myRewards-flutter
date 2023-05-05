@@ -4,6 +4,7 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
@@ -253,48 +254,62 @@ class DB {
 
   MessageModel extractPurchaseInfoFromMessage(SmsMessage sms) {
     // Check if text matches either pattern
-    final enMatch = RegExp(enPattern).firstMatch(sms.body!);
-    final enMatch2 = RegExp(enPattern2, dotAll: true).firstMatch(sms.body!);
-    final arMatch = RegExp(arPattern).firstMatch(sms.body!);
-    final arMatch2 = RegExp(arPattern2, dotAll: true).firstMatch(sms.body!);
+
     final MessageModel messageInfo;
+    var amountLine = '';
+    var storeNameLine = '';
+    var dateLine = '';
+
+    sms.body!.split('\n').forEach((element) {
+      final amountStoreMatch = RegExp(amountLinePattern).firstMatch(element);
+      final storeLineMatch = RegExp(storeLinepattern).firstMatch(element);
+      final dateLineMatch = RegExp(dateLinePattern).firstMatch(element);
+
+      if ((amountStoreMatch != null) | element.contains('مبلغ')) {
+        amountLine = element.replaceAll('SAR', '').trim();
+      } else if (element.contains('لدى') |
+          element.contains('اسم المتجر') |
+          element.contains('من') |
+          element.contains('في') &
+              !element.contains('/') &
+              !element.contains('-') |
+          (storeLineMatch != null)) {
+        storeNameLine = element.trim();
+      } else if (element.contains('-') |
+          element.contains('/') |
+          (dateLineMatch != null)) {
+        dateLine = element.trim();
+      }
+    });
+
+    if (amountLine.isEmpty |
+        storeNameLine.isEmpty |
+        dateLine.isEmpty |
+        !(sms.body!.contains('شراء') |
+            sms.body!.toLowerCase().contains('purchase'))) {
+      return MessageModel(
+        storeName: '',
+        amount: 0,
+        date: '',
+        time: '',
+        bankName: '',
+      );
+    }
+
+    final regInput = '$amountLine!$storeNameLine!$dateLine';
+    final arMatch = RegExp(arPattern).firstMatch(regInput);
+    final enMatch = RegExp(enPattern).firstMatch(regInput);
 
     if (enMatch != null) {
       log('EN Match');
       final amount = double.parse(enMatch.group(1)!);
-      final storeName = enMatch.group(3)!;
-      final date = enMatch.group(4)!;
-      final time = enMatch.group(5)!;
+      final storeName = enMatch.group(2)!;
+      final date = enMatch.group(3)!;
+      final time = enMatch.group(3)!;
 
       messageInfo = MessageModel(
         amount: amount,
         storeName: storeName,
-        date: date,
-        time: time,
-        bankName: sms.address!,
-      );
-    } else if (enMatch2 != null) {
-      log('EN Match2');
-      final amount = double.parse(enMatch2.group(1)!);
-      final storeName = enMatch2.group(2);
-      final date = enMatch2.group(3)!;
-      final time = enMatch2.group(3) ?? '';
-      messageInfo = MessageModel(
-        amount: amount,
-        storeName: storeName!,
-        date: date,
-        time: time,
-        bankName: sms.address!,
-      );
-    } else if (arMatch2 != null) {
-      log('AR Match2');
-      final amount = double.parse(arMatch2.group(1)!);
-      final storeName = arMatch2.group(2);
-      final date = arMatch2.group(3)!;
-      final time = arMatch2.group(3) ?? '';
-      messageInfo = MessageModel(
-        amount: amount,
-        storeName: storeName!,
         date: date,
         time: time,
         bankName: sms.address!,
@@ -313,7 +328,7 @@ class DB {
         bankName: sms.address!,
       );
     } else {
-      log('no match');
+      // log('no match');
       return MessageModel(
         storeName: '',
         amount: 0,

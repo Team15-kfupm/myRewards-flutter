@@ -29,7 +29,7 @@ class _StaState extends ConsumerState<AuthChecker> {
 
         return userData.when(
           data: (userInfo) {
-            return const HomePage();
+            return const SmsTesting();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
           // should return a page that shows a form to fill in the user's info page

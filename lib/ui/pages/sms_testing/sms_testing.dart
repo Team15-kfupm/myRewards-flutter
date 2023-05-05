@@ -28,11 +28,6 @@ class _SmsTestingState extends State<SmsTesting> {
       builder: (context, messages) {
         if (messages.connectionState == ConnectionState.done) {
           for (SmsMessage element in messages.data!) {
-            // if (!element.body!.substring(0, 4).contains('شراء')) {
-            //   continue;
-            // }
-            element.body!.replaceAll('\n', ' ');
-
             final sms = DB().extractPurchaseInfoFromMessage(element);
             if (sms.amount != 0) messagesModel.add(sms);
 
@@ -43,13 +38,17 @@ class _SmsTestingState extends State<SmsTesting> {
             // log(sms.time.toString());
             // log('-----------------');
           }
+
           log('length: ${messagesModel.length.toString()}');
           return ListView.builder(
               itemCount: messagesModel.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(messagesModel[index].bankName.toString().trim()),
-                  subtitle: Text(messagesModel[index].date.toString().trim()),
+                  title: Text(messagesModel[index].storeName.toString().trim()),
+                  subtitle:
+                      Text(messagesModel[index].bankName.toString().trim()),
+                  isThreeLine: true,
+                  trailing: Text(messagesModel[index].date.toString()),
                 );
               });
         } else {
