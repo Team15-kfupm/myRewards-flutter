@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myrewards_flutter/core/models/offer_model.dart';
+import 'package:myrewards_flutter/ui/pages/store_page/store_page.dart';
 import '../../../../core/providers/has_code_provider.dart';
 import '../../../../core/providers/offer_code_provider.dart';
 import '../../../../core/providers/user_info_provider.dart';
@@ -127,91 +130,86 @@ class OfferCardState extends ConsumerState<OfferCard> {
                   Positioned(
                     bottom: -2.h,
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        if (hasOtherCode) {
+                          Flushbar(
+                            message: 'Please redeem the claimed offer first',
+                            duration: const Duration(milliseconds: 1500),
+                            flushbarStyle: FlushbarStyle.FLOATING,
+                            backgroundColor: Colors.red,
+                            flushbarPosition: FlushbarPosition.TOP,
+                          ).show(context);
+                          return;
+                        }
                         if (!isEnoughtPoints) {
                           return;
                         }
-                      },
-                      child: InkWell(
-                        onTap: () async {
-                          if (!isEnoughtPoints) {
-                            return;
-                          }
+                        ref.read(isLoadingStorePageProvider.notifier).state =
+                            true;
+                        final code = await DB().claimOffer(
+                          ref.read(userInfoProvider).value!.uid,
+                          widget.offer.id,
+                          store.id,
+                        );
+                        ref.read(isLoadingStorePageProvider.notifier).state =
+                            false;
 
-                          if (hasOtherCode) {
-                            Flushbar(
-                              message: 'Please redeem the claimed offer first',
-                              duration: const Duration(milliseconds: 1500),
-                              flushbarStyle: FlushbarStyle.FLOATING,
-                              backgroundColor: Colors.red,
-                              flushbarPosition: FlushbarPosition.TOP,
-                            ).show(context);
-                            return;
-                          }
-                          final code = await DB().claimOffer(
-                            ref.read(userInfoProvider).value!.uid,
-                            widget.offer.id,
-                            store.id,
-                          );
-
-                          if (code.isEmpty) {
-                            //TODO: show error
-                            Flushbar(
-                              message: 'Something went wrong :(',
-                              duration: const Duration(milliseconds: 1000),
-                              flushbarStyle: FlushbarStyle.FLOATING,
-                              backgroundColor: Colors.red,
-                              flushbarPosition: FlushbarPosition.TOP,
-                            ).show(context);
-                            return;
-                          }
-
+                        if (code.isEmpty) {
                           Flushbar(
-                            message: 'Offer claimed!',
+                            message: 'Something went wrong :(',
                             duration: const Duration(milliseconds: 1000),
                             flushbarStyle: FlushbarStyle.FLOATING,
-                            backgroundColor: Colors.green,
+                            backgroundColor: Colors.red,
                             flushbarPosition: FlushbarPosition.TOP,
                           ).show(context);
-                        },
-                        child: offerCode.isNotEmpty
-                            ? Container(
-                                width: 324.w,
-                                height: 39.h,
-                                decoration: const BoxDecoration(
-                                  color: lightGreyColor,
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    bottomRight: Radius.circular(20),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    offerCode,
-                                    style: welcomeNameTextStyle,
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                width: 324.w,
-                                height: 39.h,
-                                decoration: BoxDecoration(
-                                  color: isEnoughtPoints
-                                      ? offerCardClaimBackgroundColor
-                                      : welcomeTextColor,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    bottomRight: Radius.circular(20),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Claim',
-                                    style: welcomeNameTextStyle,
-                                  ),
+                          return;
+                        }
+
+                        Flushbar(
+                          message: 'Offer claimed!',
+                          duration: const Duration(milliseconds: 1000),
+                          flushbarStyle: FlushbarStyle.FLOATING,
+                          backgroundColor: Colors.green,
+                          flushbarPosition: FlushbarPosition.TOP,
+                        ).show(context);
+                      },
+                      child: offerCode.isNotEmpty
+                          ? Container(
+                              width: 324.w,
+                              height: 39.h,
+                              decoration: const BoxDecoration(
+                                color: lightGreyColor,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
                                 ),
                               ),
-                      ),
+                              child: Center(
+                                child: Text(
+                                  offerCode,
+                                  style: welcomeNameTextStyle,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: 324.w,
+                              height: 39.h,
+                              decoration: BoxDecoration(
+                                color: isEnoughtPoints
+                                    ? offerCardClaimBackgroundColor
+                                    : welcomeTextColor,
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Claim',
+                                  style: welcomeNameTextStyle,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   Padding(
@@ -222,14 +220,19 @@ class OfferCardState extends ConsumerState<OfferCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.offer.title,
-                            style: totalSpendingsAmountTextStyle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          // text size get smaller when overflow
+
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              widget.offer.title,
+                              style: offerTitleTextStyle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Text('Points: ${widget.offer.worthPoints}',
-                              style: totalSpendingsTextStyle),
+                              style: offerPointsTextStyle),
                         ],
                       ),
                     ),

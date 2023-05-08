@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:lottie/lottie.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 
 class IntroPage extends StatefulWidget {
@@ -23,12 +24,18 @@ class _IntroPageState extends State<IntroPage> {
             title: 'Welcome to MyRewards',
             body:
                 'Now you will be able to get more rewards with each purchase you made!.',
-            image: Image.asset('assets/intro1.png'),
+            image: Lottie.asset(
+              'assets/lottie/intro1.json',
+              height: 250.h,
+            ),
           ),
           PageViewModel(
             title: 'We provide stats about your Purchases',
             body: 'To be able to make better decision about your spending.',
-            image: Image.asset('assets/intro2.png'),
+            image: Lottie.asset(
+              'assets/lottie/intro2.json',
+              height: 300.h,
+            ),
           ),
         ],
         onDone: () {

@@ -57,18 +57,17 @@ class SettingsPage extends ConsumerWidget {
                 32.verticalSpace,
                 Row(
                   children: [
-                    Container(
-                        width: 70.w,
-                        height: 70.h,
-                        decoration: const BoxDecoration(
-                          color: userAvatarBackgroundColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.person_outline,
-                          color: blackColor,
-                          size: 32.r,
-                        )),
+                    CircleAvatar(
+                      radius: 30.r,
+                      backgroundColor: secondaryColor,
+                      child: Text(
+                        ref.read(userInfoProvider).value!.name[0].toUpperCase(),
+                        style: TextStyle(
+                            color: whiteColor,
+                            fontSize: 25.sp,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
                     23.horizontalSpace,
                     Text(
                       ref.read(userInfoProvider).value!.name,

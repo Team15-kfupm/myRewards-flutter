@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
 
@@ -105,7 +106,12 @@ class StoreCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                FlutterLogo(size: 100.r),
+                1.verticalSpace,
+                SvgPicture.asset(
+                  'assets/logo.svg',
+                  width: 90.w,
+                  height: 90.h,
+                ),
                 InkWell(
                   onTap: () {},
                   child: Container(

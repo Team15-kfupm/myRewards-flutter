@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/widgets/store_card.dart';
 
@@ -76,11 +75,11 @@ class StoreSearchPageState extends ConsumerState<StoreSearchPage> {
               focusColor: secondaryColor,
               hoverColor: secondaryColor,
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: secondaryColor),
+                borderSide: const BorderSide(color: secondaryColor),
                 borderRadius: BorderRadius.circular(10),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: secondaryColor),
+                borderSide: const BorderSide(color: secondaryColor),
                 borderRadius: BorderRadius.circular(10),
               ),
               contentPadding: EdgeInsets.symmetric(horizontal: 10.h),
@@ -101,10 +100,19 @@ class StoreSearchPageState extends ConsumerState<StoreSearchPage> {
                 )
               : _searchResults!.isEmpty
                   ? Center(
-                      child: Text(
-                        'No results found.',
-                        style: statCategoryLabelTextStyle,
-                        textAlign: TextAlign.center,
+                      child: Column(
+                        children: [
+                          Lottie.asset(
+                            'assets/lottie/no_search_result.json',
+                            height: 200.h,
+                            width: 200.w,
+                          ),
+                          Text(
+                            'No stores are found',
+                            style: statCategoryLabelTextStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     )
                   : GridView.count(

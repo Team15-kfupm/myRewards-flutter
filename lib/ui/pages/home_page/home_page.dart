@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:myrewards_flutter/core/services/db_services.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/avatar_with_welcome.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/home_store_card_list.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/widgets/credits_card.dart';
 import 'package:myrewards_flutter/ui/pages/statistics_page/statistics_page.dart';
 import 'package:myrewards_flutter/ui/pages/stores_page/stores_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/constants.dart';
 import '../settings_page/settings_page.dart';
@@ -19,14 +20,37 @@ class HomePage extends ConsumerStatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends ConsumerState<HomePage> {
+class HomePageState extends ConsumerState<HomePage>
+    with TickerProviderStateMixin {
+  late AnimationController _selectedController;
+  late AnimationController _unselectedController;
   @override
   void initState() {
     DB().isNewUser();
     super.initState();
+    _selectedController = AnimationController(vsync: this);
+    _selectedController.duration = const Duration(milliseconds: 10);
+    _selectedController.forward(from: 0.0);
+
+    // stop the animation at 64%
+    _selectedController.addListener(() {
+      if (_selectedController.value >= 0.64) {
+        _selectedController.stop();
+      }
+    });
+    _unselectedController = AnimationController(vsync: this);
+    _unselectedController.duration = const Duration(milliseconds: 1);
+    _unselectedController.forward(from: 0.6);
+    // stop the animation at 64%
+    _unselectedController.addListener(() {
+      if (_unselectedController.value >= 0.64) {
+        _unselectedController.stop();
+      }
+    });
   }
 
   int _selectedIndex = 0;
+  List<bool> isSelected = [true, false, false, false];
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
@@ -77,30 +101,68 @@ class HomePageState extends ConsumerState<HomePage> {
         bottomNavigationBar: BottomNavigationBar(
           unselectedIconTheme: const IconThemeData(color: Colors.grey),
           onTap: (value) {
-            setState(() {
-              _selectedIndex = value;
+            if (isSelected[value]) return;
+            isSelected.setAll(0, [false, false, false, false]);
+            isSelected[value] = true;
+            _selectedIndex = value;
+            _selectedController.forward(from: 0.0);
+            _selectedController.duration = const Duration(milliseconds: 1000);
+            // stop the animation at 64%
+            _selectedController.addListener(() {
+              if (_selectedController.value >= 0.9) {
+                _selectedController.stop();
+              }
             });
+            setState(() {});
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Lottie.asset(
+                'assets/lottie/home.json',
+                controller:
+                    isSelected[0] ? _selectedController : _unselectedController,
+                height: 30.h,
+                onLoaded: (composition) {
+                  _selectedController.duration = composition.duration;
+                },
+                fit: BoxFit.cover,
+              ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.storefront_outlined),
+              icon: Lottie.asset(
+                'assets/lottie/store.json',
+                height: 50.h,
+                controller:
+                    isSelected[1] ? _selectedController : _unselectedController,
+                fit: BoxFit.cover,
+              ),
               label: 'Stores',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.pie_chart_rounded),
+              icon: Lottie.asset(
+                'assets/lottie/statistics.json',
+                controller:
+                    isSelected[2] ? _selectedController : _unselectedController,
+                height: 50.h,
+                fit: BoxFit.cover,
+              ),
               label: 'Statistics',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Container(
+                  child: Lottie.asset(
+                'assets/lottie/settings.json',
+                controller:
+                    isSelected[3] ? _selectedController : _unselectedController,
+                height: 35.h,
+                fit: BoxFit.cover,
+              )),
               label: 'Settings',
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: secondaryColor,
+          selectedItemColor: Colors.lightBlueAccent[700],
         ),
       ),
     );

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:myrewards_flutter/core/models/donut_chart_data_model.dart';
-import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 import 'package:myrewards_flutter/ui/pages/statistics_page/statistics_page.dart';
 import 'package:myrewards_flutter/utils/constants.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -167,7 +165,10 @@ class DonutChartWidgetState extends ConsumerState<DonutChartWidget> {
                   itemCount: transactionsList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      leading: Icon(Icons.abc),
+                      leading: const Icon(
+                        Icons.monetization_on_outlined,
+                        color: primaryColor,
+                      ),
                       title: Text(transactionsList[index].storeName),
                       subtitle: Text(transactionsList[index].category),
                       trailing: Text(transactionsList[index].amount.toString()),

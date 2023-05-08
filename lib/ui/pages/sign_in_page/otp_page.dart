@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:another_flushbar/flushbar.dart';
@@ -159,24 +161,27 @@ class OTPField extends StatefulWidget {
 }
 
 class _OTPFieldState extends State<OTPField> {
+  List<bool> isEmpty = [true, true, true, true, true, true];
   @override
   Widget build(BuildContext context) {
     return Form(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 40.w,
             height: 57.h,
             decoration: BoxDecoration(
-              color: lightGreyColor,
+              color: isEmpty[0] ? transparentColor : secondaryColor,
+              border: Border.all(color: settingsTileArrowIconColor, width: 2.r),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: TextFormField(
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.center,
               maxLength: 1,
-              style: TextStyle(fontSize: 24.r, color: blackColor),
+              style: TextStyle(fontSize: 24.r, color: whiteColor),
               decoration: const InputDecoration(
                 counterText: "",
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
@@ -185,25 +190,30 @@ class _OTPFieldState extends State<OTPField> {
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();
+                  isEmpty[0] = false;
                 } else if (value.isEmpty) {
                   FocusScope.of(context).previousFocus();
+                  isEmpty[0] = true;
                 }
+                setState(() {});
                 setOtp(value, 0);
               },
             ),
           ),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 40.w,
             height: 57.h,
             decoration: BoxDecoration(
-              color: lightGreyColor,
+              color: isEmpty[1] ? transparentColor : secondaryColor,
+              border: Border.all(color: settingsTileArrowIconColor, width: 2.r),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: TextFormField(
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.center,
               maxLength: 1,
-              style: TextStyle(fontSize: 24.r, color: blackColor),
+              style: TextStyle(fontSize: 24.r, color: whiteColor),
               decoration: const InputDecoration(
                 counterText: "",
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
@@ -212,25 +222,30 @@ class _OTPFieldState extends State<OTPField> {
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();
+                  isEmpty[1] = false;
                 } else if (value.isEmpty) {
                   FocusScope.of(context).previousFocus();
+                  isEmpty[1] = true;
                 }
+                setState(() {});
                 setOtp(value, 1);
               },
             ),
           ),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 40.w,
             height: 57.h,
             decoration: BoxDecoration(
-              color: lightGreyColor,
+              color: isEmpty[2] ? transparentColor : secondaryColor,
+              border: Border.all(color: settingsTileArrowIconColor, width: 2.r),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: TextFormField(
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.center,
               maxLength: 1,
-              style: TextStyle(fontSize: 24.r, color: blackColor),
+              style: TextStyle(fontSize: 24.r, color: whiteColor),
               decoration: const InputDecoration(
                 counterText: "",
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
@@ -239,25 +254,30 @@ class _OTPFieldState extends State<OTPField> {
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();
+                  isEmpty[2] = false;
                 } else if (value.isEmpty) {
                   FocusScope.of(context).previousFocus();
+                  isEmpty[2] = true;
                 }
+                setState(() {});
                 setOtp(value, 2);
               },
             ),
           ),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 40.w,
             height: 57.h,
             decoration: BoxDecoration(
-              color: lightGreyColor,
+              color: isEmpty[3] ? transparentColor : secondaryColor,
+              border: Border.all(color: settingsTileArrowIconColor, width: 2.r),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: TextFormField(
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.center,
               maxLength: 1,
-              style: TextStyle(fontSize: 24.r, color: blackColor),
+              style: TextStyle(fontSize: 24.r, color: whiteColor),
               decoration: const InputDecoration(
                 counterText: "",
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
@@ -266,25 +286,30 @@ class _OTPFieldState extends State<OTPField> {
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();
+                  isEmpty[3] = false;
                 } else if (value.isEmpty) {
                   FocusScope.of(context).previousFocus();
+                  isEmpty[3] = true;
                 }
+                setState(() {});
                 setOtp(value, 3);
               },
             ),
           ),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 40.w,
             height: 57.h,
             decoration: BoxDecoration(
-              color: lightGreyColor,
+              color: isEmpty[4] ? transparentColor : secondaryColor,
+              border: Border.all(color: settingsTileArrowIconColor, width: 2.r),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: TextFormField(
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.center,
               maxLength: 1,
-              style: TextStyle(fontSize: 24.r, color: blackColor),
+              style: TextStyle(fontSize: 24.r, color: whiteColor),
               decoration: const InputDecoration(
                 counterText: "",
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
@@ -293,25 +318,30 @@ class _OTPFieldState extends State<OTPField> {
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();
+                  isEmpty[4] = false;
                 } else if (value.isEmpty) {
                   FocusScope.of(context).previousFocus();
+                  isEmpty[4] = true;
                 }
+                setState(() {});
                 setOtp(value, 4);
               },
             ),
           ),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 40.w,
             height: 57.h,
             decoration: BoxDecoration(
-              color: lightGreyColor,
+              color: isEmpty[5] ? transparentColor : secondaryColor,
+              border: Border.all(color: settingsTileArrowIconColor, width: 2.r),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: TextFormField(
               keyboardType: TextInputType.phone,
               textAlign: TextAlign.center,
               maxLength: 1,
-              style: TextStyle(fontSize: 24.r, color: blackColor),
+              style: TextStyle(fontSize: 24.r, color: whiteColor),
               decoration: const InputDecoration(
                 counterText: "",
                 contentPadding: EdgeInsets.symmetric(vertical: 15),
@@ -320,9 +350,12 @@ class _OTPFieldState extends State<OTPField> {
               onChanged: (value) {
                 if (value.length == 1) {
                   FocusScope.of(context).nextFocus();
+                  isEmpty[5] = false;
                 } else if (value.isEmpty) {
                   FocusScope.of(context).previousFocus();
+                  isEmpty[5] = true;
                 }
+                setState(() {});
                 setOtp(value, 5);
               },
             ),

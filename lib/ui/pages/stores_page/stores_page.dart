@@ -12,7 +12,7 @@ class StoresPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding:
-            const EdgeInsets.only(right: 25, left: 25, bottom: 15, top: 10),
+            const EdgeInsets.only(right: 25, left: 25, bottom: 15, top: 15),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(

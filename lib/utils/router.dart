@@ -18,7 +18,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const HomePage());
 
     case '/searchPage':
-      return MaterialPageRoute(builder: (context) => StoreSearchPage());
+      return MaterialPageRoute(builder: (context) => const StoreSearchPage());
 
     case '/introPage':
       return MaterialPageRoute(builder: (context) => const IntroPage());

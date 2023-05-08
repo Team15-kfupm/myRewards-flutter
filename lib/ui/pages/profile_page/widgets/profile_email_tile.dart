@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';

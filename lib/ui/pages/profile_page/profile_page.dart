@@ -59,18 +59,17 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: Column(children: [
-            Container(
-                width: 90.w,
-                height: 90.h,
-                decoration: const BoxDecoration(
-                  color: settingsAppBarIconBackgroundColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.person_outline,
-                  color: blackColor,
-                  size: 40.r,
-                )),
+            CircleAvatar(
+              radius: 40.r,
+              backgroundColor: secondaryColor,
+              child: Text(
+                userInfo.value!.name[0].toUpperCase(),
+                style: TextStyle(
+                    color: whiteColor,
+                    fontSize: 35.sp,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
             21.verticalSpace,
             Text(
               userInfo.value?.name ?? '',

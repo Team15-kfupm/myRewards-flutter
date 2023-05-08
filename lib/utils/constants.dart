@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 // Firebase Options Section Start//
 const apiKey = 'AIzaSyBGlVY6MQ6n6Iv2UZjq-E4PAZm5_wQCN3w';
@@ -274,6 +273,18 @@ final joinedDateTextStyle = GoogleFonts.poppins(
   fontSize: 13.spMin,
   fontWeight: FontWeight.w400,
   color: settingsTileArrowIconColor,
+);
+
+final offerTitleTextStyle = GoogleFonts.poppins(
+  fontSize: 20.spMin,
+  fontWeight: FontWeight.w500,
+  color: settingsTileTitleColor,
+);
+
+final offerPointsTextStyle = GoogleFonts.poppins(
+  fontSize: 16.spMin,
+  fontWeight: FontWeight.w400,
+  color: settingsTileTitleColor,
 );
 
 // Text Style Section End//

@@ -259,7 +259,7 @@ class SignUpPageState extends ConsumerState<SignUpPage> {
                   child: Text(value),
                 );
               }).toList(),
-              hint: Text(''),
+              hint: const Text(''),
               validator: (value) {
                 if (value == null) {
                   return 'Please select your gender';

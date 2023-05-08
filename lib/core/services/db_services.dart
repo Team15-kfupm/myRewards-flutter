@@ -4,7 +4,6 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myrewards_flutter/core/models/message_model.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
@@ -387,9 +386,9 @@ class DB {
         .collection('transactions')
         .get();
 
-    transactionsQuery.docs.forEach((element) {
+    for (var element in transactionsQuery.docs) {
       log(element.data().toString());
-    });
+    }
 
     return transactionsQuery.docs
         .map(

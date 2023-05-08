@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myrewards_flutter/core/models/store_model.dart';
-import 'package:myrewards_flutter/core/providers/user_info_provider.dart';
 
 import '../../../../utils/constants.dart';
 
@@ -120,10 +120,13 @@ class StoreCardState extends ConsumerState<StoreCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FlutterLogo(
-                    size: 80.r,
+                  SvgPicture.asset(
+                    'assets/logo.svg',
+                    width: 60.w,
+                    height: 60.h,
                   ),
-                  Center(
+                  Align(
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       widget.store.name,
                       style: totalSpendingsTextStyle,

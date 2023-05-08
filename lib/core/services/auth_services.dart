@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,11 +23,14 @@ class AuthService {
   Future<void> signInWithPhoneNumber(WidgetRef ref, String phoneNumber) async {
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      verificationCompleted: ((phoneAuthCredential) {
+      verificationCompleted: ((phoneAuthCredential) async {
         log('verify success');
 
-        _auth.signInWithCredential(phoneAuthCredential);
+        final user = await _auth.signInWithCredential(phoneAuthCredential);
         ref.read(isLoadingProvider.notifier).state = false;
+        _userFromFirebaseUser(user.user!);
+
+        Navigator.pop(ref.context);
       }),
       verificationFailed: (FirebaseAuthException e) {
         ref.read(isLoadingProvider.notifier).state = false;
