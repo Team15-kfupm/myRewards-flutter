@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:myrewards_flutter/utils/constants.dart';
 
+import '../welcome_page/welcome_page.dart';
 import 'widgets/go_button.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
@@ -19,24 +20,26 @@ class SignInPageState extends ConsumerState<SignInPage> {
   String _phoneNumber = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        height: 452.h,
-        width: 375.w,
-        padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
-        decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.r),
-            topRight: Radius.circular(20.r),
-          ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.r),
+          topRight: Radius.circular(20.r),
         ),
-        child: Column(
-          children: [
-            const Align(alignment: Alignment.topRight, child: CloseButton()),
-            25.verticalSpace,
-            TextField(
+      ),
+      child: Column(
+        children: [
+          const Align(alignment: Alignment.topRight, child: CloseButton()),
+          25.verticalSpace,
+          GestureDetector(
+            onTap: () {
+              ref.read(offsetProvider.notifier).state =
+                  MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).viewInsets.bottom;
+            },
+            child: TextField(
               onChanged: (value) {
                 _phoneNumber = value;
                 setState(() {});
@@ -64,10 +67,10 @@ class SignInPageState extends ConsumerState<SignInPage> {
                 hintText: '05XXXXXXXX',
               ),
             ),
-            60.verticalSpace,
-            GoButton(phoneNumber: _phoneNumber.trim()),
-          ],
-        ),
+          ),
+          60.verticalSpace,
+          GoButton(phoneNumber: _phoneNumber.trim()),
+        ],
       ),
     );
   }

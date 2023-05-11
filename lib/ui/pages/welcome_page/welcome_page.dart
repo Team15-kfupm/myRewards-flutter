@@ -6,11 +6,17 @@ import '../../../core/providers/shared_pref_provider.dart';
 import '../../../utils/constants.dart';
 import '../sign_in_page/widgets/upper_part.dart';
 
-class WelcomePage extends ConsumerWidget {
+class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  WelcomePageState createState() => WelcomePageState();
+}
+
+final offsetProvider = StateProvider<double>((ref) => 0);
+
+class WelcomePageState extends ConsumerState<WelcomePage> {
+  @override
+  Widget build(BuildContext context) {
     final sharedPref = ref.watch(sharedPrefProvider);
 
     return sharedPref.when(data: (sharedPref) {
@@ -46,12 +52,13 @@ class WelcomePage extends ConsumerWidget {
                       isScrollControlled: false,
                       useSafeArea: true,
                       isDismissible: true,
-                      enableDrag: false,
+                      enableDrag: true,
                       builder: (BuildContext context) {
-                        return Container(
-                          color: Colors.white,
-                          height: MediaQuery.of(context).size.height * 0.55,
-                          child: const SignInPage(),
+                        return const Scaffold(
+                          resizeToAvoidBottomInset: true,
+                          body: SingleChildScrollView(
+                            child: SignInPage(),
+                          ),
                         );
                       },
                     );
