@@ -26,11 +26,17 @@ class AuthService {
       verificationCompleted: ((phoneAuthCredential) async {
         log('verify success');
 
-        final user = await _auth.signInWithCredential(phoneAuthCredential);
-        ref.read(isLoadingProvider.notifier).state = false;
-        _userFromFirebaseUser(user.user!);
+        ref.read(isLoadingProvider.notifier).state = true;
 
-        Navigator.pop(ref.context);
+        try {
+          final user = await _auth.signInWithCredential(phoneAuthCredential);
+
+          _userFromFirebaseUser(user.user!);
+          ref.read(isLoadingProvider.notifier).state = false;
+          Navigator.pop(ref.context);
+        } catch (e) {
+          ref.read(isLoadingProvider.notifier).state = false;
+        }
       }),
       verificationFailed: (FirebaseAuthException e) {
         ref.read(isLoadingProvider.notifier).state = false;

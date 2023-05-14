@@ -4,7 +4,7 @@ class StoreModel {
   final String id;
   final String name;
   final List<OfferModel> offers;
-  final int points;
+  final num points;
 
   StoreModel({
     required this.id,
@@ -17,11 +17,11 @@ class StoreModel {
       : id = store['id'] as String,
         name = store['store_name'] as String,
         offers = store['offers'] as List<OfferModel>,
-        points = store['points'] as int;
+        points = store['points'] as num;
 
   StoreModel.fromSnapshot(store)
       : id = store['id'] as String,
         name = store['name'] as String,
         offers = store['offers'] as List<OfferModel>,
-        points = store['points'] as int;
+        points = store['points'] as double;
 }

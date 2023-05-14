@@ -526,29 +526,6 @@ class DB {
     yield* userSnapshot.map(_fetchTopStoresPoints);
   }
 
-  // Future<String?> getStoreIdByName(String storeName) async {
-  //   final storeQuery = await FirebaseFirestore.instance
-  //       .collection('stores')
-  //       .where('name', isEqualTo: storeName)
-  //       .get();
-
-  //   if (storeQuery.docs.isEmpty) {
-  //     return null; // no store with the given name was found
-  //   }
-
-  //   final storeDoc = storeQuery.docs.first;
-  //   return storeDoc.id;
-  // }
-
-// Update a specific key in the "points" field for a user
-  // Future<void> updatePoints(
-  //     String userId, String storeId, double newPoints) async {
-  //   final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-  //   final pointsMap = (await userDoc.get())['points'] ?? {};
-  //   pointsMap[storeId] = newPoints;
-  //   await userDoc.update({'points': pointsMap});
-  // }
-
   Future<List<StoreModel>> getStoresWithOffers() async {
     final user = await AuthService().user.first;
     final storesRef = firebaseInstance
@@ -561,7 +538,7 @@ class DB {
     final stores = <StoreModel>[];
     for (final storeDoc in storesSnapshot.docs) {
       List<OfferModel> offers = [];
-      int points = 0;
+      num points = 0.0;
 
 // get offers for each store
       final storeOffersSnapshot =
@@ -572,7 +549,8 @@ class DB {
         offers.add(offer);
       }
       // get points for each store for the current user
-      final userSnapshot = userDoc.get('points') as Map<String, dynamic>;
+      final userSnapshot = userDoc.get('points');
+
       final userPoints = userSnapshot[storeDoc.id];
 
       if (userPoints != null) {
@@ -590,31 +568,6 @@ class DB {
 
     return stores;
   }
-
-  // Future<void> createStoreWithOffers(
-  //     String name, String location, List<Map<String, dynamic>> offers) async {
-  //   for (var store in stores) {
-  //     try {
-  //       // Create a new store document with the given name and location
-  //       DocumentReference storeRef =
-  //           await FirebaseFirestore.instance.collection('stores').add({
-  //         'name': store['name'],
-  //         'location': store['location'],
-  //       });
-
-  //       // Create a new offer subcollection for the store
-  //       CollectionReference offerRef = storeRef.collection('offers');
-
-  //       // Add each offer document to the offer subcollection
-  //       for (final offer in store['offers'] as List) {
-  //         await offerRef.add(offer);
-  //       }
-  //     } catch (e) {
-  //       print('Error creating store with offers: $e');
-  //       rethrow;
-  //     }
-  //   }
-  // }
 
   Future addNewUser(UserInfoModel userInfo) async {
     await firebaseInstance.collection('users').doc(userInfo.uid).set({

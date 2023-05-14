@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +16,8 @@ class StoreCard extends ConsumerStatefulWidget {
   StoreCardState createState() => StoreCardState();
 }
 
-final currentStoreProvider =
-    StateProvider((ref) => StoreModel(id: '', name: '', offers: [], points: 0));
+final currentStoreProvider = StateProvider(
+    (ref) => StoreModel(id: '', name: '', offers: [], points: 0.0));
 
 class StoreCardState extends ConsumerState<StoreCard> {
   @override

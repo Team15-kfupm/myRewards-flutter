@@ -30,8 +30,6 @@ class HomeStoresCardListState extends ConsumerState<HomeStoresCardList> {
 
           return topStores.when(
               data: (topStoresList) {
-                log('top store card list points: ${topStoresPointsMap.toString()}',
-                    name: 'HomeStoresCardListState');
                 return Expanded(
                   child: topStoresList.isEmpty
                       ? Column(

@@ -9,7 +9,7 @@ class UserInfoModel {
   final DateTime birthDate;
   final String gender;
   final Map points;
-  final int totalPoints;
+  final num totalPoints;
 
   UserInfoModel(
       {required this.uid,

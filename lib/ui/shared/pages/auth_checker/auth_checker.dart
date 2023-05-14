@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:myrewards_flutter/ui/pages/home_page/home_page.dart';
+import 'package:myrewards_flutter/ui/pages/welcome_page/intro_page.dart';
 
 import 'package:myrewards_flutter/ui/pages/welcome_page/welcome_page.dart';
 

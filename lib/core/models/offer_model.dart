@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 class OfferModel {
   final String id;
   final String title;
-  final int worthPoints;
+  final num worthPoints;
   final String startDate;
   final String endDate;
 
@@ -18,7 +18,7 @@ class OfferModel {
   OfferModel.fromDocument(offer)
       : id = offer['id'] as String,
         title = offer['title'] as String,
-        worthPoints = offer['worth_points'] as int,
+        worthPoints = offer['worth_points'] as num,
         startDate = _dateFormatted(offer['start_date']),
         endDate = _dateFormatted(offer['end_date']);
 }
